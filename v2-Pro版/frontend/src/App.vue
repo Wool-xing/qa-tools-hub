@@ -284,8 +284,8 @@ main:not(.has-sidebar) { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto
 /* Dark mode */
 [data-theme="dark"] {
   --bg: #010102; --surface: #0f1011; --surface-hover: #141516;
-  --surface-raised: #18191a; --text: #e5e7eb; --text-secondary: #9ca3af;
-  --text-muted: #6b7280; --border: #23252a; --border-light: #1c1d21;
+  --surface-raised: #18191a; --text: #ffffff; --text-secondary: #e0e0e0;
+  --text-muted: #b0b0b0; --border: #23252a; --border-light: #1c1d21;
   --primary: #5e6ad2; --primary-hover: #828fff; --primary-light: #1a1c2e;
   --success: #27a644; --success-light: #0d2e16;
   --warning: #f59e0b; --warning-light: #3d2c04;
