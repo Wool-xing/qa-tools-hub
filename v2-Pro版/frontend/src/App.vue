@@ -25,10 +25,15 @@
             <button @click="handleLogout" class="btn-ghost">退出</button>
           </div>
         </template>
-        <template v-else-if="$route.name !== 'login' && $route.name !== 'forgot' && $route.name !== 'reset'">
+        <template v-if="!auth.isLoggedIn && $route.name !== 'login' && $route.name !== 'forgot' && $route.name !== 'reset'">
           <div class="nav-right">
             <button @click="toggleDark" class="btn-ghost" :title="isDark ? '浅色模式' : '深色模式'">{{ isDark ? '☀️' : '🌙' }}</button>
             <router-link to="/login" class="btn-primary">登录</router-link>
+          </div>
+        </template>
+        <template v-else-if="!auth.isLoggedIn">
+          <div class="nav-right">
+            <button @click="toggleDark" class="btn-ghost" :title="isDark ? '浅色模式' : '深色模式'">{{ isDark ? '☀️' : '🌙' }}</button>
           </div>
         </template>
       </div>

@@ -80,7 +80,8 @@ async function submit() {
 .field label { font-size: .78rem; font-weight: 600; color: var(--text-secondary); }
 .field input {
   padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-size: .88rem; font-family: var(--font-sans); outline: none; background: var(--surface);
+  font-size: .88rem; font-family: var(--font-sans); outline: none;
+  background: var(--bg); color: var(--text);
   transition: all var(--fast);
 }
 .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }

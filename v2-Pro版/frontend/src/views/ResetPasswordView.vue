@@ -66,7 +66,7 @@ async function submit() {
 .login-form { display: flex; flex-direction: column; gap: 14px; }
 .field { display: flex; flex-direction: column; gap: 4px; }
 .field label { font-size: .78rem; font-weight: 600; color: var(--text-secondary); }
-.field input { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: .88rem; font-family: var(--font-sans); outline: none; background: var(--surface); }
+.field input { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: .88rem; font-family: var(--font-sans); outline: none; background: var(--bg); color: var(--text); }
 .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
 .err { color: var(--danger); font-size: .8rem; text-align: center; }
 .msg.ok { color: var(--success); font-size: .82rem; text-align: center; font-weight: 500; }
