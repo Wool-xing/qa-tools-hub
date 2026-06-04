@@ -66,7 +66,7 @@ const openSections = reactive({
 const sections = [
   {
     key: 'main',
-    label: '主导航',
+    label: '📌 主导航',
     items: [
       { to: '/dashboard', icon: '📊', label: '仪表板', match: 'dashboard' },
       { to: '/levels', icon: '🎯', label: '闯关学习', match: 'levels' },
@@ -77,7 +77,7 @@ const sections = [
   },
   {
     key: 'levels',
-    label: '学习领域',
+    label: '🎯 学习领域',
     items: [
       { to: '/levels', icon: '🌱', label: '入门基础', badge: '8关' },
       { to: '/levels', icon: '🌐', label: 'Web测试', badge: '4关' },
@@ -91,7 +91,7 @@ const sections = [
   },
   {
     key: 'labs',
-    label: '实操实验室',
+    label: '🧪 实操实验室',
     items: [
       { to: '/labs/sql', icon: '🗄️', label: 'SQL 练习场', match: 'sql-lab' },
       { to: '/labs/linux', icon: '💻', label: 'Linux 日志分析', match: 'cmd-lab' },
@@ -109,7 +109,7 @@ const sections = [
   },
   {
     key: 'practice',
-    label: '练习工具',
+    label: '🔧 练习工具',
     items: [
       { to: '/labs/bugreport', icon: '🐛', label: 'Bug报告工坊', match: 'bug-lab' },
       { to: '/labs/a11y', icon: '♿', label: '无障碍测试', match: 'a11y-lab' },
