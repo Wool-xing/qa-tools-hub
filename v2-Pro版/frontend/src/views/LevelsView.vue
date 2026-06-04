@@ -87,7 +87,7 @@ async function applyStageFilter() {
   await nextTick()
   setTimeout(() => {
     const el = document.getElementById('block-'+stage) || document.getElementById('stage-'+stage)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, 200)
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
