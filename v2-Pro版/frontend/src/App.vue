@@ -182,7 +182,7 @@ main.has-sidebar {
 }
 .topbar-inner {
   width: 100%; padding: 0 32px;
-  height: 100%; display: flex; align-items: center;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
 }
 .logo {
   display: flex; align-items: center; gap: 8px; text-decoration: none;

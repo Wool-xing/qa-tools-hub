@@ -9,25 +9,25 @@
     <div v-if="loading" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">⏳ 加载中...</div>
     <template v-else>
     <div v-if="store.progress.total === 0" class="card" style="text-align:center;padding:40px;margin-bottom:var(--space-lg);">
-      <p style="font-size:2rem;margin-bottom:8px;">🚀</p>
+      <p style="font-size:2rem;margin-bottom:8px;"></p>
       <p style="font-weight:600;margin-bottom:4px;">尚未加载关卡数据</p>
       <p style="font-size:.82rem;color:var(--text-secondary);">请确认后端服务已启动</p>
     </div>
     <!-- Stats -->
     <div class="stats-row" v-else>
-      <div class="stat-card" :aria-label="'已完成关卡 ' + (store.progress.completed || 0)">
+      <div class="stat-card" :aria-label="' + (store.progress.completed || 0)">
         <span class="stat-icon" aria-hidden="true">✅</span>
         <div><span class="stat-num">{{ store.progress.completed || 0 }}</span><span class="stat-label">已完成关卡</span></div>
       </div>
-      <div class="stat-card" :aria-label="'总积分 ' + (store.progress.points || 0)">
+      <div class="stat-card" :aria-label="' + (store.progress.points || 0)">
         <span class="stat-icon" aria-hidden="true">⭐</span>
         <div><span class="stat-num">{{ store.progress.points || 0 }}</span><span class="stat-label">总积分</span></div>
       </div>
-      <div class="stat-card" :aria-label="'完成度 ' + pct + '%'">
+      <div class="stat-card" :aria-label="' + pct + '%'">
         <span class="stat-icon" aria-hidden="true">📈</span>
         <div><span class="stat-num">{{ pct }}%</span><span class="stat-label">完成度</span></div>
       </div>
-      <div class="stat-card" :aria-label="'学习模块 ' + totalStages + ' 个'">
+      <div class="stat-card" :aria-label="' + totalStages + ' 个'">
         <span class="stat-icon" aria-hidden="true">🎯</span>
         <div><span class="stat-num">{{ totalStages }}</span><span class="stat-label">学习模块</span></div>
       </div>
@@ -40,7 +40,7 @@
         <div v-for="(s, k) in store.stages" :key="k" class="stage-bar-row">
           <span class="stage-bar-label">{{ stageName(k) }}</span>
           <div class="stage-bar-track">
-            <div class="stage-bar-fill" :class="barColor(s)" :style="{width: s.total?s.completed/s.total*100+'%':'0%'}" role="progressbar" :aria-valuenow="s.total ? Math.round(s.completed/s.total*100) : 0" aria-valuemin="0" aria-valuemax="100" :aria-label="stageName(k) + ' 完成度'"></div>
+            <div class="stage-bar-fill" :class="barColor(s)" :style="{width: s.total?s.completed/s.total*100+'%':'0%'}" role="progressbar" :aria-valuenow="s.total ? Math.round(s.completed/s.total*100) : 0" aria-valuemin="0" aria-valuemax="100" :aria-label="+ ' 完成度'"></div>
           </div>
           <span class="stage-bar-num">{{ s.completed || 0 }}/{{ s.total }}</span>
         </div>
@@ -69,7 +69,7 @@
     <div class="card" style="margin-bottom:var(--space-lg);">
       <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">技能雷达</h3>
       <div class="radar-wrap">
-        <svg viewBox="0 0 300 300" class="radar-svg" role="img" :aria-label="'技能雷达图：' + radarAxes.map(a => a.name).join('、')">
+        <svg viewBox="0 0 300 300" class="radar-svg" role="img" :aria-label="+ radarAxes.map(a => a.name).join('、')">
           <!-- Grid rings -->
           <circle cx="150" cy="150" r="30" fill="none" stroke="var(--border-light)" stroke-width="1"/>
           <circle cx="150" cy="150" r="60" fill="none" stroke="var(--border-light)" stroke-width="1"/>
@@ -133,16 +133,16 @@ const totalStages = computed(() => Object.keys(store.stages).length)
 
 function stageName(k) {
   return {
-    beginner: '入门', intermediate: '进阶', advanced: '🧠 专家',
-    web: 'Web', api: 'API', mobile: '📱 APP',
+    beginner: '入门', intermediate: '进阶', advanced: '专家',
+    web: 'Web', api: 'API', mobile: 'APP',
     performance: '性能', security: '安全',
-    automotive: '🚗 车载', network: '📶 网络',
-    ops: '🖥️ 运维', cicd: '🔄 CI/CD',
-    accessibility: '♿ 无障碍', data: '数据测试',
-    chaos: '🌀 混沌工程', visual: '🔍 视觉回归',
-    risk: '⚠️ 风险驱动', metrics: '度量分析',
-    'automation-arch': '🏗️ 自动化架构', 'advanced-api': '🔌 现代API',
-    compliance: '合规测试', fintech: '💰 金融测试',
+    automotive: '车载', network: '网络',
+    ops: '运维', cicd: 'CI/CD',
+    accessibility: '无障碍', data: '数据测试',
+    chaos: '混沌工程', visual: '视觉回归',
+    risk: '风险驱动', metrics: '度量分析',
+    'automation-arch': '自动化架构', 'advanced-api': '现代API',
+    compliance: '合规测试', fintech: '金融测试',
   }[k] || k
 }
 function barColor(s) {
