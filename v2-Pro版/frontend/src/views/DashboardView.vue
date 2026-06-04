@@ -83,7 +83,7 @@
           <circle v-for="(p,i) in radarDots" :key="i" :cx="p.x" :cy="p.y" r="4" fill="var(--primary)"/>
         </svg>
         <div class="radar-labels">
-          <span v-for="(a,i) in radarAxes" :key="i" class="radar-label" :style="radarLabelStyle(i)">{{ a.icon }} {{ a.name }}</span>
+          <span v-for="a in radarAxes" :key="a.key" class="radar-label">{{ a.name }}</span>
         </div>
       </div>
     </div>
@@ -179,17 +179,6 @@ const radarDots = computed(() => radarAxes.map((_, i) => {
 
 const radarPoints = computed(() => radarDots.value.map(d => `${d.x},${d.y}`).join(' '))
 
-function radarLabelStyle(i) {
-  const pos = [
-    { top: '-20px', left: '50%', transform: 'translateX(-50%)' },
-    { top: '5%', right: '-10px' },
-    { bottom: '-5px', right: '5%' },
-    { bottom: '-20px', left: '50%', transform: 'translateX(-50%)' },
-    { top: '5%', left: '-10px' },
-    { top: '-5px', left: '5%' },
-  ]
-  return pos[i] || {}
-}
 
 const milestones = computed(() => {
   const stages = store.stages || {}
@@ -299,8 +288,8 @@ onMounted(async () => {
 
 .radar-wrap { position: relative; max-width: 320px; margin: 0 auto; }
 .radar-svg { width: 100%; height: auto; display: block; }
-.radar-labels { position: relative; }
-.radar-label { position: absolute; font-size: .68rem; white-space: nowrap; font-weight: 500; color: var(--text-secondary); }
+.radar-labels { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 12px; }
+.radar-label { font-size: .78rem; font-weight: 500; color: var(--text-secondary); }
 
 .path-track { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 28px; }
 .path-track::before { content: ''; position: absolute; left: 14px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
