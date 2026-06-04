@@ -154,22 +154,6 @@ const answer = reactive({})
 const showResult = ref(false)
 const runResult = ref(null)
 
-const stageLabel = computed(() => {
-  const s = store.current?.stage
-  return {
-    beginner: '🌱 入门', intermediate: '🚀 进阶', advanced: '🧠 专家',
-    web: '🌐 Web', api: '📡 API', mobile: '📱 APP',
-    performance: '⚡ 性能', security: '🛡️ 安全',
-    automotive: '🚗 车载', network: '📶 网络',
-    ops: '🖥️ 运维', cicd: '🔄 CI/CD',
-    accessibility: '♿ 无障碍', data: '📊 数据',
-    chaos: '🌀 混沌工程', visual: '🔍 视觉回归',
-    risk: '⚠️ 风险驱动', metrics: '📊 度量分析',
-    'automation-arch': '🏗️ 自动化架构', 'advanced-api': '🔌 现代API',
-    compliance: '📋 合规测试', fintech: '💰 金融测试',
-  }[s] || s
-})
-
 /* Enhanced markdown renderer */
 function md(str) {
   if (!str) return ''
@@ -270,9 +254,8 @@ function initDebugCode() {
 <style scoped>
 .player { max-width: 760px; margin: 0 auto; }
 
-/* Breadcrumb */
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
+/* Breadcrumb */
+
 
 /* Tabs */
 .tabs {

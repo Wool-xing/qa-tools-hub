@@ -881,8 +881,6 @@ const trendAreaPts = computed(() => {
 <style scoped>
 /* ==================== Layout ==================== */
 .lab-page { max-width: 1100px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 /* ==================== Tabs ==================== */
 .tabs-bar { display: flex; gap: 4px; margin-bottom: var(--space-lg); border-bottom: 1px solid var(--border); padding-bottom: 0; }

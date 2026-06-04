@@ -151,8 +151,6 @@ function nextCmd() {
 
 <style scoped>
 .lab-page { max-width: 800px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .phone-mock { display: flex; justify-content: center; margin-bottom: var(--space-md); }
 .phone-screen {

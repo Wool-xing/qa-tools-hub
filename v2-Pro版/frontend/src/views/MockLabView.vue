@@ -291,8 +291,6 @@ onMounted(() => { loadMocks() })
 
 <style scoped>
 .lab-page { max-width: 1100px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .mock-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
 @media (max-width: 860px) { .mock-layout { grid-template-columns: 1fr; } }

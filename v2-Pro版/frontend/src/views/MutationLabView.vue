@@ -594,8 +594,6 @@ function submitHeatmap() {
 
 <style scoped>
 .lab-page { max-width: 860px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .tab-bar { display: flex; gap: 2px; margin-bottom: var(--space-md); border-bottom: 2px solid var(--border); flex-wrap: wrap; }
 .tab-btn {

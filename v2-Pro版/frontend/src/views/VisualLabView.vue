@@ -240,8 +240,6 @@ function renderScenario(side) {
 
 <style scoped>
 .lab-page { max-width: 900px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 .scenario-bar { display: flex; gap: 8px; margin-bottom: var(--space-md); flex-wrap: wrap; }
 .scenario-btn {
   padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border);

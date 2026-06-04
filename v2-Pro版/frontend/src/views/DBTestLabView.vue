@@ -211,8 +211,6 @@ async function execute() {
 
 <style scoped>
 .lab-page { max-width: 900px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .challenge-bar { display: flex; gap: 6px; margin-bottom: var(--space-md); flex-wrap: wrap; }
 .challenge-btn {

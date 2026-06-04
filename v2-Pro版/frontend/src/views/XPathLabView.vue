@@ -181,8 +181,6 @@ const cheatsheet = [
 
 <style scoped>
 .lab-page { max-width: 860px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .mode-bar { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
 .mode-bar button { padding: 6px 16px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; font-size: .8rem; font-weight: 500; transition: all var(--fast); font-family: var(--font-sans); }

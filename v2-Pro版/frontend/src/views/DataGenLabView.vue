@@ -871,8 +871,6 @@ applySqlTable()
 
 <style scoped>
 .lab-page { max-width: 900px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 /* Tab bar — same pattern as RequirementLabView */
 .tab-bar { display: flex; gap: 2px; margin-bottom: var(--space-md); border-bottom: 2px solid var(--border); flex-wrap: wrap; }

@@ -326,8 +326,6 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .lab-page { max-width: 760px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .field-label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 8px; margin-top: 14px; color: var(--text-secondary); }
 .field-label:first-of-type { margin-top: 0; }

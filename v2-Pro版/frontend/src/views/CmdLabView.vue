@@ -85,8 +85,6 @@ async function execute() {
 
 <style scoped>
 .lab-page { max-width: 800px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 .file-bar { display: flex; gap: 8px; align-items: center; margin-bottom: var(--space-md); }
 .file-label { font-size: .85rem; }
 .file-btn {

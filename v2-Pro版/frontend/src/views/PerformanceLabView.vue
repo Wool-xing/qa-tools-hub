@@ -342,8 +342,6 @@ const errLinePoints = computed(() => {
 
 <style scoped>
 .lab-page { max-width: 1100px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .perf-layout {
   display: grid;

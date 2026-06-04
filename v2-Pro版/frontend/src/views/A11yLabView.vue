@@ -254,8 +254,6 @@ function escapeRegex(str) {
 
 <style scoped>
 .lab-page { max-width: 860px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .tabs-bar { display: flex; gap: 4px; margin-bottom: var(--space-lg); background: var(--surface); border-radius: var(--radius); padding: 4px; border: 1px solid var(--border); }
 .tab-btn { flex: 1; padding: 10px 8px; border: none; background: none; border-radius: 8px; cursor: pointer; font-size: .82rem; color: var(--text-secondary); font-weight: 500; transition: all var(--fast); font-family: var(--font-sans); }

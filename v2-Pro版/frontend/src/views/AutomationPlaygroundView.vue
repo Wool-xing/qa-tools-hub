@@ -597,8 +597,6 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .lab-page { max-width: 1200px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .page-header { margin-bottom: var(--space-md); }
 .page-header h1 { font-size: 1.5rem; font-weight: 750; letter-spacing: -.5px; margin-bottom: 4px; }

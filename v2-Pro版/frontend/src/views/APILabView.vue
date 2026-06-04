@@ -214,8 +214,6 @@ function replayRequest(h) { url.value = h.url; method.value = h.method; sendRequ
 
 <style scoped>
 .lab-page { max-width: 800px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 .req-bar { display: flex; gap: 8px; margin-bottom: 10px; }
 .method-select {

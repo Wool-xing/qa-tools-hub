@@ -591,8 +591,6 @@ function checkMem() {
 
 <style scoped>
 .lab-page { max-width: 920px; margin: 0 auto; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 
 /* Tab bar */
 .tab-bar { display: flex; gap: 4px; margin-bottom: var(--space-lg); background: var(--surface); border-radius: var(--radius); padding: 4px; border: 1px solid var(--border); overflow-x: auto; }
