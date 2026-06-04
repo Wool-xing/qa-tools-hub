@@ -15,8 +15,7 @@
           </button>
           <template v-if="auth.isLoggedIn">
             <router-link to="/profile" class="topbar-user">
-              <span class="user-avatar">{{ (auth.user?.username || 'U')[0].toUpperCase() }}</span>
-              <span class="user-name">{{ auth.user?.username }}</span>
+              {{ auth.user?.username }}
             </router-link>
             <button @click="handleLogout" class="topbar-link logout-btn">退出</button>
           </template>
@@ -216,15 +215,9 @@ main.has-sidebar {
   transition: filter var(--fast);
 }
 .topbar-cta:hover { filter: brightness(1.1); }
-.topbar-user { text-decoration: none; }
-.user-avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--surface-hover); color: var(--text);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .75rem; font-weight: 600;
-}
+.topbar-user { text-decoration: none; color: var(--text); font-size: .85rem; font-weight: 500; }
+.topbar-user:hover { color: var(--primary); }
 .logout-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); }
-.user-name { font-size: .82rem; color: var(--text-secondary); font-weight: 500; }
 
 /* ==================== Buttons ==================== */
 .btn-primary {
