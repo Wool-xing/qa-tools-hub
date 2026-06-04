@@ -186,7 +186,7 @@ main.has-sidebar {
   height: 52px;
 }
 .topbar-inner {
-  max-width: 1280px; margin: 0 auto; padding: 0 24px;
+  width: 100%; padding: 0 32px;
   height: 100%; display: flex; align-items: center;
 }
 .logo {
