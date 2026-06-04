@@ -16,7 +16,7 @@
     <!-- Stats -->
     <div class="stats-row" v-else>
       <div class="stat-card" :aria-label="' + (store.progress.completed || 0)">
-        <span class="stat-icon" aria-hidden="true">✅</span>
+        <span class="stat-icon" aria-hidden="true"></span>
         <div><span class="stat-num">{{ store.progress.completed || 0 }}</span><span class="stat-label">已完成关卡</span></div>
       </div>
       <div class="stat-card" :aria-label="' + (store.progress.points || 0)">
@@ -24,11 +24,11 @@
         <div><span class="stat-num">{{ store.progress.points || 0 }}</span><span class="stat-label">总积分</span></div>
       </div>
       <div class="stat-card" :aria-label="' + pct + '%'">
-        <span class="stat-icon" aria-hidden="true">📈</span>
+        <span class="stat-icon" aria-hidden="true"></span>
         <div><span class="stat-num">{{ pct }}%</span><span class="stat-label">完成度</span></div>
       </div>
       <div class="stat-card" :aria-label="' + totalStages + ' 个'">
-        <span class="stat-icon" aria-hidden="true">🎯</span>
+        <span class="stat-icon" aria-hidden="true"></span>
         <div><span class="stat-num">{{ totalStages }}</span><span class="stat-label">学习模块</span></div>
       </div>
     </div>
@@ -52,7 +52,7 @@
       <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">学习路径</h3>
       <div class="path-track">
         <div v-for="(m,i) in milestones" :key="i" class="path-milestone" :class="{ done: m.done, current: m.current }">
-          <div class="path-dot">{{ m.done ? '✅' : m.current ? '📍' : '○' }}</div>
+          <div class="path-dot">{{ "" }}</div>
           <div class="path-info">
             <strong>{{ m.label }}</strong>
             <span>{{ m.desc }}</span>
@@ -83,7 +83,7 @@
           <circle v-for="(p,i) in radarDots" :key="i" :cx="p.x" :cy="p.y" r="4" fill="var(--primary)"/>
         </svg>
         <div class="radar-labels">
-          <span v-for="(a,i) in radarAxes" :key="i" class="radar-label" :style="radarLabelStyle(i)">{{ a.icon }} {{ a.name }}</span>
+          <span v-for="(a,i) in radarAxes" :key="i" class="radar-label" :style="radarLabelStyle(i)">{{ a.name }}</span>
         </div>
       </div>
     </div>
@@ -105,15 +105,15 @@
       <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">快速操作</h3>
       <div class="quick-actions">
         <router-link to="/levels" class="quick-action">
-          <span class="qa-icon">🎯</span>
+          <span class="qa-icon"></span>
           <div><strong>继续闯关</strong><span>102 关覆盖 22 个测试领域</span></div>
         </router-link>
         <router-link to="/labs" class="quick-action">
-          <span class="qa-icon">🧪</span>
+          <span class="qa-icon"></span>
           <div><strong>进入实验室</strong><span>SQL · Linux · API 实操</span></div>
         </router-link>
         <router-link to="/labs/sql" class="quick-action">
-          <span class="qa-icon">🗄️</span>
+          <span class="qa-icon"></span>
           <div><strong>SQL 练习</strong><span>数据验证查询技能</span></div>
         </router-link>
       </div>
@@ -154,12 +154,12 @@ function barColor(s) {
 }
 
 const radarAxes = [
-  { name: '入门', icon: '🌱', key: 'beginner' },
-  { name: '进阶', icon: '🚀', key: 'intermediate' },
-  { name: 'Web', icon: '🌐', key: 'web' },
-  { name: 'API', icon: '📡', key: 'api' },
-  { name: '安全', icon: '🛡️', key: 'security' },
-  { name: '性能', icon: '⚡', key: 'performance' },
+  { name: '入门', key: 'beginner' },
+  { name: '进阶', key: 'intermediate' },
+  { name: 'Web', key: 'web' },
+  { name: 'API', key: 'api' },
+  { name: '安全', key: 'security' },
+  { name: '性能', key: 'performance' },
 ]
 
 const radarData = computed(() => {
@@ -231,14 +231,14 @@ const achievements = computed(() => {
   const webDone = (stages.web?.completed || 0) >= (stages.web?.total || 1)
   const labCount = parseInt(localStorage.getItem('qa-lab-count') || '0')
   return [
-    { key: 'first', icon: '🌟', name: '初出茅庐', desc: '完成第 1 关', earned: completed >= 1 },
-    { key: 'five', icon: '🔥', name: '小有所成', desc: '完成 5 关', earned: completed >= 5 },
-    { key: 'ten', icon: '⚡', name: '中流砥柱', desc: '完成 10 关', earned: completed >= 10 },
-    { key: 'half', icon: '💎', name: '半壁江山', desc: '完成 20 关', earned: completed >= 20 },
-    { key: 'beginner', icon: '🌱', name: '入门毕业', desc: '完成全部入门关卡', earned: beginnerDone },
-    { key: 'web', icon: '🌐', name: 'Web 专家', desc: '完成全部 Web 测试关卡', earned: webDone },
-    { key: 'lab1', icon: '🧪', name: '实验室新人', desc: '使用 1 个实验室', earned: labCount >= 1 },
-    { key: 'lab3', icon: '🔬', name: '实验达人', desc: '使用 3 个实验室', earned: labCount >= 3 },
+    { key: 'first', icon: '', name: '初出茅庐', desc: '完成第 1 关', earned: completed >= 1 },
+    { key: 'five', icon: '', name: '小有所成', desc: '完成 5 关', earned: completed >= 5 },
+    { key: 'ten', name: '中流砥柱', desc: '完成 10 关', earned: completed >= 10 },
+    { key: 'half', icon: '', name: '半壁江山', desc: '完成 20 关', earned: completed >= 20 },
+    { key: 'beginner', name: '入门毕业', desc: '完成全部入门关卡', earned: beginnerDone },
+    { key: 'web', name: 'Web 专家', desc: '完成全部 Web 测试关卡', earned: webDone },
+    { key: 'lab1', icon: '', name: '实验室新人', desc: '使用 1 个实验室', earned: labCount >= 1 },
+    { key: 'lab3', icon: '', name: '实验达人', desc: '使用 3 个实验室', earned: labCount >= 3 },
   ]
 })
 
