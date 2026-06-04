@@ -84,7 +84,7 @@ async function applyStageFilter() {
     if (openStages.hasOwnProperty(stage)) openStages[stage] = true
     await nextTick()
     const el = document.getElementById('stage-'+stage)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
