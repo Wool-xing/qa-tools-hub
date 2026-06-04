@@ -36,7 +36,7 @@
             :to="auth.isLoggedIn ? item.to : '/login'"
             class="tool-card"
           >
-            <span class="tool-icon">{{ item.icon }}</span>
+            <span v-if="item.icon" class="tool-icon">{{ item.icon }}</span>
             <div class="tool-info">
               <span class="tool-name">{{ item.name }}</span>
               <span class="tool-desc">{{ item.desc }}</span>
@@ -73,14 +73,16 @@ const categories = [
     icon: '🎯',
     name: '学习关卡',
     items: [
-      { icon: '🌱', name: '入门基础', desc: '测试理论 · 用例设计 · 缺陷管理', to: '/levels', tag: '8关', tagColor: 'primary' },
-      { icon: '🌐', name: 'Web 测试', desc: '浏览器工具 · 兼容性 · 自动化', to: '/levels', tag: '4关', tagColor: 'primary' },
-      { icon: '📡', name: 'API 测试', desc: 'REST · GraphQL · 契约测试', to: '/levels', tag: '3关', tagColor: 'primary' },
-      { icon: '📱', name: 'APP 测试', desc: '移动端 · 专项 · 兼容性', to: '/levels', tag: '4关', tagColor: 'primary' },
-      { icon: '⚡', name: '性能测试', desc: 'k6 · 基准 · 负载测试', to: '/levels', tag: '3关', tagColor: 'primary' },
-      { icon: '🛡️', name: '安全测试', desc: 'OWASP · 渗透 · 安全扫描', to: '/levels', tag: '4关', tagColor: 'danger' },
-      { icon: '📶', name: '网络 & 抓包', desc: 'TCP/IP · HTTP · 代理工具', to: '/levels', tag: '3关', tagColor: 'primary' },
-      { icon: '🔄', name: 'CI/CD', desc: '流水线 · 自动化集成', to: '/levels', tag: '2关', tagColor: 'primary' },
+      { name: '入门', desc: '测试理论 · 用例设计 · 缺陷管理', to: '/levels?stage=beginner', tag: '8关', tagColor: 'primary' },
+      { name: '进阶', desc: '自动化 · 持续集成 · 测试架构', to: '/levels?stage=intermediate', tag: '3关', tagColor: 'primary' },
+      { name: '专家', desc: '性能调优 · 安全渗透 · 测试策略', to: '/levels?stage=advanced', tag: '4关', tagColor: 'primary' },
+      { name: 'Web 测试', desc: '浏览器工具 · 兼容性 · 自动化', to: '/levels?stage=web', tag: '4关', tagColor: 'primary' },
+      { name: 'API 测试', desc: 'REST · GraphQL · 契约测试', to: '/levels?stage=api', tag: '3关', tagColor: 'primary' },
+      { name: 'APP 测试', desc: '移动端 · 专项 · 兼容性', to: '/levels?stage=mobile', tag: '4关', tagColor: 'primary' },
+      { name: '性能测试', desc: 'k6 · 基准 · 负载测试', to: '/levels?stage=performance', tag: '3关', tagColor: 'primary' },
+      { name: '安全测试', desc: 'OWASP · 渗透 · 安全扫描', to: '/levels?stage=security', tag: '4关', tagColor: 'danger' },
+      { name: '网络 & 抓包', desc: 'TCP/IP · HTTP · 代理工具', to: '/levels?stage=network', tag: '3关', tagColor: 'primary' },
+      { name: 'CI/CD', desc: '流水线 · 自动化集成', to: '/levels?stage=cicd', tag: '2关', tagColor: 'primary' },
     ],
   },
   {

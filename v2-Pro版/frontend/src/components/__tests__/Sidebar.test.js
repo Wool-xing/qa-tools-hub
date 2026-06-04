@@ -27,11 +27,12 @@ describe('Sidebar', () => {
       global: { plugins: [router] },
     })
     const titles = wrapper.findAll('.nav-section-title')
-    expect(titles).toHaveLength(4)
+    expect(titles).toHaveLength(5)
     expect(titles[0].text()).toContain('主导航')
-    expect(titles[1].text()).toContain('学习领域')
-    expect(titles[2].text()).toContain('实操实验室')
-    expect(titles[3].text()).toContain('练习工具')
+    expect(titles[1].text()).toContain('能力进阶')
+    expect(titles[2].text()).toContain('专项领域')
+    expect(titles[3].text()).toContain('实操实验室')
+    expect(titles[4].text()).toContain('练习工具')
   })
 
   it('opens on desktop width by default (>768px)', async () => {
@@ -54,7 +55,7 @@ describe('Sidebar', () => {
       global: { plugins: [router] },
     })
     // "实操实验室" and "练习工具" start collapsed
-    const labSection = wrapper.findAll('.nav-section-title')[2]
+    const labSection = wrapper.findAll('.nav-section-title')[3]
     expect(labSection.text()).toContain('实操实验室')
     // click to open
     await labSection.trigger('click')
