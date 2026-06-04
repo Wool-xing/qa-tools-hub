@@ -678,7 +678,7 @@ function submitHeatmap() {
 .fn-sig { color: var(--text-secondary); }
 .test-arg-input {
   width: 180px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-size: .8rem; font-family: var(--font-mono); background: var(--surface); outline: none;
+  font-size: .8rem; font-family: var(--font-mono); background: var(--bg); color: var(--text); outline: none;
 }
 .test-arg-input:focus { border-color: var(--primary); }
 .test-expected-input {
@@ -698,7 +698,7 @@ function submitHeatmap() {
 .eq-pair { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
 .eq-side { display: flex; flex-direction: column; gap: 4px; }
 .eq-label { font-size: .68rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-.eq-code { font-size: .84rem; padding: 6px 12px; background: var(--bg-subtle); border-radius: 4px; font-family: var(--font-mono); }
+.eq-code { font-size: .84rem; padding: 6px 12px; background: var(--bg); border-radius: 4px; font-family: var(--font-mono); }
 .eq-arrow { font-size: 1.2rem; color: var(--text-muted); }
 .eq-actions { display: flex; gap: 10px; }
 .btn-equiv {
@@ -720,7 +720,7 @@ function submitHeatmap() {
 .score-unit { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
 
 /* Weakness */
-.weakness-scenario { padding: 14px; background: var(--bg-subtle); border-radius: var(--radius-sm); }
+.weakness-scenario { padding: 14px; background: var(--bg); border-radius: var(--radius-sm); }
 .weakness-desc { font-size: .88rem; font-weight: 550; line-height: 1.5; color: var(--text); }
 .weakness-options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
 .weakness-opt-btn {

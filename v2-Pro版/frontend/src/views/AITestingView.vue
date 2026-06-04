@@ -204,7 +204,7 @@ function checkTA() { taSubmitted.value = true }
 .scenario-btn:hover { border-color: var(--primary); }
 .scenario-btn.active { border-color: #7c3aed; background: #f5f3ff; color: #7c3aed; font-weight: 600; }
 
-.prompt-context { padding: 12px 16px; background: var(--bg-subtle); border-radius: var(--radius-sm); font-size: .82rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+.prompt-context { padding: 12px 16px; background: var(--bg); border-radius: var(--radius-sm); font-size: .82rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
 
 .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
 .field label { font-size: .78rem; font-weight: 600; color: var(--text-secondary); }
@@ -243,7 +243,7 @@ function checkTA() { taSubmitted.value = true }
 .missed-item { font-size: .78rem; color: #92400e; padding: 4px 0; }
 
 .ta-scenario { margin-top: 10px; }
-.ta-context { padding: 12px 16px; background: var(--bg-subtle); border-radius: var(--radius-sm); font-size: .84rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+.ta-context { padding: 12px 16px; background: var(--bg); border-radius: var(--radius-sm); font-size: .84rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
 .ta-q { font-size: .92rem; font-weight: 600; margin-bottom: 12px; line-height: 1.5; }
 .quiz-opt { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; margin-bottom: 6px; border: 2px solid var(--border); border-radius: var(--radius); background: var(--surface); cursor: pointer; font-size: .86rem; text-align: left; transition: all var(--fast); font-family: var(--font-sans); }
 .quiz-opt:hover:not(:disabled) { border-color: #7c3aed; background: #f5f3ff; }

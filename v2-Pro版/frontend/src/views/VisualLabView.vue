@@ -255,13 +255,13 @@ function renderScenario(side) {
 @media (max-width: 720px) { .diff-panels { grid-template-columns: 1fr; } }
 
 .diff-panel { border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.diff-panel.baseline-panel { border-color: var(--info); }
+.diff-panel.baseline-panel { border-color: var(--primary); }
 .diff-panel.current-panel { border-color: var(--warning); }
 .diff-label {
   padding: 8px 14px; font-size: .74rem; font-weight: 600;
   font-family: var(--font-mono); text-align: center;
 }
-.baseline-panel .diff-label { background: var(--info-light); color: var(--info); }
+.baseline-panel .diff-label { background: var(--primary-light); color: var(--primary); }
 .current-panel .diff-label { background: var(--warning-light); color: var(--warning); }
 
 .diff-canvas { position: relative; min-height: 260px; background: #fff; padding: 16px 20px; }

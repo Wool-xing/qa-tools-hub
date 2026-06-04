@@ -420,7 +420,7 @@ function checkWeakQuiz() { weakQuiz.submitted = true }
 .dns-party { font-size: .84rem; font-weight: 600; }
 .dns-arrow { font-family: var(--font-mono); font-size: .78rem; color: var(--primary); }
 .dns-resolver { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-.dns-step-card { display: flex; justify-content: space-between; padding: 6px 12px; background: var(--bg-subtle); border-radius: 6px; font-size: .78rem; }
+.dns-step-card { display: flex; justify-content: space-between; padding: 6px 12px; background: var(--bg); border-radius: 6px; font-size: .78rem; }
 .dns-time { font-family: var(--font-mono); color: var(--text-muted); font-size: .72rem; }
 .dns-records { display: flex; flex-direction: column; gap: 6px; }
 .dns-record { display: flex; gap: 12px; align-items: baseline; font-size: .8rem; padding: 6px 0; border-bottom: 1px solid var(--border-light); }

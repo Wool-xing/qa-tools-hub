@@ -902,7 +902,7 @@ const trendAreaPts = computed(() => {
   cursor: pointer; transition: all var(--fast); color: var(--text);
 }
 .stage-chip:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
-.stage-chip.used { opacity: .4; cursor: not-allowed; background: var(--bg-subtle); }
+.stage-chip.used { opacity: .4; cursor: not-allowed; background: var(--bg); }
 .chip-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
 /* ==================== Pipeline Canvas ==================== */
@@ -1007,7 +1007,7 @@ const trendAreaPts = computed(() => {
 .flaky-radios { display: flex; gap: 8px; flex-wrap: wrap; }
 .radio-item { font-size: .72rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--text); }
 
-.flaky-reveal { margin-top: 8px; padding: 10px; border-radius: var(--radius-sm); background: var(--bg-subtle); }
+.flaky-reveal { margin-top: 8px; padding: 10px; border-radius: var(--radius-sm); background: var(--bg); }
 .reveal-correct { color: var(--success); font-weight: 700; font-size: .8rem; margin-bottom: 4px; }
 .reveal-wrong { color: var(--danger); font-weight: 700; font-size: .8rem; margin-bottom: 4px; }
 .reveal-reason { font-size: .74rem; color: var(--text-secondary); line-height: 1.5; }
@@ -1041,7 +1041,7 @@ const trendAreaPts = computed(() => {
 /* ==================== Challenge Card ==================== */
 .challenge-card { border: 1px dashed var(--warning); background: var(--warning-light); }
 .challenge-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-.challenge-result { margin-top: 10px; padding: 12px; border-radius: var(--radius-sm); background: var(--bg-subtle); font-size: .8rem; line-height: 1.6; }
+.challenge-result { margin-top: 10px; padding: 12px; border-radius: var(--radius-sm); background: var(--bg); font-size: .8rem; line-height: 1.6; }
 .challenge-result.win { background: var(--success-light); color: var(--success); font-weight: 600; }
 
 /* ==================== Hunt Table ==================== */

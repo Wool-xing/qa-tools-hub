@@ -204,7 +204,7 @@ const categories = [
 .bottom-cta { margin-bottom: 48px; }
 .cta-card {
   text-align: center; padding: 48px 20px;
-  background: linear-gradient(135deg, var(--primary-light), var(--primary-bg));
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-light));
   border-radius: var(--radius-xl); border: 1px solid var(--border);
 }
 .cta-card h2 { font-size: 1.3rem; margin-bottom: 8px; }

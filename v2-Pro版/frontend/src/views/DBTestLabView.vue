@@ -230,7 +230,7 @@ async function execute() {
 .schema-details summary { color: var(--primary); font-weight: 600; cursor: pointer; margin-bottom: 6px; }
 .schema-pre {
   font-size: .72rem; font-family: var(--font-mono); line-height: 1.5;
-  background: var(--bg-subtle); color: var(--text-secondary);
+  background: var(--bg); color: var(--text-secondary);
   padding: 10px 14px; border-radius: var(--radius-sm); overflow-x: auto;
   white-space: pre; max-height: 240px; overflow-y: auto;
 }

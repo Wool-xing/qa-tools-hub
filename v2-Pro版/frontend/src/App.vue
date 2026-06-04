@@ -103,29 +103,25 @@ onBeforeUnmount(() => { _mq.removeEventListener('change', _mqHandler) })
 <style>
 /* ==================== Design System ==================== */
 :root {
-  /* Colors */
-  --bg: #f5f5f7;
-  --bg-subtle: #fafafa;
+  /* Colors — Light */
+  --bg: #f0f0f3;
   --surface: #ffffff;
-  --surface-hover: #f8f9fb;
+  --surface-hover: #f5f5f8;
   --surface-raised: #ffffff;
-  --text: #1a1a2e;
-  --text-secondary: #5a5a7a;
-  --text-muted: #9ca3af;
-  --border: #e8e8ed;
-  --border-light: #f0f0f5;
-  --primary: #6366f1;
-  --primary-hover: #5558e6;
-  --primary-light: #eef2ff;
-  --primary-bg: #f5f3ff;
+  --text: #0f1115;
+  --text-secondary: #5c5e6b;
+  --text-muted: #8b8e99;
+  --border: #e2e3e9;
+  --border-light: #eeeef2;
+  --primary: #5e6ad2;
+  --primary-hover: #4f5ac0;
+  --primary-light: #f0f1ff;
   --success: #10b981;
   --success-light: #ecfdf5;
   --warning: #f59e0b;
   --warning-light: #fffbeb;
   --danger: #ef4444;
   --danger-light: #fef2f2;
-  --info: #3b82f6;
-  --info-light: #eff6ff;
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -139,23 +135,22 @@ onBeforeUnmount(() => { _mq.removeEventListener('change', _mqHandler) })
   --space-xl: 32px;
   --space-2xl: 48px;
 
-  /* Radii */
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
+  /* Radii — Linear scale */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 999px;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0,0,0,.04);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow: 0 4px 12px rgba(0,0,0,.06);
-  --shadow-lg: 0 12px 32px rgba(0,0,0,.08);
+  /* Shadows — minimal */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.03);
+  --shadow: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.10);
 
   /* Transitions */
   --ease: cubic-bezier(.16,1,.3,1);
   --fast: .15s var(--ease);
-  --normal: .25s var(--ease);
+  --normal: .2s var(--ease);
 }
 
 /* Reset */
@@ -280,19 +275,19 @@ main.has-sidebar {
 
 main:not(.has-sidebar) { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; padding: var(--space-xl) var(--space-lg); }
 
-/* Dark mode */
+/* Dark mode — Linear-inspired */
 [data-theme="dark"] {
-  --bg: #0f1117; --bg-subtle: #161822; --surface: #1a1d2e; --surface-hover: #222640;
-  --surface-raised: #222640; --text: #e5e7eb; --text-secondary: #a0a0b8;
-  --text-muted: #6b7280; --border: #2d2d4a; --border-light: #252540;
-  --primary: #818cf8; --primary-hover: #6366f1; --primary-light: #1e1b4b; --primary-bg: #1e1b4b;
-  --success: #34d399; --success-light: #064e3b;
-  --warning: #fbbf24; --warning-light: #451a03;
-  --danger: #f87171; --danger-light: #450a0a;
-  --info: #60a5fa; --info-light: #0c1a3e;
-  --shadow-xs: 0 1px 2px rgba(0,0,0,.3); --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
-  --shadow: 0 4px 12px rgba(0,0,0,.4); --shadow-lg: 0 12px 32px rgba(0,0,0,.5);
+  --bg: #010102; --surface: #0f1011; --surface-hover: #141516;
+  --surface-raised: #18191a; --text: #f7f8f8; --text-secondary: #8a8f98;
+  --text-muted: #62666d; --border: #23252a; --border-light: #1c1d21;
+  --primary: #5e6ad2; --primary-hover: #828fff; --primary-light: #1a1c2e;
+  --success: #27a644; --success-light: #0d2e16;
+  --warning: #f59e0b; --warning-light: #3d2c04;
+  --danger: #ef4444; --danger-light: #3d0f0f;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.5);
+  --shadow: 0 2px 8px rgba(0,0,0,.6);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.7);
 }
-[data-theme="dark"] .topbar { background: rgba(26,29,46,.85); }
+[data-theme="dark"] .topbar { background: rgba(1,1,2,.88); }
 [data-theme="dark"] body { background: var(--bg); }
 </style>

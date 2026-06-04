@@ -108,7 +108,7 @@ onMounted(() => store.fetchList())
 .info-val { font-size: .88rem; font-weight: 600; }
 
 .stats-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.stat-item { text-align: center; padding: 12px; background: var(--bg-subtle); border-radius: var(--radius); }
+.stat-item { text-align: center; padding: 12px; background: var(--bg); border-radius: var(--radius); }
 .stat-num { display: block; font-size: 1.4rem; font-weight: 800; color: var(--primary); }
 .stat-label { font-size: .72rem; color: var(--text-muted); }
 

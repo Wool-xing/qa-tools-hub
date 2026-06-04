@@ -375,10 +375,10 @@ select.form-input { cursor: pointer; }
 .ref-content { margin-top: 10px; }
 .ref-field { margin-bottom: 10px; }
 .ref-field strong { display: block; font-size: .76rem; color: var(--text-muted); margin-bottom: 2px; text-transform: uppercase; letter-spacing: .5px; }
-.ref-field p { font-size: .84rem; color: var(--text); line-height: 1.6; background: var(--bg-subtle); padding: 8px 12px; border-radius: 6px; }
+.ref-field p { font-size: .84rem; color: var(--text); line-height: 1.6; background: var(--bg); padding: 8px 12px; border-radius: 6px; }
 
 .triage-list { display: flex; flex-direction: column; gap: 6px; }
-.triage-item { display: flex; gap: 10px; align-items: center; padding: 10px 14px; background: var(--bg-subtle); border-radius: var(--radius); border: 1px solid var(--border); }
+.triage-item { display: flex; gap: 10px; align-items: center; padding: 10px 14px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
 .triage-item.ranked { border-color: var(--primary); }
 .triage-id { font-weight: 700; font-family: var(--font-mono); font-size: .78rem; color: var(--text-muted); min-width: 28px; }
 .triage-info { flex: 1; }

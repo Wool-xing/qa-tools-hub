@@ -152,7 +152,7 @@ async function checkChallenge() {
 .challenge-btn:hover { border-color: var(--primary); }
 .challenge-btn.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 600; }
 .challenge-btn.solved { border-color: var(--success); background: var(--success-light); }
-.challenge-card { padding: 14px; background: var(--bg-subtle); border-radius: var(--radius); }
+.challenge-card { padding: 14px; background: var(--bg); border-radius: var(--radius); }
 .ch-task { font-size: .86rem; font-weight: 600; margin-bottom: 8px; }
 .ch-hint { font-size: .78rem; color: var(--primary); margin-bottom: 8px; padding: 8px; background: var(--primary-light); border-radius: 4px; font-family: var(--font-mono); }
 .ch-actions { display: flex; justify-content: space-between; align-items: center; }

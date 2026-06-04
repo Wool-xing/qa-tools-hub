@@ -376,7 +376,7 @@ onBeforeUnmount(() => {
 .team-card-code {
   display: flex; align-items: center; gap: 6px;
   padding: 8px 14px; border-radius: var(--radius-sm);
-  background: var(--bg-subtle); border: 1px dashed var(--border);
+  background: var(--bg); border: 1px dashed var(--border);
   cursor: pointer; transition: all var(--fast); user-select: none;
   flex-shrink: 0;
 }

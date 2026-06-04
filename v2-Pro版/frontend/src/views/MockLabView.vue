@@ -342,12 +342,12 @@ select.form-input { cursor: pointer; }
   min-width: 48px; text-align: center;
 }
 .mock-method.method-get { background: var(--success-light); color: var(--success); }
-.mock-method.method-post { background: var(--info-light); color: var(--info); }
+.mock-method.method-post { background: var(--primary-light); color: var(--primary); }
 .mock-method.method-put { background: var(--warning-light); color: var(--warning); }
 .mock-method.method-delete { background: var(--danger-light); color: var(--danger); }
 .mock-method.method-patch { background: #f3e8ff; color: #9333ea; }
 
-.test-result { margin-top: 12px; padding: 12px; background: var(--bg-subtle); border-radius: var(--radius-sm); }
+.test-result { margin-top: 12px; padding: 12px; background: var(--bg); border-radius: var(--radius-sm); }
 .result-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .result-label { font-size: .74rem; font-weight: 600; color: var(--text-secondary); min-width: 50px; }
 .result-value { font-size: .82rem; font-family: var(--font-mono); font-weight: 700; }
@@ -368,7 +368,7 @@ select.form-input { cursor: pointer; }
 .challenge-btn:hover { border-color: var(--primary); }
 .challenge-btn.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 600; }
 .challenge-btn.solved { border-color: var(--success); background: var(--success-light); }
-.challenge-card { padding: 14px; background: var(--bg-subtle); border-radius: var(--radius); }
+.challenge-card { padding: 14px; background: var(--bg); border-radius: var(--radius); }
 .ch-task { font-size: .86rem; font-weight: 600; margin-bottom: 8px; }
 .ch-steps { margin-bottom: 8px; }
 .ch-step { font-size: .76rem; color: var(--text-secondary); margin-bottom: 4px; line-height: 1.5; }

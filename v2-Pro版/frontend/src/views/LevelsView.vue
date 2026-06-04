@@ -171,7 +171,7 @@ onMounted(() => store.fetchList())
 .level-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px;
   padding: 12px; border: 1px solid var(--border); border-top: none;
-  border-radius: 0 0 var(--radius) var(--radius); background: var(--bg-subtle);
+  border-radius: 0 0 var(--radius) var(--radius); background: var(--bg);
 }
 .level-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);

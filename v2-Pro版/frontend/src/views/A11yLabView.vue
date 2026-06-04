@@ -293,7 +293,7 @@ function escapeRegex(str) {
 .sev-count.sev-aaa { background: #eff6ff; color: #2563eb; }
 
 .violation-list { display: flex; flex-direction: column; gap: 10px; }
-.violation-item { padding: 14px; background: var(--bg-subtle); border-radius: var(--radius-sm); border-left: 4px solid var(--border); }
+.violation-item { padding: 14px; background: var(--bg); border-radius: var(--radius-sm); border-left: 4px solid var(--border); }
 .violation-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
 .sev-badge { padding: 2px 8px; border-radius: 4px; font-size: .7rem; font-weight: 700; font-family: var(--font-mono); }
 .sev-badge.sev-a { background: #fef2f2; color: #dc2626; }

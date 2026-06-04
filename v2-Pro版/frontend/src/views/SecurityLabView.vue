@@ -195,7 +195,7 @@ async function submitSQLI() {
 .panel-label { padding: 8px 14px; font-size: .76rem; font-weight: 600; }
 .result-panel.unsafe .panel-label { background: var(--danger-light); color: var(--danger); }
 .result-panel.safe .panel-label { background: var(--success-light); color: var(--success); }
-.panel-html { padding: 12px 16px; background: var(--bg-subtle); font-size: .84rem; border-bottom: 1px solid var(--border-light); }
+.panel-html { padding: 12px 16px; background: var(--bg); font-size: .84rem; border-bottom: 1px solid var(--border-light); }
 .panel-code { padding: 10px 16px; background: #1a1a2e; }
 .panel-code code { font-family: var(--font-mono); font-size: .72rem; color: #e5e7eb; }
 .xss-verdict { padding: 12px 16px; border-radius: var(--radius-sm); font-weight: 600; font-size: .84rem; text-align: center; }
@@ -209,7 +209,7 @@ async function submitSQLI() {
 .payload-chip span { font-family: var(--font-mono); font-size: .74rem; color: var(--text-secondary); }
 
 /* SQLi */
-.login-mock { max-width: 400px; margin: 0 auto 16px; padding: 20px; background: var(--bg-subtle); border-radius: var(--radius); }
+.login-mock { max-width: 400px; margin: 0 auto 16px; padding: 20px; background: var(--bg); border-radius: var(--radius); }
 .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
 .field label { font-size: .78rem; font-weight: 600; color: var(--text-secondary); }
 .form-input { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: .86rem; font-family: var(--font-mono); background: var(--surface); color: var(--text); outline: none; width: 100%; transition: border-color var(--fast); }
@@ -229,7 +229,7 @@ async function submitSQLI() {
 .sqli-verdict { padding: 12px 16px; border-radius: var(--radius-sm); font-weight: 600; font-size: .84rem; text-align: center; margin-top: 8px; }
 .sqli-verdict.bypassed { background: var(--danger-light); color: var(--danger); }
 .sqli-verdict.blocked { background: var(--warning-light); color: #92400e; }
-.sqli-verdict.normal { background: var(--bg-subtle); color: var(--text-secondary); }
+.sqli-verdict.normal { background: var(--bg); color: var(--text-secondary); }
 
 .lesson-box { margin-top: 10px; padding: 12px; background: var(--primary-light); border-radius: var(--radius); font-size: .84rem; line-height: 1.6; }
 

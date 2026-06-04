@@ -963,7 +963,7 @@ applySqlTable()
 .param-count { font-size: .7rem; color: var(--text-muted); min-width: 40px; }
 
 .pairwise-stats { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 16px; }
-.stat-card { text-align: center; padding: 16px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-subtle); }
+.stat-card { text-align: center; padding: 16px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); }
 .stat-card-green { border-color: var(--success); background: var(--success-light); }
 .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary); }
 .stat-card-green .stat-number { color: var(--success); }
@@ -979,14 +979,14 @@ applySqlTable()
   border-radius: 6px; border: 1px solid transparent; margin-bottom: 2px; flex-wrap: wrap;
 }
 .edge-item.edge-should { border-color: var(--success); background: var(--success-light); }
-.edge-item.edge-skip { border-color: var(--border); background: var(--bg-subtle); }
+.edge-item.edge-skip { border-color: var(--border); background: var(--bg); }
 .edge-check-label {
   display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer;
   font-size: .8rem; line-height: 1.5;
 }
 .edge-check-label input[type="checkbox"] { accent-color: var(--primary); width: 15px; height: 15px; flex-shrink: 0; }
 .edge-desc { flex: 1; }
-.edge-example { font-size: .7rem; font-family: var(--font-mono); color: var(--text-muted); background: var(--bg-subtle); padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
+.edge-example { font-size: .7rem; font-family: var(--font-mono); color: var(--text-muted); background: var(--bg); padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
 .edge-answer-tag { font-size: .68rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
 .tag-should { background: #d1fae5; color: #065f46; }
 .tag-skip { background: #e5e7eb; color: #6b7280; }

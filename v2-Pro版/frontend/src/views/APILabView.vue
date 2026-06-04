@@ -236,7 +236,7 @@ function replayRequest(h) { url.value = h.url; method.value = h.method; sendRequ
 .add-header { padding: 4px 10px; border: 1px dashed var(--border); border-radius: 4px; background: none; cursor: pointer; font-size: .74rem; color: var(--text-secondary); margin-top: 4px; }
 .body-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: .82rem; background: var(--surface); color: var(--text); outline: none; resize: vertical; }
 
-.resp-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--bg-subtle); border-bottom: 1px solid var(--border); }
+.resp-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
 .resp-status { font-weight: 700; font-size: .84rem; font-family: var(--font-mono); }
 .resp-status.ok { color: var(--success); } .resp-status.client-err { color: var(--warning); } .resp-status.server-err { color: var(--danger); }
 .resp-time { color: var(--text-muted); font-size: .76rem; }

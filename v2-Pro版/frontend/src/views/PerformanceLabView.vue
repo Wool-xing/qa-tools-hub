@@ -436,7 +436,7 @@ const errLinePoints = computed(() => {
 
 /* Timeline chart */
 .timeline-chart { }
-.chart-svg { width: 100%; height: 160px; background: var(--bg-subtle); border-radius: var(--radius-sm); }
+.chart-svg { width: 100%; height: 160px; background: var(--bg); border-radius: var(--radius-sm); }
 .chart-legend { display: flex; gap: 16px; margin-top: 8px; justify-content: center; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: .72rem; color: var(--text-muted); }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -456,7 +456,7 @@ const errLinePoints = computed(() => {
 .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
 @media (max-width: 700px) { .edu-grid { grid-template-columns: 1fr; } }
 .edu-card {
-  background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 18px; text-align: left;
 }
 .edu-card h4 { font-size: .84rem; font-weight: 600; margin: 0 0 10px; color: var(--text-h); }

@@ -698,7 +698,7 @@ function submitTestCases() {
 .card-title .hint-text { font-weight: 400; }
 
 /* Spec document */
-.spec-doc { border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; background: var(--bg-subtle); }
+.spec-doc { border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; background: var(--bg); }
 .spec-clause {
   display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px;
   cursor: pointer; border-radius: 6px; transition: all var(--fast);
@@ -760,7 +760,7 @@ function submitTestCases() {
 .rd-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: .82rem; border-bottom: 1px solid var(--border-light); }
 .missed-title { font-size: .8rem; font-weight: 650; margin-bottom: 6px; color: var(--danger); }
 .missed-list { margin-top: 4px; }
-.missed-item { display: flex; gap: 8px; align-items: baseline; padding: 6px 10px; font-size: .8rem; background: var(--bg-subtle); border-radius: 4px; margin-bottom: 4px; }
+.missed-item { display: flex; gap: 8px; align-items: baseline; padding: 6px 10px; font-size: .8rem; background: var(--bg); border-radius: 4px; margin-bottom: 4px; }
 .missed-cat {
   font-size: .68rem; padding: 2px 8px; border-radius: 10px; font-weight: 600;
   background: var(--danger-light); color: var(--danger); white-space: nowrap; flex-shrink: 0;
@@ -795,7 +795,7 @@ function submitTestCases() {
 .ag-timer-fill.timer-low { background: var(--danger); }
 .ag-info { display: flex; justify-content: space-between; font-size: .8rem; color: var(--text-secondary); margin-bottom: 16px; }
 .ag-question-card {
-  padding: 28px 20px; background: var(--bg-subtle); border-radius: var(--radius);
+  padding: 28px 20px; background: var(--bg); border-radius: var(--radius);
   border: 1px solid var(--border); margin-bottom: 18px;
 }
 .ag-question-text { font-size: 1.05rem; font-weight: 600; line-height: 1.6; }
@@ -814,7 +814,7 @@ function submitTestCases() {
 
 /* Test case mapper */
 .req-list { display: flex; flex-direction: column; gap: 10px; }
-.req-item { display: flex; gap: 10px; align-items: baseline; font-size: .84rem; line-height: 1.5; padding: 10px; background: var(--bg-subtle); border-radius: 6px; }
+.req-item { display: flex; gap: 10px; align-items: baseline; font-size: .84rem; line-height: 1.5; padding: 10px; background: var(--bg); border-radius: 6px; }
 .req-tag {
   font-size: .7rem; padding: 3px 8px; border-radius: 4px; font-weight: 650;
   background: var(--primary-light); color: var(--primary); font-family: var(--font-mono);
