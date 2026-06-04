@@ -2,7 +2,7 @@
   <div>
     <AchievementToast v-if="newAchievement" :name="newAchievement.name" :desc="newAchievement.desc" />
     <div class="page-header">
-      <h1>📊 学习仪表板</h1>
+      <h1>学习仪表板</h1>
       <p>追踪你的 QA 技能成长轨迹</p>
     </div>
 
@@ -35,7 +35,7 @@
 
     <!-- Stage progress -->
     <div class="card" style="margin-bottom:var(--space-lg);">
-      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">📋 模块进度</h3>
+      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">模块进度</h3>
       <div class="stage-bars">
         <div v-for="(s, k) in store.stages" :key="k" class="stage-bar-row">
           <span class="stage-bar-label">{{ stageName(k) }}</span>
@@ -49,7 +49,7 @@
 
     <!-- Learning Path -->
     <div class="card" style="margin-bottom:var(--space-lg);">
-      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">🗺️ 学习路径</h3>
+      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">学习路径</h3>
       <div class="path-track">
         <div v-for="(m,i) in milestones" :key="i" class="path-milestone" :class="{ done: m.done, current: m.current }">
           <div class="path-dot">{{ m.done ? '✅' : m.current ? '📍' : '○' }}</div>
@@ -60,14 +60,14 @@
         </div>
       </div>
       <div v-if="nextActions.length" class="next-actions">
-        <h4 style="font-size:.82rem;margin-bottom:6px;">🎯 建议下一步</h4>
+        <h4 style="font-size:.82rem;margin-bottom:6px;">建议下一步</h4>
         <div v-for="(a,i) in nextActions" :key="i" class="action-item">• {{ a }}</div>
       </div>
     </div>
 
     <!-- Skill Radar -->
     <div class="card" style="margin-bottom:var(--space-lg);">
-      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">🎯 技能雷达</h3>
+      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">技能雷达</h3>
       <div class="radar-wrap">
         <svg viewBox="0 0 300 300" class="radar-svg" role="img" :aria-label="'技能雷达图：' + radarAxes.map(a => a.name).join('、')">
           <!-- Grid rings -->
@@ -90,7 +90,7 @@
 
     <!-- Achievements -->
     <div class="card" style="margin-bottom:var(--space-lg);">
-      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">🏆 成就徽章</h3>
+      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">成就徽章</h3>
       <div class="ach-grid">
         <div v-for="a in achievements" :key="a.key" class="ach-badge" :class="{ earned: a.earned }">
           <span class="ach-icon">{{ a.earned ? a.icon : '🔒' }}</span>
@@ -102,7 +102,7 @@
 
     <!-- Quick actions -->
     <div class="card">
-      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">⚡ 快速操作</h3>
+      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">快速操作</h3>
       <div class="quick-actions">
         <router-link to="/levels" class="quick-action">
           <span class="qa-icon">🎯</span>
@@ -133,16 +133,16 @@ const totalStages = computed(() => Object.keys(store.stages).length)
 
 function stageName(k) {
   return {
-    beginner: '🌱 入门', intermediate: '🚀 进阶', advanced: '🧠 专家',
-    web: '🌐 Web', api: '📡 API', mobile: '📱 APP',
-    performance: '⚡ 性能', security: '🛡️ 安全',
+    beginner: '入门', intermediate: '进阶', advanced: '🧠 专家',
+    web: 'Web', api: 'API', mobile: '📱 APP',
+    performance: '性能', security: '安全',
     automotive: '🚗 车载', network: '📶 网络',
     ops: '🖥️ 运维', cicd: '🔄 CI/CD',
-    accessibility: '♿ 无障碍', data: '📊 数据测试',
+    accessibility: '♿ 无障碍', data: '数据测试',
     chaos: '🌀 混沌工程', visual: '🔍 视觉回归',
-    risk: '⚠️ 风险驱动', metrics: '📊 度量分析',
+    risk: '⚠️ 风险驱动', metrics: '度量分析',
     'automation-arch': '🏗️ 自动化架构', 'advanced-api': '🔌 现代API',
-    compliance: '📋 合规测试', fintech: '💰 金融测试',
+    compliance: '合规测试', fintech: '💰 金融测试',
   }[k] || k
 }
 function barColor(s) {
@@ -200,11 +200,11 @@ const milestones = computed(() => {
   stageOrder.forEach(k => { allDone[k] = (stages[k]?.completed || 0) >= (stages[k]?.total || 1) && (stages[k]?.total || 0) > 0 })
 
   return [
-    { key:'start', label:'🌱 入门小白', desc:'完成入门基础8关', done: allDone.beginner, current: completed < 8 },
-    { key:'grow', label:'🚀 技能构建', desc:'完成进阶+专家+场景共15关', done: completed >= 23, current: completed >= 8 && completed < 23 },
-    { key:'expand', label:'🌐 领域拓展', desc:'覆盖Web、API、移动、性能4域', done: allDone.web && allDone.api && allDone.mobile && allDone.performance, current: completed >= 23 && !(allDone.web && allDone.api && allDone.mobile && allDone.performance) },
-    { key:'specialize', label:'🛡️ 专业深化', desc:'安全+网络+运维+CI/CD+车载', done: allDone.security && allDone.network && allDone.ops && allDone.cicd && allDone.automotive, current: completed >= 35 && !(allDone.security && allDone.network && allDone.ops && allDone.cicd && allDone.automotive) },
-    { key:'master', label:'👑 测试专家', desc:'完成全部102关', done: completed >= 102, current: completed >= 80 && completed < 102 },
+    { key:'start', label:'入门小白', desc:'完成入门基础8关', done: allDone.beginner, current: completed < 8 },
+    { key:'grow', label:'技能构建', desc:'完成进阶+专家+场景共15关', done: completed >= 23, current: completed >= 8 && completed < 23 },
+    { key:'expand', label:'领域拓展', desc:'覆盖Web、API、移动、性能4域', done: allDone.web && allDone.api && allDone.mobile && allDone.performance, current: completed >= 23 && !(allDone.web && allDone.api && allDone.mobile && allDone.performance) },
+    { key:'specialize', label:'专业深化', desc:'安全+网络+运维+CI/CD+车载', done: allDone.security && allDone.network && allDone.ops && allDone.cicd && allDone.automotive, current: completed >= 35 && !(allDone.security && allDone.network && allDone.ops && allDone.cicd && allDone.automotive) },
+    { key:'master', label:'测试专家', desc:'完成全部102关', done: completed >= 102, current: completed >= 80 && completed < 102 },
   ]
 })
 
@@ -218,7 +218,7 @@ const nextActions = computed(() => {
   if (!stages.performance || stages.performance.completed < stages.performance.total) actions.push('完成「性能测试」关卡 —— 掌握k6和Core Web Vitals')
   if (!stages.accessibility || !stages.accessibility.total) actions.push('探索「无障碍测试」新关卡 —— 欧美合规必备')
   if (completed >= 68 && completed < 84) actions.push('冲刺完成最后16关，解锁「测试专家」成就')
-  if (actions.length === 0) actions.push('🏆 你已完成全部学习路径！探索实验室或管理测试用例。')
+  if (actions.length === 0) actions.push('你已完成全部学习路径！探索实验室或管理测试用例。')
   return actions.slice(0, 3)
 })
 

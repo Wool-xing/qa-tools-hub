@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-header">
-      <h1>🧪 实操实验室</h1>
+      <h1>实操实验室</h1>
       <p>动手练习——把测试技能练成肌肉记忆</p>
     </div>
     <div class="lab-grid">

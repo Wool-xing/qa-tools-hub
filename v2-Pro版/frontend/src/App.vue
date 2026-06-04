@@ -2,35 +2,35 @@
   <div class="app">
     <nav class="topbar">
       <div class="topbar-inner">
-        <router-link to="/" class="logo" v-if="!auth.isLoggedIn">
-          <span class="logo-icon">🧪</span>
+        <!-- Logo left -->
+        <router-link :to="auth.isLoggedIn ? '/dashboard' : '/'" class="logo">
+          <span class="logo-mark">QA</span>
           <span class="logo-text">QA通关</span>
         </router-link>
-        <router-link to="/dashboard" class="logo" v-else>
-          <span class="logo-icon">🧪</span>
-          <span class="logo-text">QA通关</span>
-        </router-link>
-        <template v-if="auth.isLoggedIn">
-          <div class="nav-links">
-            <router-link to="/levels" class="nav-item">🎯 闯关</router-link>
-            <router-link to="/labs" class="nav-item">🧪 实验室</router-link>
-          </div>
-          <div class="nav-right">
-            <button @click="toggleDark" class="btn-ghost" :title="isDark ? '浅色模式' : '深色模式'">{{ isDark ? '☀️' : '🌙' }}</button>
-            <router-link to="/profile" class="nav-item" title="个人中心">
+
+        <!-- Nav center — logged in -->
+        <div v-if="auth.isLoggedIn" class="topbar-nav">
+          <router-link to="/dashboard" class="topbar-link">仪表板</router-link>
+          <router-link to="/levels" class="topbar-link">闯关</router-link>
+          <router-link to="/labs" class="topbar-link">实验室</router-link>
+        </div>
+
+        <!-- Right actions -->
+        <div class="topbar-actions">
+          <button @click="toggleDark" class="topbar-icon-btn" :title="isDark ? '浅色' : '深色'">
+            {{ isDark ? '☀️' : '🌙' }}
+          </button>
+          <template v-if="auth.isLoggedIn">
+            <router-link to="/profile" class="topbar-user">
               <span class="user-avatar">{{ (auth.user?.username || 'U')[0].toUpperCase() }}</span>
-              <span class="user-name">{{ auth.user?.username }}</span>
             </router-link>
-            <router-link v-if="auth.user?.is_admin" to="/admin" class="nav-item">🛡️</router-link>
-            <button @click="handleLogout" class="btn-ghost">退出</button>
-          </div>
-        </template>
-        <template v-if="!auth.isLoggedIn">
-          <div class="nav-right">
-            <button @click="toggleDark" class="btn-ghost" :title="isDark ? '浅色模式' : '深色模式'">{{ isDark ? '☀️' : '🌙' }}</button>
-            <router-link v-if="$route.name !== 'login' && $route.name !== 'forgot' && $route.name !== 'reset'" to="/login" class="btn-primary">登录</router-link>
-          </div>
-        </template>
+            <button @click="handleLogout" class="topbar-link logout-btn">退出</button>
+          </template>
+          <template v-else>
+            <router-link to="/login" class="topbar-link">登录</router-link>
+            <router-link v-if="$route.name !== 'login'" to="/login" class="topbar-cta">免费开始</router-link>
+          </template>
+        </div>
       </div>
     </nav>
     <div class="app-body">
@@ -179,71 +179,83 @@ main.has-sidebar {
   padding: var(--space-lg) var(--space-xl);
   max-width: none;
 }
+/* ==================== Topbar — Stripe nav-bar style ==================== */
 .topbar {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,.8);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  height: 56px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  height: 52px;
 }
 .topbar-inner {
-  max-width: 1100px; margin: 0 auto; padding: 0 var(--space-lg);
-  height: 100%; display: flex; align-items: center; gap: var(--space-lg);
+  max-width: 1280px; margin: 0 auto; padding: 0 24px;
+  height: 100%; display: flex; align-items: center;
 }
 .logo {
-  display: flex; align-items: center; gap: 8px;
-  text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.05rem;
-  letter-spacing: -.3px; white-space: nowrap;
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+  color: var(--text); font-weight: 600; font-size: .95rem;
+  letter-spacing: -.3px; margin-right: 32px;
 }
-.logo-icon {
-  width: 32px; height: 32px; border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
-  display: flex; align-items: center; justify-content: center; font-size: .9rem;
-  box-shadow: 0 2px 8px rgba(99,102,241,.3);
+.logo-mark {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--primary); color: #fff; display: flex;
+  align-items: center; justify-content: center; font-size: .65rem;
+  font-weight: 700; letter-spacing: 0;
 }
-.nav-links { display: flex; align-items: center; gap: 2px; flex: 1; }
-.nav-item {
-  padding: 6px 14px; border-radius: var(--radius-sm);
-  text-decoration: none; color: var(--text-secondary); font-size: .84rem;
-  font-weight: 500; transition: all var(--fast); white-space: nowrap;
+.topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
+.topbar-link {
+  padding: 6px 14px; border-radius: 6px; text-decoration: none;
+  color: var(--text-secondary); font-size: .85rem; font-weight: 450;
+  transition: all var(--fast);
 }
-.nav-item:hover { color: var(--text); background: var(--surface-hover); }
-.nav-item.router-link-active { color: var(--primary); background: var(--primary-light); font-weight: 600; }
-.nav-right { display: flex; align-items: center; gap: 10px; }
+.topbar-link:hover { color: var(--text); }
+.topbar-link.router-link-active { color: var(--primary); }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.topbar-icon-btn {
+  width: 32px; height: 32px; border-radius: 6px; border: none;
+  background: transparent; cursor: pointer; font-size: .95rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--fast);
+}
+.topbar-icon-btn:hover { background: var(--surface-hover); }
+.topbar-cta {
+  padding: 7px 18px; border-radius: var(--radius-full); text-decoration: none;
+  background: var(--primary); color: #fff; font-size: .82rem; font-weight: 550;
+  transition: filter var(--fast);
+}
+.topbar-cta:hover { filter: brightness(1.1); }
+.topbar-user { text-decoration: none; }
 .user-avatar {
-  width: 30px; height: 30px; border-radius: var(--radius-sm);
-  background: var(--primary); color: #fff; display: flex; align-items: center;
-  justify-content: center; font-size: .75rem; font-weight: 700; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface-hover); color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 600;
 }
-.user-name { font-size: .82rem; color: var(--text); font-weight: 500; }
+.logout-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); }
 
 /* ==================== Buttons ==================== */
 .btn-primary {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 20px; border-radius: var(--radius-sm); border: none;
-  background: var(--primary); color: #fff; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 20px; border-radius: var(--radius-full); border: none;
+  background: var(--primary); color: #fff; font-weight: 550;
   font-size: .84rem; cursor: pointer; text-decoration: none;
-  transition: all var(--fast); font-family: var(--font-sans);
+  transition: filter var(--fast); font-family: var(--font-sans);
 }
-.btn-primary:hover { background: var(--primary-hover); box-shadow: 0 2px 12px rgba(99,102,241,.3); }
+.btn-primary:hover { filter: brightness(1.08); }
 .btn-primary:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
 
 .btn-ghost {
-  padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid transparent;
+  padding: 6px 14px; border-radius: 6px; border: none;
   background: transparent; color: var(--text-secondary); cursor: pointer;
-  font-size: .82rem; font-family: var(--font-sans);
-  transition: all var(--fast);
+  font-size: .82rem; font-family: var(--font-sans); transition: all var(--fast);
 }
 .btn-ghost:hover { background: var(--surface-hover); color: var(--text); }
 
 .btn-outline {
-  padding: 8px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border);
-  background: var(--surface); color: var(--text-secondary); cursor: pointer;
+  padding: 8px 20px; border-radius: var(--radius-full); border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); cursor: pointer;
   font-size: .84rem; font-weight: 500; font-family: var(--font-sans);
   transition: all var(--fast);
 }
-.btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
 /* ==================== Shared Components ==================== */
 .page-header {
@@ -288,6 +300,6 @@ main:not(.has-sidebar) { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto
   --shadow: 0 2px 8px rgba(0,0,0,.6);
   --shadow-lg: 0 8px 24px rgba(0,0,0,.7);
 }
-[data-theme="dark"] .topbar { background: rgba(1,1,2,.88); }
+[data-theme="dark"] .topbar { background: var(--surface); }
 [data-theme="dark"] body { background: var(--bg); }
 </style>

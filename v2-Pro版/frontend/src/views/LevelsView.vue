@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-header">
-      <h1>🎯 测试技能闯关</h1>
+      <h1>测试技能闯关</h1>
       <p>{{ store.progress.completed || 0 }}/{{ store.progress.total || 0 }} 关已完成 · {{ store.progress.points || 0 }} 积分</p>
     </div>
 
@@ -16,7 +16,7 @@
         <option value="">全部题型</option>
         <option value="quiz">📝 选择题</option>
         <option value="code">💻 编程题</option>
-        <option value="explore">🔍 探索题</option>
+        <option value="explore">探索题</option>
       </select>
     </div>
 
@@ -81,16 +81,16 @@ const pct = computed(() => store.progress.total ? Math.round(store.progress.comp
 
 function stageName(k) {
   return {
-    beginner: '🌱 入门基础', intermediate: '🚀 进阶提升', advanced: '🧠 专家进阶',
-    web: '🌐 Web测试', api: '📡 API测试', mobile: '📱 APP测试',
-    performance: '⚡ 性能测试', security: '🛡️ 安全测试',
-    automotive: '🚗 车载测试', network: '📶 网络 & 抓包',
-    ops: '🖥️ 运维 & 数据库', cicd: '🔄 CI/CD',
-    accessibility: '♿ 无障碍测试', data: '📊 数据测试',
-    chaos: '🌀 混沌工程', visual: '🔍 视觉回归',
-    risk: '⚠️ 风险驱动', metrics: '📊 度量分析',
-    'automation-arch': '🏗️ 自动化架构', 'advanced-api': '🔌 现代API',
-    compliance: '📋 合规测试', fintech: '💰 金融测试',
+    beginner: '入门基础', intermediate: '进阶提升', advanced: '专家进阶',
+    web: 'Web测试', api: 'API测试', mobile: 'APP测试',
+    performance: '性能测试', security: '安全测试',
+    automotive: '车载测试', network: '网络 & 抓包',
+    ops: '运维 & 数据库', cicd: 'CI/CD',
+    accessibility: '无障碍测试', data: '数据测试',
+    chaos: '混沌工程', visual: '视觉回归',
+    risk: '风险驱动', metrics: '度量分析',
+    'automation-arch': '自动化架构', 'advanced-api': '现代API',
+    compliance: '合规测试', fintech: '金融测试',
   }[k] || k
 }
 const stageOrder = ['beginner', 'intermediate', 'advanced', 'web', 'api', 'mobile', 'performance', 'security', 'automotive', 'network', 'ops', 'cicd', 'accessibility', 'data', 'chaos', 'visual', 'risk', 'metrics', 'automation-arch', 'advanced-api', 'compliance', 'fintech']

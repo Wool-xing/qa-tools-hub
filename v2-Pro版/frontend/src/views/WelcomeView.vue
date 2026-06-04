@@ -6,8 +6,8 @@
       <p class="hero-sub">测试工程师一站式学习与工具平台</p>
       <p class="hero-desc">102 个实战关卡 · 21 个交互实验室 · 22 个测试领域覆盖</p>
       <div class="hero-actions">
-        <router-link to="/login" class="cta-btn">🚀 开始学习</router-link>
-        <a href="#tools" class="cta-outline">🔧 浏览工具</a>
+        <router-link to="/login" class="cta-btn">开始学习</router-link>
+        <a href="#tools" class="cta-outline">浏览工具</a>
       </div>
     </section>
 
@@ -21,7 +21,7 @@
 
     <!-- Tool Directory (runoob style) -->
     <section id="tools" class="tools-section">
-      <h2>📁 学习与工具目录</h2>
+      <h2>学习与工具目录</h2>
 
       <div v-for="cat in categories" :key="cat.key" class="tool-category">
         <h3 class="cat-title">
@@ -50,7 +50,7 @@
     <!-- Bottom CTA -->
     <section class="bottom-cta">
       <div class="cta-card">
-        <h2>🚀 准备好开始了吗？</h2>
+        <h2>准备好开始了吗？</h2>
         <p>从零到测试专家，只需每天 30 分钟</p>
         <router-link to="/login" class="cta-btn">免费开始学习</router-link>
       </div>
