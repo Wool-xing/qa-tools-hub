@@ -27,7 +27,7 @@
     </div>
 
     <!-- Stages (accordion) -->
-    <div v-for="(key, idx) in visibleStages" :key="key" class="stage-block" role="list">
+    <div v-for="(key, idx) in visibleStages" :key="key" class="stage-block" :id="'block-'+key" role="list">
       <button class="stage-header" @click="openStages[key] = openStages[key] === undefined ? false : !openStages[key]" :class="{ open: openStages[key] }"
         :aria-expanded="openStages[key] ? 'true' : 'false'" :aria-controls="'stage-'+key">
         <span class="stage-chevron">▸</span>
@@ -76,16 +76,19 @@ const openStages = reactive({
   accessibility: false, data: false, chaos: false, visual: false, risk: false, metrics: false, 'automation-arch': false, 'advanced-api': false, compliance: false,
 })
 
-// Read stage from query param, expand accordion, scroll to it
+// Read stage from query param, expand accordion, scroll to center
 async function applyStageFilter() {
   const stage = route.query.stage
-  if (stage) {
-    Object.keys(openStages).forEach(k => openStages[k] = false)
-    if (openStages.hasOwnProperty(stage)) openStages[stage] = true
-    await nextTick()
-    const el = document.getElementById('stage-'+stage)
+  if (!stage) return
+  Object.keys(openStages).forEach(k => openStages[k] = false)
+  if (!openStages.hasOwnProperty(stage)) return
+  openStages[stage] = true
+  // Wait for data + DOM
+  await nextTick()
+  setTimeout(() => {
+    const el = document.getElementById('block-'+stage) || document.getElementById('stage-'+stage)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
+  }, 200)
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
 
