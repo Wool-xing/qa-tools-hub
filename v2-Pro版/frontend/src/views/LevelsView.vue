@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useLevelsStore } from '../stores/levels'
 const store = useLevelsStore()
@@ -76,14 +76,15 @@ const openStages = reactive({
   accessibility: false, data: false, chaos: false, visual: false, risk: false, metrics: false, 'automation-arch': false, 'advanced-api': false, compliance: false,
 })
 
-// Read stage from query param and expand matching accordion
-function applyStageFilter() {
+// Read stage from query param, expand accordion, scroll to it
+async function applyStageFilter() {
   const stage = route.query.stage
   if (stage) {
-    // Close all first
     Object.keys(openStages).forEach(k => openStages[k] = false)
-    // Open the matching one(s)
     if (openStages.hasOwnProperty(stage)) openStages[stage] = true
+    await nextTick()
+    const el = document.getElementById('stage-'+stage)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
