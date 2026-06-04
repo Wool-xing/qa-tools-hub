@@ -65,26 +65,18 @@
       </div>
     </div>
 
-    <!-- Skill Radar -->
+    <!-- Skill Progress -->
     <div class="card" style="margin-bottom:var(--space-lg);">
-      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">技能雷达</h3>
-      <div class="radar-wrap">
-        <svg viewBox="0 0 300 300" class="radar-svg" role="img" :aria-label="'技能雷达图：' + radarAxes.map(a => a.name).join('、')">
-          <!-- Grid rings -->
-          <circle cx="150" cy="150" r="30" fill="none" stroke="var(--border-light)" stroke-width="1"/>
-          <circle cx="150" cy="150" r="60" fill="none" stroke="var(--border-light)" stroke-width="1"/>
-          <circle cx="150" cy="150" r="90" fill="none" stroke="var(--border-light)" stroke-width="1"/>
-          <circle cx="150" cy="150" r="120" fill="none" stroke="var(--border)" stroke-width="1"/>
-          <!-- Axes -->
-          <line v-for="(a,i) in radarAxes" :key="i" x1="150" y1="150" :x2="150+120*Math.cos(i*Math.PI/3-Math.PI/2)" :y2="150+120*Math.sin(i*Math.PI/3-Math.PI/2)" stroke="var(--border-light)" stroke-width="1"/>
-          <!-- Data polygon -->
-          <polygon :points="radarPoints" fill="var(--primary)" fill-opacity="0.15" stroke="var(--primary)" stroke-width="2"/>
-          <!-- Data dots -->
-          <circle v-for="(p,i) in radarDots" :key="i" :cx="p.x" :cy="p.y" r="4" fill="var(--primary)"/>
-        </svg>
-        <div class="radar-labels">
-          <span v-for="a in radarAxes" :key="a.key" class="radar-label">{{ a.name }}</span>
+      <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">技能进度</h3>
+      <div class="skill-bars">
+        <div v-for="(v,k) in skillData" :key="k" class="skill-row">
+          <span class="skill-name">{{ v.name }}</span>
+          <div class="skill-track">
+            <div class="skill-fill" :style="{width: v.pct+'%'}"></div>
+          </div>
+          <span class="skill-num">{{ v.completed }}/{{ v.total }}</span>
         </div>
+        <p v-if="!skillData.length" style="color:var(--text-muted);font-size:.82rem;text-align:center;padding:16px;">暂无数据，完成关卡后显示</p>
       </div>
     </div>
 
@@ -153,31 +145,21 @@ function barColor(s) {
   return ''
 }
 
-const radarAxes = [
-  { name: '入门', icon: '🌱', key: 'beginner' },
-  { name: '进阶', icon: '🚀', key: 'intermediate' },
-  { name: 'Web', icon: '🌐', key: 'web' },
-  { name: 'API', icon: '📡', key: 'api' },
-  { name: '安全', icon: '🛡️', key: 'security' },
-  { name: '性能', icon: '⚡', key: 'performance' },
-]
-
-const radarData = computed(() => {
+const skillKeys = ['beginner','intermediate','advanced','web','api','mobile','performance','security','network','ops','cicd']
+const skillData = computed(() => {
   const stages = store.stages || {}
-  return radarAxes.map(a => {
-    const s = stages[a.key]
-    if (!s || !s.total) return 0
-    return Math.round((s.completed || 0) / s.total * 100)
-  })
+  return skillKeys.map(k => {
+    const s = stages[k]
+    if (!s || !s.total) return null
+    return {
+      key: k,
+      name: stageName(k),
+      completed: s.completed || 0,
+      total: s.total,
+      pct: Math.round((s.completed || 0) / s.total * 100)
+    }
+  }).filter(Boolean)
 })
-
-const radarDots = computed(() => radarAxes.map((_, i) => {
-  const val = radarData.value[i] / 100 * 120
-  const angle = i * Math.PI / 3 - Math.PI / 2
-  return { x: 150 + val * Math.cos(angle), y: 150 + val * Math.sin(angle) }
-}))
-
-const radarPoints = computed(() => radarDots.value.map(d => `${d.x},${d.y}`).join(' '))
 
 
 const milestones = computed(() => {
@@ -286,10 +268,12 @@ onMounted(async () => {
 .ach-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 10px; border-radius: var(--radius); border: 1px solid var(--border); text-align: center; opacity: .4; transition: all var(--fast); }
 .ach-badge.earned { opacity: 1; border-color: var(--warning); background: var(--warning-light); }
 
-.radar-wrap { position: relative; max-width: 320px; margin: 0 auto; }
-.radar-svg { width: 100%; height: auto; display: block; }
-.radar-labels { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 12px; }
-.radar-label { font-size: .78rem; font-weight: 500; color: var(--text-secondary); }
+.skill-bars { display: flex; flex-direction: column; gap: 10px; }
+.skill-row { display: flex; align-items: center; gap: 12px; }
+.skill-name { width: 70px; font-size: .8rem; color: var(--text-secondary); font-weight: 500; text-align: right; flex-shrink: 0; }
+.skill-track { flex: 1; height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden; }
+.skill-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width .6s var(--ease); min-width: 2px; }
+.skill-num { font-size: .75rem; color: var(--text-muted); font-weight: 600; min-width: 36px; }
 
 .path-track { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 28px; }
 .path-track::before { content: ''; position: absolute; left: 14px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
