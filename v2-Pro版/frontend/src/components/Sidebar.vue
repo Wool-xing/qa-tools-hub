@@ -58,6 +58,7 @@ const open = ref(window.innerWidth > 768)
 
 const openSections = reactive({
   main: true,
+  levels: true,
   labs: false,
   practice: false,
 })
@@ -72,6 +73,20 @@ const sections = [
       { to: '/labs', label: '实验室', match: 'labs' },
       { to: '/testcases', label: '用例库', match: 'testcases' },
       { to: '/teams', label: '团队协作', match: 'teams' },
+    ],
+  },
+  {
+    key: 'levels',
+    label: '学习领域',
+    items: [
+      { to: '/levels', label: '入门基础', match: false, badge: '8关' },
+      { to: '/levels', label: 'Web测试', match: false, badge: '4关' },
+      { to: '/levels', label: 'API测试', match: false, badge: '3关' },
+      { to: '/levels', label: 'APP测试', match: false, badge: '4关' },
+      { to: '/levels', label: '性能测试', match: false, badge: '3关' },
+      { to: '/levels', label: '安全测试', match: false, badge: '4关' },
+      { to: '/levels', label: '网络&抓包', match: false, badge: '3关' },
+      { to: '/levels', label: '运维&数据库', match: false, badge: '3关' },
     ],
   },
   {
@@ -114,9 +129,9 @@ function toggleSection(key) {
 }
 
 function isActive(to, matchName) {
+  if (matchName === false) return false
   if (matchName) {
     if (route.name === matchName) return true
-    // highlight "levels" nav when viewing a specific level
     if (matchName === 'levels' && (route.name === 'level' || route.path.startsWith('/level/'))) return true
     if (route.path === to) return true
     if (route.path.startsWith(to + '/') || route.path.startsWith(to + '?')) return true
