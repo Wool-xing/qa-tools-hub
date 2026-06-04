@@ -58,7 +58,6 @@ const open = ref(window.innerWidth > 768)
 
 const openSections = reactive({
   main: true,
-  levels: true,
   labs: false,
   practice: false,
 })
@@ -73,20 +72,6 @@ const sections = [
       { to: '/labs', label: '实验室', match: 'labs' },
       { to: '/testcases', label: '用例库', match: 'testcases' },
       { to: '/teams', label: '团队协作', match: 'teams' },
-    ],
-  },
-  {
-    key: 'levels',
-    label: '学习领域',
-    items: [
-      { to: '/levels', label: '入门基础', badge: '8关' },
-      { to: '/levels', label: 'Web测试', badge: '4关' },
-      { to: '/levels', label: 'API测试', badge: '3关' },
-      { to: '/levels', label: 'APP测试', badge: '4关' },
-      { to: '/levels', label: '性能测试', badge: '3关' },
-      { to: '/levels', label: '安全测试', badge: '4关' },
-      { to: '/levels', label: '网络&抓包', badge: '3关' },
-      { to: '/levels', label: '运维&数据库', badge: '3关' },
     ],
   },
   {
