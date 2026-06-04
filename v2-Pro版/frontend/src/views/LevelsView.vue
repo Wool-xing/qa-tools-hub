@@ -169,7 +169,7 @@ onMounted(() => store.fetchList())
 .stage-header {
   width: 100%; display: flex; align-items: center; gap: 10px;
   padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
-  background: var(--surface); cursor: pointer; font-size: .88rem;
+  background: var(--surface); color: var(--text); cursor: pointer; font-size: .88rem;
   transition: all var(--fast); font-family: var(--font-sans); text-align: left;
 }
 .stage-header:hover { border-color: var(--primary); background: var(--primary-light); }

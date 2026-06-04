@@ -149,6 +149,7 @@ onBeforeUnmount(() => { _mq.removeEventListener('change', _mqHandler) })
 
 /* Reset */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+button, input, select, textarea { color: inherit; font-family: inherit; }
 
 html { scroll-behavior: smooth; }
 
