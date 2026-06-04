@@ -61,19 +61,32 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useLevelsStore } from '../stores/levels'
 const store = useLevelsStore()
 const router = useRouter()
+const route = useRoute()
 
 const search = ref('')
 const filterType = ref('')
 const openStages = reactive({
-  beginner: true, web: true, api: true, mobile: true,
-  performance: true, security: true, network: true, ops: true, cicd: true, automotive: true,
-  accessibility: true, data: true, chaos: true, visual: true, risk: true, metrics: true, 'automation-arch': true, 'advanced-api': true, compliance: true,
+  beginner: false, intermediate: false, advanced: false, web: false, api: false, mobile: false,
+  performance: false, security: false, network: false, ops: false, cicd: false, automotive: false,
+  accessibility: false, data: false, chaos: false, visual: false, risk: false, metrics: false, 'automation-arch': false, 'advanced-api': false, compliance: false,
 })
+
+// Read stage from query param and expand matching accordion
+function applyStageFilter() {
+  const stage = route.query.stage
+  if (stage) {
+    // Close all first
+    Object.keys(openStages).forEach(k => openStages[k] = false)
+    // Open the matching one(s)
+    if (openStages.hasOwnProperty(stage)) openStages[stage] = true
+  }
+}
+watch(() => route.query.stage, applyStageFilter, { immediate: true })
 
 const visibleStages = computed(() => stageOrder.filter(k => totalIn(k) > 0))
 
