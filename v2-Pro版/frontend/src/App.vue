@@ -8,13 +8,6 @@
           <span class="logo-text">QA通关</span>
         </router-link>
 
-        <!-- Nav center — logged in -->
-        <div v-if="auth.isLoggedIn" class="topbar-nav">
-          <router-link to="/dashboard" class="topbar-link">仪表板</router-link>
-          <router-link to="/levels" class="topbar-link">闯关</router-link>
-          <router-link to="/labs" class="topbar-link">实验室</router-link>
-        </div>
-
         <!-- Right actions -->
         <div class="topbar-actions">
           <button @click="toggleDark" class="topbar-icon-btn" :title="isDark ? '浅色' : '深色'">
@@ -23,6 +16,7 @@
           <template v-if="auth.isLoggedIn">
             <router-link to="/profile" class="topbar-user">
               <span class="user-avatar">{{ (auth.user?.username || 'U')[0].toUpperCase() }}</span>
+              <span class="user-name">{{ auth.user?.username }}</span>
             </router-link>
             <button @click="handleLogout" class="topbar-link logout-btn">退出</button>
           </template>
@@ -200,7 +194,6 @@ main.has-sidebar {
   align-items: center; justify-content: center; font-size: .65rem;
   font-weight: 700; letter-spacing: 0;
 }
-.topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
 .topbar-link {
   padding: 6px 14px; border-radius: 6px; text-decoration: none;
   color: var(--text-secondary); font-size: .85rem; font-weight: 450;
@@ -230,6 +223,7 @@ main.has-sidebar {
   font-size: .75rem; font-weight: 600;
 }
 .logout-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); }
+.user-name { font-size: .82rem; color: var(--text-secondary); font-weight: 500; }
 
 /* ==================== Buttons ==================== */
 .btn-primary {
