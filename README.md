@@ -15,10 +15,10 @@
 
 ## Pro 版功能
 
-### 43关学习体系 (12个领域)
+### 102关学习体系 (22个领域)
 🌱 入门基础(8) · 🚀 进阶提升(3) · 🧠 专家进阶(4) · 🌐 Web测试(4) · 📡 API测试(3) · 📱 APP测试(4) · ⚡ 性能测试(3) · 🛡️ 安全测试(4) · 🚗 车载测试(2) · 📶 网络&抓包(3) · 🖥️ 运维&数据库(3) · 🔄 CI/CD(2)
 
-### 5大实验室
+### 21大实验室
 1. **🗄️ SQL 练习场** — 3种数据库场景，SQLite安全沙箱（仅SELECT），表格展示结果
 2. **💻 Linux 日志分析** — 模拟真实服务器，grep/tail/awk/sort/wc命令，VFS文件系统
 3. **📮 API 请求练习** — 构造HTTP请求(GET/POST/PUT/DELETE)，Headers管理，响应断言
@@ -41,7 +41,7 @@ POST /api/auth/login          — 登录 (JWT, 速率限制)
 POST /api/auth/forgot-password — 忘记密码 (邮件重置)
 POST /api/auth/reset-password  — 重置密码
 GET  /api/auth/me             — 当前用户
-GET  /api/levels              — 43关列表 + 进度
+GET  /api/levels              — 102关列表 + 进度
 GET  /api/levels/{id}         — 关卡详情
 POST /api/levels/submit       — 提交答案 (quiz/code/explore)
 POST /api/levels/{id}/run     — 代码沙箱执行
