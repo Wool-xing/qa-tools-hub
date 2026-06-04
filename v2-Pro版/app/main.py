@@ -102,9 +102,9 @@ async def lifespan(app: FastAPI):
     seed()
     for issue in check_config():
         logger.warning("Config: %s", issue)
-    logger.info("QA通关 API v2.0 started")
+    logger.info("QA通关 API v%s started", __version__)
     yield
-    logger.info("QA通关 API v2.0 shutting down")
+    logger.info("QA通关 API v%s shutting down", __version__)
 
 
 # ==================== App ====================
@@ -156,7 +156,7 @@ async def root():
     index_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
     if os.path.isfile(index_path):
         return FileResponse(index_path)
-    return {"message": "QA通关 API v2.0", "docs": "/docs"}
+    return {"message": f"QA通关 API v{__version__}", "docs": "/docs"}
 
 
 # Mock service virtualisation endpoint — must be before SPA fallback
