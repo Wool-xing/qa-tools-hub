@@ -16,7 +16,7 @@
       <p class="ch-task-text">{{ challenges[chIdx].task }}</p>
 
       <details class="schema-details">
-        <summary>📋 表结构 & 数据预览</summary>
+        <summary>表结构 & 数据预览</summary>
         <pre class="schema-pre">{{ challenges[chIdx].schema }}</pre>
       </details>
 

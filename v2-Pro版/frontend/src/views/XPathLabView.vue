@@ -9,7 +9,7 @@
         </select>
       </div>
 
-      <div class="task-desc">🎯 <strong>目标：</strong>{{ scenarios[currentScenario].task }}</div>
+      <div class="task-desc"><strong>目标：</strong>{{ scenarios[currentScenario].task }}</div>
 
       <div class="selector-bar">
         <span class="sel-prefix">{{ mode === 'css' ? '' : '//' }}</span>
@@ -26,7 +26,7 @@
       </div>
 
       <div v-if="matchCount > 0" class="card match-info" style="margin-top:12px;">
-        <h4>✅ 匹配的元素</h4>
+        <h4>匹配的元素</h4>
         <div v-for="(m, i) in matches" :key="i" class="match-row">
           <span class="match-tag">&lt;{{ m.tag }}&gt;</span>
           <span class="match-text">{{ m.text?.trim().slice(0, 60) || '(空元素)' }}</span>
@@ -92,11 +92,11 @@ const scenarios = [
     task: '定位当前激活的导航项',
     html: `<nav class="sidebar">
   <ul class="menu">
-    <li class="menu-item"><a href="/dashboard">📊 仪表板</a></li>
-    <li class="menu-item active"><a href="/test-cases">📋 测试用例</a></li>
-    <li class="menu-item"><a href="/bugs">🐛 缺陷管理</a></li>
+    <li class="menu-item"><a href="/dashboard">仪表板</a></li>
+    <li class="menu-item active"><a href="/test-cases">测试用例</a></li>
+    <li class="menu-item"><a href="/bugs">缺陷管理</a></li>
     <li class="menu-item has-submenu">
-      <a href="/reports">📈 报告</a>
+      <a href="/reports">报告</a>
       <ul class="submenu">
         <li><a href="/reports/weekly">周报</a></li>
         <li><a href="/reports/coverage">覆盖率</a></li>

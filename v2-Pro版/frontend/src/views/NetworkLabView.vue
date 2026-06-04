@@ -25,7 +25,7 @@
           <div class="hs-party server"><span>服务器</span><span class="hs-label">{{ tcpStep >= 1 ? (tcpStep >= 2 ? 'ESTABLISHED' : 'SYN-RCVD') : 'LISTEN' }}</span></div>
         </div>
         <p class="hs-status">客户端状态：<strong>{{ ['CLOSED','SYN-SENT','SYN-SENT','ESTABLISHED'][tcpStep] }}</strong> &nbsp;|&nbsp; 点击箭头逐步演示</p>
-        <button class="btn-outline" style="margin-top:8px;" @click="tcpStep = 0">🔄 重置</button>
+        <button class="btn-outline" style="margin-top:8px;" @click="tcpStep = 0">重置</button>
       </div>
 
       <div class="card" style="margin-bottom:var(--space-md);">
@@ -35,7 +35,7 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
         <div v-if="!tcpQuiz.submitted" style="margin-top:10px;">
-          <button class="btn-primary" :disabled="tcpQuiz.chosen===-1" @click="checkTcpQuiz">✅ 提交</button>
+          <button class="btn-primary" :disabled="tcpQuiz.chosen===-1" @click="checkTcpQuiz">提交</button>
         </div>
         <div v-if="tcpQuiz.submitted" class="explain">{{ tcpQuiz.chosen===tcpQuiz.answer ? '✅ 正确！' : '❌ 错误。' }} {{ tcpQuiz.explain }}</div>
       </div>
@@ -44,7 +44,7 @@
     <!-- ====== HTTP ====== -->
     <div v-if="activeTab === 'http'" class="proto-content">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>🌐 HTTP 版本对比</h3>
+        <h3>HTTP 版本对比</h3>
         <div class="http-compare">
           <div v-for="v in httpVersions" :key="v.ver" class="http-card" :class="{ highlight: httpSelected === v.ver }" @click="httpSelected = v.ver">
             <h4>{{ v.ver }}</h4>
@@ -80,19 +80,19 @@
             </div>
           </div>
         </div>
-        <button class="btn-outline" @click="tlsProgress = 0">🔄 重置</button>
+        <button class="btn-outline" @click="tlsProgress = 0">重置</button>
         <button class="btn-primary" style="margin-left:8px;" @click="tlsProgress = tlsSteps.length">▶ 全部展开</button>
       </div>
 
       <div class="card">
         <h3>📝 证书链验证要点</h3>
         <ul class="checklist">
-          <li>🔍 证书是否在有效期内（notBefore / notAfter）</li>
-          <li>🔍 证书 CN/SAN 是否匹配访问域名</li>
-          <li>🔍 颁发者 CA 是否在操作系统/浏览器信任库中</li>
-          <li>🔍 证书链是否完整（叶证书 → 中间CA → 根CA）</li>
-          <li>🔍 吊销状态检查（CRL / OCSP）</li>
-          <li>🔍 签名算法是否安全（禁止 MD5/SHA-1）</li>
+          <li>证书是否在有效期内（notBefore / notAfter）</li>
+          <li>证书 CN/SAN 是否匹配访问域名</li>
+          <li>颁发者 CA 是否在操作系统/浏览器信任库中</li>
+          <li>证书链是否完整（叶证书 → 中间CA → 根CA）</li>
+          <li>吊销状态检查（CRL / OCSP）</li>
+          <li>签名算法是否安全（禁止 MD5/SHA-1）</li>
         </ul>
       </div>
     </div>
@@ -102,7 +102,7 @@
       <div class="card" style="margin-bottom:var(--space-md);">
         <h3>🌍 DNS 解析流程</h3>
         <div class="dns-flow">
-          <div class="dns-party">💻 客户端</div>
+          <div class="dns-party">客户端</div>
           <div class="dns-arrow">→ www.example.com →</div>
           <div class="dns-resolver">
             <div class="dns-step-card">
@@ -125,7 +125,7 @@
             </div>
           </div>
           <div class="dns-arrow">← 93.184.216.34 ←</div>
-          <div class="dns-party">💻 客户端（缓存结果）</div>
+          <div class="dns-party">客户端（缓存结果）</div>
         </div>
       </div>
 
@@ -144,7 +144,7 @@
     <!-- ====== WebSocket ====== -->
     <div v-if="activeTab === 'ws'" class="proto-content">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>🔌 WebSocket vs HTTP</h3>
+        <h3>WebSocket vs HTTP</h3>
         <div class="ws-compare">
           <div class="ws-col">
             <h4>HTTP</h4>
@@ -176,7 +176,7 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
         <div v-if="!wsQuiz.submitted" style="margin-top:10px;">
-          <button class="btn-primary" :disabled="wsQuiz.chosen===-1" @click="checkWsQuiz">✅ 提交</button>
+          <button class="btn-primary" :disabled="wsQuiz.chosen===-1" @click="checkWsQuiz">提交</button>
         </div>
         <div v-if="wsQuiz.submitted" class="explain">{{ wsQuiz.chosen===wsQuiz.answer ? '✅ 正确！' : '❌ 错误。' }} {{ wsQuiz.explain }}</div>
       </div>
@@ -186,7 +186,7 @@
     <div v-if="activeTab === 'capture'" class="proto-content">
       <div class="card" style="margin-bottom:var(--space-md);">
         <h3>📦 HTTP 请求/响应原始报文分析</h3>
-        <p class="task-desc">🎯 <strong>目标：</strong>{{ captureScenarios[currentCapture].task }}</p>
+        <p class="task-desc"><strong>目标：</strong>{{ captureScenarios[currentCapture].task }}</p>
         <div class="capture-bar">
           <button v-for="(s,i) in captureScenarios" :key="i" class="scenario-btn" :class="{ active: currentCapture === i }" @click="currentCapture = i; captureAnswer=''; captureResult=null">{{ s.label }}</button>
         </div>
@@ -209,7 +209,7 @@
             :disabled="captureResult !== null"
             @click="captureChosen=i">{{ 'ABCD'[i] }}. {{ o }}</button>
         </div>
-        <button v-if="captureResult===null" class="btn-primary" style="margin-top:10px;" :disabled="captureChosen===-1" @click="checkCapture">✅ 提交</button>
+        <button v-if="captureResult===null" class="btn-primary" style="margin-top:10px;" :disabled="captureChosen===-1" @click="checkCapture">提交</button>
         <div v-if="captureResult!==null" class="explain">{{ captureResult ? '✅ 正确！' : '❌ 错误。' }} {{ captureScenarios[currentCapture].explain }}</div>
       </div>
     </div>
@@ -217,7 +217,7 @@
     <!-- ====== 弱网测试 ====== -->
     <div v-if="activeTab === 'weaknet'" class="proto-content">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>📶 弱网条件与测试策略</h3>
+        <h3>弱网条件与测试策略</h3>
         <div class="weaknet-grid">
           <div v-for="n in weakNetworks" :key="n.name" class="weaknet-card" @click="weakSelected = n.name">
             <h4>{{ n.icon }} {{ n.name }}</h4>
@@ -238,7 +238,7 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
         <div v-if="!weakQuiz.submitted" style="margin-top:10px;">
-          <button class="btn-primary" :disabled="weakQuiz.chosen===-1" @click="checkWeakQuiz">✅ 提交</button>
+          <button class="btn-primary" :disabled="weakQuiz.chosen===-1" @click="checkWeakQuiz">提交</button>
         </div>
         <div v-if="weakQuiz.submitted" class="explain">{{ weakQuiz.chosen===weakQuiz.answer ? '✅ 正确！' : '❌ 错误。' }} {{ weakQuiz.explain }}</div>
       </div>

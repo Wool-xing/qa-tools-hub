@@ -10,7 +10,7 @@
       </div>
 
       <details class="panel-details">
-        <summary>📋 Headers ({{ activeHeaderCount }})</summary>
+        <summary>Headers ({{ activeHeaderCount }})</summary>
         <div>
           <div v-for="(h, i) in headers" :key="i" class="header-row">
             <input v-model="h.key" placeholder="Header 名称" class="h-key" spellcheck="false">
@@ -40,7 +40,7 @@
     </div>
 
     <div v-if="response" class="card">
-      <h3 style="font-size:.9rem;margin-bottom:10px;">✅ 断⾔检查</h3>
+      <h3 style="font-size:.9rem;margin-bottom:10px;">断⾔检查</h3>
       <div class="assert-checks">
         <span class="assert-item" :class="{ pass: checks.status, fail: checks.status === false }">
           {{ checks.status ? '✅' : '❌' }} 状态码 2xx
@@ -73,7 +73,7 @@
     <div class="card" style="margin-bottom:var(--space-md);">
       <h3 style="font-size:.88rem;margin-bottom:8px;">📐 响应Schema验证</h3>
       <textarea v-model="schemaText" class="body-input" rows="4" placeholder='{"type":"object","required":["id","name"],"properties":{"id":{"type":"integer"},"name":{"type":"string"}}}' style="font-size:.78rem;"></textarea>
-      <button class="btn-outline" style="font-size:.74rem;margin-top:6px;" @click="validateSchema" :disabled="!response">🔍 验证Schema</button>
+      <button class="btn-outline" style="font-size:.74rem;margin-top:6px;" @click="validateSchema" :disabled="!response">验证Schema</button>
       <div v-if="schemaResult" class="schema-result" :class="schemaResult.valid ? 'pass' : 'fail'">
         {{ schemaResult.valid ? '✅ Schema 匹配' : '❌ ' + schemaResult.error }}
       </div>
@@ -91,7 +91,7 @@
     </details>
 
     <div style="margin-top:var(--space-lg);">
-      <h3 style="font-size:.9rem;margin-bottom:10px;">🎯 练习场景</h3>
+      <h3 style="font-size:.9rem;margin-bottom:10px;">练习场景</h3>
       <div class="scenario-list">
         <button v-for="s in scenarios" :key="s.label" class="scenario-item" @click="applyScenario(s)">
           <strong>{{ s.label }}</strong>

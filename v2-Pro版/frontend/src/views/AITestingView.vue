@@ -2,8 +2,8 @@
   <div class="lab-page">
     <div class="tabs">
       <button :class="{ active: tab==='prompt' }" @click="tab='prompt'">✍️ Prompt 工程</button>
-      <button :class="{ active: tab==='validate' }" @click="tab='validate'">🔍 AI 输出验证</button>
-      <button :class="{ active: tab==='testai' }" @click="tab='testai'">🧪 测试 AI 系统</button>
+      <button :class="{ active: tab==='validate' }" @click="tab='validate'">AI 输出验证</button>
+      <button :class="{ active: tab==='testai' }" @click="tab='testai'">测试 AI 系统</button>
     </div>
 
     <!-- ====== Prompt Engineering ====== -->
@@ -14,7 +14,7 @@
         <div class="scenario-bar"><button v-for="(s,i) in promptScenarios" :key="i" class="scenario-btn" :class="{ active: psIdx===i }" @click="selectPS(i)">{{ s.label }}</button></div>
         <div class="prompt-context">{{ promptScenarios[psIdx].context }}</div>
         <div class="field"><label>你的 Prompt</label><textarea v-model="prompt" rows="4" class="form-input" placeholder="描述你想要的测试用例..."></textarea></div>
-        <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:8px;" @click="submitPrompt" :disabled="!prompt.trim()">🤖 生成测试用例</button>
+        <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:8px;" @click="submitPrompt" :disabled="!prompt.trim()">生成测试用例</button>
         <div v-if="promptResult" class="prompt-result">
           <h4>生成的测试用例：</h4>
           <div v-for="(tc,i) in promptResult" :key="i" class="gen-tc">
@@ -36,7 +36,7 @@
     <!-- ====== AI Output Validation ====== -->
     <div v-if="tab==='validate'">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>🔍 找出 AI 生成的测试用例中的问题</h3>
+        <h3>找出 AI 生成的测试用例中的问题</h3>
         <p class="desc">AI 会「幻觉」——编造不存在的功能、遗漏边界条件、写出无法执行的步骤。找出下面AI生成的测试用例中的问题。</p>
         <div class="scenario-bar"><button v-for="(s,i) in validateScenarios" :key="i" class="scenario-btn" :class="{ active: vsIdx===i }" @click="selectVS(i)">{{ s.label }}</button></div>
         <div v-for="(tc,i) in validateScenarios[vsIdx].cases" :key="i" class="v-tc" :class="{ 'has-issue': tc.hasIssue }">
@@ -47,12 +47,12 @@
             {{ tc.flagged ? '🚩 有问题' : '🚩 标记问题' }}
           </button>
         </div>
-        <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:12px;" @click="submitValidate" :disabled="!anyFlagged">✅ 提交验证</button>
+        <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:12px;" @click="submitValidate" :disabled="!anyFlagged">提交验证</button>
         <div v-if="validateResult" class="validate-result" :class="validateResult.allCorrect ? 'pass' : 'fail'">
           <h4>{{ validateResult.allCorrect ? '🎉 全部正确！' : '📝 还需练习' }}</h4>
           <p>{{ validateResult.allCorrect ? '你准确识别了所有AI幻觉和问题。' : `你找到了 ${validateResult.found} 个问题，但还有 ${validateResult.missed} 个没发现。` }}</p>
           <div v-if="validateResult.missedDetails" class="missed-list">
-            <div v-for="(m,i) in validateResult.missedDetails" :key="i" class="missed-item">🔍 {{ m }}</div>
+            <div v-for="(m,i) in validateResult.missedDetails" :key="i" class="missed-item">{{ m }}</div>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
     <!-- ====== Testing AI Systems ====== -->
     <div v-if="tab==='testai'">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>🧪 测试 AI 系统特有的挑战</h3>
+        <h3>测试 AI 系统特有的挑战</h3>
         <p class="desc">AI系统与传统软件不同——非确定性输出、数据漂移、公平性偏差、prompt注入。选择场景回答问题。</p>
         <div class="scenario-bar"><button v-for="(s,i) in testAIScenarios" :key="i" class="scenario-btn" :class="{ active: taIdx===i }" @click="selectTA(i)">{{ s.label }}</button></div>
         <div class="ta-scenario">
@@ -70,7 +70,7 @@
           <div v-for="(o,i) in testAIScenarios[taIdx].options" :key="i" class="quiz-opt" :class="{ selected: taChosen===i, correct: taSubmitted && i===testAIScenarios[taIdx].answer, wrong: taSubmitted && taChosen===i && i!==testAIScenarios[taIdx].answer }" :disabled="taSubmitted" @click="taChosen=i">
             <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
           </div>
-          <button v-if="!taSubmitted" class="btn-primary" style="margin-top:10px;" :disabled="taChosen===-1" @click="checkTA">✅ 提交</button>
+          <button v-if="!taSubmitted" class="btn-primary" style="margin-top:10px;" :disabled="taChosen===-1" @click="checkTA">提交</button>
           <div v-if="taSubmitted" class="explain">{{ taChosen===testAIScenarios[taIdx].answer ? '✅ 正确！' : '❌ 错误。' }} {{ testAIScenarios[taIdx].explain }}</div>
         </div>
       </div>

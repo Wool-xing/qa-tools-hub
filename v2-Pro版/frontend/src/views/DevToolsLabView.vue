@@ -9,8 +9,8 @@
     <!-- ====== Tab 1: Network Investigator ====== -->
     <div v-if="activeTab === 'network'" class="tab-content">
       <div class="card">
-        <h3>🔍 网络请求分析</h3>
-        <p class="task-desc">🎯 <strong>目标：</strong>{{ netScenarios[netIdx].task }}</p>
+        <h3>网络请求分析</h3>
+        <p class="task-desc"><strong>目标：</strong>{{ netScenarios[netIdx].task }}</p>
         <div class="scenario-bar">
           <button v-for="(s,i) in netScenarios" :key="i" class="scenario-btn" :class="{ active: netIdx === i }" @click="switchNet(i)">{{ s.label }}</button>
         </div>
@@ -38,7 +38,7 @@
 
         <div class="quiz-q" style="margin-top:16px;">{{ netScenarios[netIdx].question }}</div>
         <textarea v-model="netAnswers[netIdx]" class="text-answer" placeholder="写下你的诊断..."></textarea>
-        <button v-if="!netSubmitted[netIdx]" class="btn-primary" style="margin-top:8px;" @click="checkNet">✅ 提交诊断</button>
+        <button v-if="!netSubmitted[netIdx]" class="btn-primary" style="margin-top:8px;" @click="checkNet">提交诊断</button>
         <div v-if="netSubmitted[netIdx]" class="explain">{{ netScore[netIdx] >= 3 ? '✅' : netScore[netIdx] >= 1 ? '⚠️' : '❌' }} 得分: {{ netScore[netIdx] }}/{{ netScenarios[netIdx].keywords.length }} — {{ netScenarios[netIdx].explain }}</div>
       </div>
     </div>
@@ -46,7 +46,7 @@
     <!-- ====== Tab 2: Performance Profiler ====== -->
     <div v-if="activeTab === 'perf'" class="tab-content">
       <div class="card">
-        <h3>⚡ 性能火焰图分析</h3>
+        <h3>性能火焰图分析</h3>
         <div class="scenario-bar">
           <button v-for="(s,i) in perfScenarios" :key="i" class="scenario-btn" :class="{ active: perfIdx === i }" @click="perfIdx = i; perfChosen = -1; perfResult = null">{{ s.label }}</button>
         </div>
@@ -68,7 +68,7 @@
         <button v-for="(o,i) in perfScenarios[perfIdx].options" :key="i" class="quiz-opt" :class="{ selected: perfChosen===i, correct: perfResult && i===perfScenarios[perfIdx].answer, wrong: perfResult && perfChosen===i && i!==perfScenarios[perfIdx].answer }" :disabled="perfResult !== null" @click="perfChosen=i">
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
-        <button v-if="perfResult===null" class="btn-primary" style="margin-top:10px;" :disabled="perfChosen===-1" @click="checkPerf">✅ 提交</button>
+        <button v-if="perfResult===null" class="btn-primary" style="margin-top:10px;" :disabled="perfChosen===-1" @click="checkPerf">提交</button>
         <div v-if="perfResult!==null" class="explain">{{ perfResult ? '✅ 正确！' : '❌ 错误。' }} {{ perfScenarios[perfIdx].explain }}</div>
       </div>
     </div>
@@ -76,7 +76,7 @@
     <!-- ====== Tab 3: Console Detective ====== -->
     <div v-if="activeTab === 'console'" class="tab-content">
       <div class="card">
-        <h3>🐛 控制台侦探</h3>
+        <h3>控制台侦探</h3>
         <div class="scenario-bar">
           <button v-for="(s,i) in conScenarios" :key="i" class="scenario-btn" :class="{ active: conIdx === i }" @click="conIdx = i; conChosen = -1; conResult = null">{{ s.label }}</button>
         </div>
@@ -96,7 +96,7 @@
         <button v-for="(o,i) in conScenarios[conIdx].options" :key="i" class="quiz-opt" :class="{ selected: conChosen===i, correct: conResult && i===conScenarios[conIdx].answer, wrong: conResult && conChosen===i && i!==conScenarios[conIdx].answer }" :disabled="conResult !== null" @click="conChosen=i">
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
-        <button v-if="conResult===null" class="btn-primary" style="margin-top:10px;" :disabled="conChosen===-1" @click="checkCon">✅ 提交</button>
+        <button v-if="conResult===null" class="btn-primary" style="margin-top:10px;" :disabled="conChosen===-1" @click="checkCon">提交</button>
         <div v-if="conResult!==null" class="explain">{{ conResult ? '✅ 正确！' : '❌ 错误。' }} {{ conScenarios[conIdx].explain }}</div>
       </div>
     </div>
@@ -104,7 +104,7 @@
     <!-- ====== Tab 4: Coverage Analyzer ====== -->
     <div v-if="activeTab === 'coverage'" class="tab-content">
       <div class="card">
-        <h3>📊 代码覆盖率分析</h3>
+        <h3>代码覆盖率分析</h3>
         <div class="scenario-bar">
           <button v-for="(s,i) in covScenarios" :key="i" class="scenario-btn" :class="{ active: covIdx === i }" @click="covIdx = i; clearCovChecked(); covResult = null">{{ s.label }}</button>
         </div>
@@ -132,7 +132,7 @@
             <span v-if="covResult !== null" class="cl-mark">{{ rec.correct ? '✅' : '➖' }}</span>
           </label>
         </div>
-        <button v-if="covResult===null" class="btn-primary" style="margin-top:10px;" @click="checkCov">✅ 提交选择</button>
+        <button v-if="covResult===null" class="btn-primary" style="margin-top:10px;" @click="checkCov">提交选择</button>
         <div v-if="covResult!==null" class="explain">得分: {{ covScore }}/{{ covScenarios[covIdx].recommendations.filter(r=>r.correct).length }} — {{ covScenarios[covIdx].explain }}</div>
       </div>
     </div>
@@ -153,7 +153,7 @@
         </div>
 
         <div class="lh-opps">
-          <h4>🔍 优化机会</h4>
+          <h4>优化机会</h4>
           <div v-for="(opp,i) in lhScenarios[lhIdx].opportunities" :key="i" class="lh-opp" :class="{ 'lh-opp-selected': lhOrder.includes(i) }" @click="toggleLhPick(i)">
             <span class="lh-opp-num">{{ lhOrder.indexOf(i) >= 0 ? lhOrder.indexOf(i) + 1 : '·' }}</span>
             <div class="lh-opp-body">
@@ -165,7 +165,7 @@
 
         <div class="quiz-q" style="margin-top:12px;">{{ lhScenarios[lhIdx].question }}</div>
         <div v-if="lhOrder.length > 0" class="lh-picks">已选顺序: {{ lhOrder.map(i => (i+1)).join(' → ') }}</div>
-        <button v-if="lhResult===null" class="btn-primary" style="margin-top:8px;" :disabled="lhOrder.length < 3" @click="checkLh">✅ 提交排序 (选3项)</button>
+        <button v-if="lhResult===null" class="btn-primary" style="margin-top:8px;" :disabled="lhOrder.length < 3" @click="checkLh">提交排序 (选3项)</button>
         <div v-if="lhResult!==null" class="explain">得分: {{ lhScore }}/5 — {{ lhScenarios[lhIdx].explain }}</div>
       </div>
     </div>
@@ -211,7 +211,7 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
 
-        <button v-if="memResult===null" class="btn-primary" style="margin-top:10px;" :disabled="memLeakChosen===-1 || memFixChosen===-1" @click="checkMem">✅ 提交</button>
+        <button v-if="memResult===null" class="btn-primary" style="margin-top:10px;" :disabled="memLeakChosen===-1 || memFixChosen===-1" @click="checkMem">提交</button>
         <div v-if="memResult!==null" class="explain">{{ memScore === 2 ? '✅ 全对！' : memScore === 1 ? '⚠️ 对一半。' : '❌ 再想想。' }} {{ memScenarios[memIdx].explain }}</div>
       </div>
     </div>

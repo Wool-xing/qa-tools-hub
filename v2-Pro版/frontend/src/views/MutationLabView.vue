@@ -18,11 +18,11 @@
         <div class="card">
           <h3 class="card-title">📝 原始代码</h3>
           <pre class="code-block">{{ snippets[sandboxSnippetIdx].code }}</pre>
-          <h3 class="card-title" style="margin-top:14px;">🧪 现有测试</h3>
+          <h3 class="card-title" style="margin-top:14px;">现有测试</h3>
           <pre class="code-block test-block">{{ snippets[sandboxSnippetIdx].testCode }}</pre>
         </div>
         <div class="card">
-          <h3 class="card-title">🔧 选择变异算子</h3>
+          <h3 class="card-title">选择变异算子</h3>
           <div class="op-grid">
             <button
               v-for="op in snippets[sandboxSnippetIdx].mutations"
@@ -65,7 +65,7 @@
       </div>
 
       <div class="card" style="margin-bottom:14px;">
-        <h3 class="card-title">📊 杀灭率</h3>
+        <h3 class="card-title">杀灭率</h3>
         <div class="kill-bar-wrap">
           <div class="kill-bar">
             <div class="kill-bar-fill" :style="{ width: killRatePct + '%' }" :class="killRateColor"></div>
@@ -77,7 +77,7 @@
       </div>
 
       <div class="card" style="margin-bottom:14px;">
-        <h3 class="card-title">🧬 变异体状态</h3>
+        <h3 class="card-title">变异体状态</h3>
         <div class="mutant-list">
           <div v-for="m in killRateMutants" :key="m.id" class="mutant-row" :class="m.killed ? 'mutant-dead' : 'mutant-alive'">
             <span class="mutant-tag">{{ m.killed ? '💀' : '🧟' }}</span>
@@ -106,7 +106,7 @@
         </div>
         <div class="toolbar">
           <span class="hint-text">{{ userTestCases.length ? userTestCases.length + ' 条测试' : '尚未添加测试' }}</span>
-          <button class="btn-primary" :disabled="!userTestCases.length" @click="reRunKillRate">🔄 重新运行</button>
+          <button class="btn-primary" :disabled="!userTestCases.length" @click="reRunKillRate">重新运行</button>
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@
           </div>
         </div>
         <div v-if="em.userChoice === undefined" class="eq-actions">
-          <button class="btn-equiv btn-equiv-yes" @click="answerEquivalent(i, true)">✅ 等效变异</button>
+          <button class="btn-equiv btn-equiv-yes" @click="answerEquivalent(i, true)">等效变异</button>
           <button class="btn-equiv btn-equiv-no" @click="answerEquivalent(i, false)">❌ 非等效变异</button>
         </div>
         <div v-else class="eq-feedback" :class="em.userChoice === em.equivalent ? 'fb-correct' : 'fb-wrong'">
@@ -146,7 +146,7 @@
         <div class="score-big">{{ eqScore }}<span class="score-unit">/{{ equivalentMutants.length }}</span></div>
         <p style="text-align:center;">{{ eqScore >= 5 ? '出色！你对等价变异体有很好的理解。' : '继续练习，等价变异体是变异测试中的关键概念。' }}</p>
         <div style="text-align:center;margin-top:12px;">
-          <button class="btn-ghost" @click="resetEquivalent">🔄 重新挑战</button>
+          <button class="btn-ghost" @click="resetEquivalent">重新挑战</button>
         </div>
       </div>
     </div>
@@ -188,7 +188,7 @@
         <div class="score-big">{{ weaknessScore }}<span class="score-unit">/{{ weaknessRounds.length }}</span></div>
         <p style="text-align:center;">{{ weaknessScore >= 4 ? '优秀！你掌握了测试弱点分析的核心思维。' : '继续练习——识别测试缺口是提高测试质量的关键技能。' }}</p>
         <div style="text-align:center;margin-top:12px;">
-          <button class="btn-ghost" @click="resetWeakness">🔄 重新挑战</button>
+          <button class="btn-ghost" @click="resetWeakness">重新挑战</button>
         </div>
       </div>
     </div>
@@ -196,7 +196,7 @@
     <!-- ═══════════════ TAB 4: 变异分数热力图 ═══════════════ -->
     <div v-if="activeTab === 4" class="tab-content">
       <div class="card" style="margin-bottom:14px;">
-        <h3 class="card-title">📁 项目文件变异分数</h3>
+        <h3 class="card-title">项目文件变异分数</h3>
         <p class="hint-text">模拟一个真实项目的逐文件变异测试报告。颜色越深 = 分数越低 = 测试越弱。</p>
       </div>
 
@@ -215,7 +215,7 @@
       </div>
 
       <div class="card" style="margin-top:14px;">
-        <h3 class="card-title">🎯 哪 2 个文件需要优先改进测试？</h3>
+        <h3 class="card-title">哪 2 个文件需要优先改进测试？</h3>
         <div class="heatmap-pick">
           <select v-model="heatmapPick1" class="field-select" style="flex:1;">
             <option value="">-- 选择第一个文件 --</option>

@@ -4,7 +4,7 @@
     <template v-if="dashboardTeamId">
       <div class="page-header">
         <a @click="backToList" class="back-link">← 返回团队列表</a>
-        <h1>📊 {{ dashboardTeamName }} — 仪表板</h1>
+        <h1>{{ dashboardTeamName }} — 仪表板</h1>
       </div>
 
       <div v-if="dashboardLoading" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">加载仪表板...</div>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="card" style="margin-top:var(--space-lg);">
-          <h3 style="margin-bottom:var(--space-md);">👥 成员进度</h3>
+          <h3 style="margin-bottom:var(--space-md);">成员进度</h3>
           <table class="member-table" v-if="members.length">
             <thead>
               <tr>
@@ -51,7 +51,7 @@
     <!-- ==================== Tabs Mode ==================== -->
     <template v-else>
       <div class="page-header">
-        <h1>👥 团队协作</h1>
+        <h1>团队协作</h1>
         <p>创建团队，与同事共享测试用例和学习进度</p>
       </div>
 
@@ -97,7 +97,7 @@
               </div>
             </div>
             <div class="team-card-actions">
-              <button class="btn-outline" @click="viewDashboard(t.id)">📊 查看仪表板</button>
+              <button class="btn-outline" @click="viewDashboard(t.id)">查看仪表板</button>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@
             <span class="invite-label">邀请码</span>
             <code class="invite-code">{{ createdTeam.invite_code }}</code>
           </div>
-          <button class="btn-primary" @click="copyCode(createdTeam.invite_code)">📋 复制邀请码</button>
+          <button class="btn-primary" @click="copyCode(createdTeam.invite_code)">复制邀请码</button>
           <p class="invite-hint">分享邀请码给团队成员即可加入</p>
           <hr style="margin:16px 0;border:none;border-top:1px solid var(--border-light);">
           <button class="btn-outline" @click="createdTeam = null; fetchTeams()">创建另一个团队</button>

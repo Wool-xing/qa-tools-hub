@@ -38,7 +38,7 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span>
           <span>{{ opt }}</span>
         </button>
-        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">✅ 提交答案</button>
+        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">提交答案</button>
       </div>
 
       <!-- Code -->
@@ -57,13 +57,13 @@
             <div v-if="!runResult.ok" class="output-err">{{ runResult.error }}</div>
           </div>
         </div>
-        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="!answer.code" @click="doSubmit">✅ 提交代码</button>
+        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="!answer.code" @click="doSubmit">提交代码</button>
       </div>
 
       <!-- Debug -->
       <div v-if="store.current.task_type==='debug'">
         <div class="content-panel markdown" v-html="rendered" style="margin-bottom:var(--space-md);"></div>
-        <div class="hint-box">🐛 下面的代码有Bug。找出问题并修复它——代码必须运行成功且通过所有检查才算过关。</div>
+        <div class="hint-box">下面的代码有Bug。找出问题并修复它——代码必须运行成功且通过所有检查才算过关。</div>
         <div class="code-editor">
           <div class="ce-header">
             <span class="ce-dot red"></span><span class="ce-dot yellow"></span><span class="ce-dot green"></span>
@@ -77,7 +77,7 @@
             <div v-if="!runResult.ok" class="output-err">{{ runResult.error }}</div>
           </div>
         </div>
-        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="!answer.code" @click="doSubmit">✅ 提交修复</button>
+        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="!answer.code" @click="doSubmit">提交修复</button>
       </div>
 
       <!-- Scenario -->
@@ -95,14 +95,14 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span>
           <span>{{ opt.slice(2).trim() }}</span>
         </button>
-        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">✅ 提交判断</button>
+        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">提交判断</button>
       </div>
 
       <!-- Explore -->
       <div v-if="store.current.task_type==='explore'">
         <div class="content-panel markdown" v-html="rendered" style="margin-bottom:var(--space-md);"></div>
         <textarea v-model="answer.text" placeholder="写下你的理解和回答..." class="explore-textarea" rows="6"></textarea>
-        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="!answer.text" @click="doSubmit">✅ 提交回答</button>
+        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="!answer.text" @click="doSubmit">提交回答</button>
       </div>
 
       <!-- Analyze (data-driven quiz) -->
@@ -122,7 +122,7 @@
           <span class="opt-letter">{{ 'ABCD'[i] }}</span>
           <span>{{ opt }}</span>
         </button>
-        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">✅ 提交答案</button>
+        <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">提交答案</button>
       </div>
     </div>
 
@@ -133,8 +133,8 @@
       <p>得分: {{ store.result.score }} 分 | 第 {{ store.result.attempts }} 次尝试</p>
       <p v-if="store.result.explanation" class="explain">{{ store.result.explanation }}</p>
       <div class="result-actions">
-        <button v-if="store.result.completed" @click="goNext" class="btn-primary" style="justify-content:center;">📋 继续下一关</button>
-        <button v-else @click="resetTask" class="btn-outline">🔄 再试一次</button>
+        <button v-if="store.result.completed" @click="goNext" class="btn-primary" style="justify-content:center;">继续下一关</button>
+        <button v-else @click="resetTask" class="btn-outline">再试一次</button>
       </div>
     </div>
   </div>

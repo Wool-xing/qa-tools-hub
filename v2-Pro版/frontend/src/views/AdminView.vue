@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="page-header"><h1>🛡️ 管理面板</h1><p>用户管理与平台数据</p></div>
+    <div class="page-header"><h1>管理面板</h1><p>用户管理与平台数据</p></div>
 
     <div v-if="auth.user && !auth.user.is_admin" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">
       🔒 需要管理员权限
@@ -9,8 +9,8 @@
       <div v-if="adminError" class="err-banner" @click="adminError=''">{{ adminError }} <span class="err-dismiss">✕</span></div>
       <!-- Admin Tabs -->
       <div class="admin-tabs">
-        <button :class="{ active: adminTab==='overview' }" @click="adminTab='overview'">📊 概览</button>
-        <button :class="{ active: adminTab==='levels' }" @click="adminTab='levels'">🎯 关卡管理</button>
+        <button :class="{ active: adminTab==='overview' }" @click="adminTab='overview'">概览</button>
+        <button :class="{ active: adminTab==='levels' }" @click="adminTab='levels'">关卡管理</button>
       </div>
 
       <!-- ====== Overview Tab ====== -->
@@ -22,7 +22,7 @@
         </div>
 
         <div class="card" style="margin-top:var(--space-lg);">
-          <h3 style="margin-bottom:var(--space-md);">👥 用户列表</h3>
+          <h3 style="margin-bottom:var(--space-md);">用户列表</h3>
           <div class="table-wrap">
             <table>
               <thead><tr><th>ID</th><th>用户名</th><th>邮箱</th><th>角色</th><th>已通关</th><th>注册时间</th></tr></thead>
@@ -147,7 +147,7 @@
         <!-- Delete Confirm Modal -->
         <div v-if="showDeleteConfirm" class="modal-overlay" @click.self="showDeleteConfirm=false">
           <div class="modal-card" style="max-width:400px;">
-            <h3>⚠️ 确认删除</h3>
+            <h3>确认删除</h3>
             <p style="margin:16px 0;">确定要删除关卡 <strong>{{ deleteTarget?.title }}</strong> 吗？此操作不可撤销。</p>
             <div class="modal-actions">
               <button class="btn btn-outline" @click="showDeleteConfirm=false">取消</button>

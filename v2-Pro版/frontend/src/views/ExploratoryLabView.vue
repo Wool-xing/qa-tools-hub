@@ -2,7 +2,7 @@
   <div class="lab-page">
     <!-- Setup Phase -->
     <div v-if="phase === 'setup'" class="card">
-      <h3 style="margin-bottom:14px;">📋 会话设置</h3>
+      <h3 style="margin-bottom:14px;">会话设置</h3>
 
       <label class="field-label">Charter 模板</label>
       <div class="template-bar">
@@ -21,7 +21,7 @@
     <!-- Active Session -->
     <div v-if="phase === 'active'" class="session-active">
       <div class="card charter-readonly">
-        <div class="charter-label">🎯 测试 Charter</div>
+        <div class="charter-label">测试 Charter</div>
         <p>{{ charter }}</p>
       </div>
 
@@ -72,14 +72,14 @@
     <!-- Review Phase -->
     <div v-if="phase === 'review'" class="session-review">
       <div class="card">
-        <h3 style="margin-bottom:8px;">✅ 会话完成</h3>
+        <h3 style="margin-bottom:8px;">会话完成</h3>
         <p class="review-summary">
           共 <strong>{{ formattedTime }}</strong> · <strong>{{ observations.length }}</strong> 条观察记录
         </p>
       </div>
 
       <div v-if="obsByType.Bug.length" class="card">
-        <h3>🐛 Bug ({{ obsByType.Bug.length }})</h3>
+        <h3>Bug ({{ obsByType.Bug.length }})</h3>
         <ul class="review-list">
           <li v-for="(o, i) in obsByType.Bug" :key="i">{{ o.text }}</li>
         </ul>
@@ -97,7 +97,7 @@
         </ul>
       </div>
       <div v-if="obsByType.Risk.length" class="card">
-        <h3>⚠️ 风险 ({{ obsByType.Risk.length }})</h3>
+        <h3>风险 ({{ obsByType.Risk.length }})</h3>
         <ul class="review-list">
           <li v-for="(o, i) in obsByType.Risk" :key="i">{{ o.text }}</li>
         </ul>
@@ -109,10 +109,10 @@
       </div>
 
       <div class="review-actions">
-        <button class="btn-primary" @click="copyMarkdown">📋 复制为 Markdown</button>
-        <button class="btn-outline" @click="resetAll">🔄 开始新会话</button>
+        <button class="btn-primary" @click="copyMarkdown">复制为 Markdown</button>
+        <button class="btn-outline" @click="resetAll">开始新会话</button>
       </div>
-      <p v-if="copied" class="copied-msg">✅ 已复制到剪贴板！</p>
+      <p v-if="copied" class="copied-msg">已复制到剪贴板！</p>
     </div>
   </div>
 </template>

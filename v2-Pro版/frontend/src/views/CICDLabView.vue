@@ -21,7 +21,7 @@
       <!-- Pipeline Canvas -->
       <div class="card" v-if="pipelineStages.length > 0">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-          <h3 style="margin:0;font-size:.9rem;">🔧 管道画布</h3>
+          <h3 style="margin:0;font-size:.9rem;">管道画布</h3>
           <button class="btn-outline" @click="clearPipeline" style="font-size:.74rem;padding:4px 12px;">清空管道</button>
         </div>
         <div class="pipeline-canvas">
@@ -101,14 +101,14 @@
           <button class="btn-outline" :class="{ active: exportFormat === 'gitlab' }" @click="exportFormat = 'gitlab'; generateExport()">GitLab CI</button>
         </div>
         <pre v-if="exportedYaml" class="export-code"><code>{{ exportedYaml }}</code></pre>
-        <button v-if="exportedYaml" class="btn-outline" style="margin-top:8px;" @click="copyExport">📋 复制到剪贴板</button>
+        <button v-if="exportedYaml" class="btn-outline" style="margin-top:8px;" @click="copyExport">复制到剪贴板</button>
         <span v-if="copyMsg" class="copy-msg">{{ copyMsg }}</span>
       </div>
 
       <!-- Challenge 1: Speed -->
       <div class="card challenge-card" style="margin-top:var(--space-md);">
         <div class="challenge-header" @click="ch1Open = !ch1Open">
-          <h3 style="margin:0;font-size:.9rem;">🏆 挑战 1：速度优化 <span class="tag tag-warning">CHALLENGE</span></h3>
+          <h3 style="margin:0;font-size:.9rem;">挑战 1：速度优化 <span class="tag tag-warning">CHALLENGE</span></h3>
           <span>{{ ch1Open ? '▲' : '▼' }}</span>
         </div>
         <div v-if="ch1Open">
@@ -122,7 +122,7 @@
     <!-- ====== TAB 2: Flaky Detection ====== -->
     <div v-if="activeTab === 'flaky'" class="tab-content">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3 style="margin-bottom:6px;font-size:.9rem;">🔍 Flaky 测试检测模式</h3>
+        <h3 style="margin-bottom:6px;font-size:.9rem;">Flaky 测试检测模式</h3>
         <p style="font-size:.78rem;color:var(--text-secondary);margin-bottom:12px;">分析以下 8 个测试的最近 10 次运行历史，分类并选择处理措施。</p>
       </div>
 
@@ -157,7 +157,7 @@
             </div>
           </div>
           <div v-else class="flaky-reveal">
-            <div v-if="flakyAnalysis[idx].classification === flakyAnalysis[idx].correctClass && flakyAnalysis[idx].action === flakyAnalysis[idx].correctAction" class="reveal-correct">✅ 正确！</div>
+            <div v-if="flakyAnalysis[idx].classification === flakyAnalysis[idx].correctClass && flakyAnalysis[idx].action === flakyAnalysis[idx].correctAction" class="reveal-correct">正确！</div>
             <div v-else class="reveal-wrong">
               ❌ 应为：<strong>{{ classLabel(flakyAnalysis[idx].correctClass) }}</strong> → <strong>{{ actionLabel(flakyAnalysis[idx].correctAction) }}</strong>
             </div>
@@ -167,7 +167,7 @@
       </div>
 
       <div v-if="flakyAllSubmitted && flakyScore === null" class="card" style="margin-top:var(--space-md);text-align:center;">
-        <button class="btn-primary" @click="checkAllSubmitted">✅ 提交评分</button>
+        <button class="btn-primary" @click="checkAllSubmitted">提交评分</button>
       </div>
       <div v-if="flakyScore !== null" class="card" style="margin-top:var(--space-md);text-align:center;">
         <h3 style="font-size:1rem;margin-bottom:6px;">你的得分：{{ flakyScore }} / {{ flakyTests.length * 2 }}</h3>
@@ -175,7 +175,7 @@
           正确分类 {{ flakyCorrectCount }} / {{ flakyTests.length }} 个测试；
           正确措施 {{ flakyActionCount }} / {{ flakyTests.length }} 个
         </p>
-        <button class="btn-outline" style="margin-top:8px;" @click="resetFlaky">🔄 重试</button>
+        <button class="btn-outline" style="margin-top:8px;" @click="resetFlaky">重试</button>
         <details style="margin-top:10px;text-align:left;">
           <summary style="font-size:.8rem;font-weight:600;color:var(--primary);cursor:pointer;">💡 学习要点</summary>
           <ul style="padding-left:20px;font-size:.78rem;color:var(--text-secondary);line-height:1.8;margin-top:6px;">
@@ -190,7 +190,7 @@
       <!-- Challenge 2: Flaky Hunt -->
       <div class="card challenge-card" style="margin-top:var(--space-md);">
         <div class="challenge-header" @click="ch2Open = !ch2Open">
-          <h3 style="margin:0;font-size:.9rem;">🏆 挑战 2：Flaky 测试猎手 <span class="tag tag-warning">CHALLENGE</span></h3>
+          <h3 style="margin:0;font-size:.9rem;">挑战 2：Flaky 测试猎手 <span class="tag tag-warning">CHALLENGE</span></h3>
           <span>{{ ch2Open ? '▲' : '▼' }}</span>
         </div>
         <div v-if="ch2Open">
@@ -209,7 +209,7 @@
               </tbody>
             </table>
           </div>
-          <button class="btn-primary" style="margin-top:10px;" @click="submitHunt" :disabled="huntSubmitted">🎯 提交</button>
+          <button class="btn-primary" style="margin-top:10px;" @click="submitHunt" :disabled="huntSubmitted">提交</button>
           <div v-if="huntSubmitted" class="challenge-result" :class="{ win: huntScore.precision >= 0.8 }">
             精确率 {{ (huntScore.precision * 100).toFixed(0) }}% · 召回率 {{ (huntScore.recall * 100).toFixed(0) }}% · F1 {{ (huntScore.f1 * 100).toFixed(0) }}%
             <br /><small>（真正例 {{ huntScore.tp }} / 假正例 {{ huntScore.fp }} / 假负例 {{ huntScore.fn }}）</small>
@@ -253,7 +253,7 @@
           <strong>{{ triageCauseChosen === triageAnswer.correctCause ? '✅ 正确！' : '❌ 错误。' }}</strong>
           {{ triageAnswer.explanation }}
         </div>
-        <button v-if="triageCauseChosen !== null" class="btn-outline" style="margin-top:10px;" @click="resetTriage">🔄 再试一次</button>
+        <button v-if="triageCauseChosen !== null" class="btn-outline" style="margin-top:10px;" @click="resetTriage">再试一次</button>
       </div>
     </div>
 
@@ -269,7 +269,7 @@
       <template v-if="reportData">
         <!-- Pass Rate Trend -->
         <div class="card" style="margin-bottom:var(--space-md);">
-          <h3 style="margin-bottom:10px;font-size:.9rem;">📈 通过率趋势（最近 10 次）</h3>
+          <h3 style="margin-bottom:10px;font-size:.9rem;">通过率趋势（最近 10 次）</h3>
           <div class="trend-chart">
             <div class="trend-bar-wrap" v-for="(p, i) in reportData.passRateTrend" :key="i">
               <div class="trend-bar" :style="{ height: p + '%' }" :title="'Run #' + (i + 1) + ': ' + p + '%'">
@@ -322,7 +322,7 @@
 
           <!-- Flaky Candidates -->
           <div class="card" style="grid-column: 1 / -1;">
-            <h3 style="margin-bottom:10px;font-size:.9rem;">⚠️ Flaky 候选（通过率 50%-95%）</h3>
+            <h3 style="margin-bottom:10px;font-size:.9rem;">Flaky 候选（通过率 50%-95%）</h3>
             <table class="report-table">
               <thead><tr><th>测试</th><th>通过率</th><th>最近 10 次</th><th>建议</th></tr></thead>
               <tbody>

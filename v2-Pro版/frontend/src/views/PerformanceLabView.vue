@@ -18,7 +18,7 @@
 
           <div class="slider-group">
             <label class="slider-label">
-              <span>👥 虚拟用户数 (VUs): <strong>{{ vus }}</strong></span>
+              <span>虚拟用户数 (VUs): <strong>{{ vus }}</strong></span>
             </label>
             <input type="range" v-model.number="vus" min="1" max="500" class="slider" />
             <span class="slider-range">1 — 500</span>
@@ -96,7 +96,7 @@
 
           <!-- Throughput Timeline -->
           <div class="card" style="margin-bottom:var(--space-md);">
-            <h3 class="section-title">📈 吞吐量时间线 (RPS)</h3>
+            <h3 class="section-title">吞吐量时间线 (RPS)</h3>
             <div class="timeline-chart">
               <svg :viewBox="'0 0 ' + chartW + ' 160'" class="chart-svg">
                 <!-- Grid lines -->
@@ -118,7 +118,7 @@
 
           <!-- Checks -->
           <div class="card">
-            <h3 class="section-title">✅ 检查结果</h3>
+            <h3 class="section-title">检查结果</h3>
             <div class="checks-row">
               <span class="check-badge" :class="i < result.checks_passed ? 'check-pass' : 'check-fail'"
                 v-for="i in result.checks_total" :key="i">
@@ -137,14 +137,14 @@
       <div class="edu-content">
         <div class="edu-grid">
           <div class="edu-card">
-            <h4>📊 延迟分位数 (Latency Percentiles)</h4>
+            <h4>延迟分位数 (Latency Percentiles)</h4>
             <p><strong>P50 (中位数)：</strong>50% 的请求比这个值快。反映"典型用户体验"。</p>
             <p><strong>P95：</strong>95% 的请求比这个值快。SLA 常用指标——只允许 5% 的请求超过它。</p>
             <p><strong>P99：</strong>99% 的请求比这个值快。捕捉"长尾延迟"——那 1% 最慢的用户在经历什么。</p>
             <p class="edu-tip">💡 平均值会隐藏长尾问题。P95/P99 才是性能测试的核心关注点。</p>
           </div>
           <div class="edu-card">
-            <h4>⚡ RPS vs VUs</h4>
+            <h4>RPS vs VUs</h4>
             <p><strong>VUs (虚拟用户)：</strong>同时"在线"并发送请求的模拟用户数量。</p>
             <p><strong>RPS (每秒请求数)：</strong>系统实际每秒处理的请求数。这是吞吐量。</p>
             <p class="edu-tip">💡 VUs 增加不意味着 RPS 线性增长——当系统饱和时，延迟上升，RPS 反而可能下降。这就是瓶颈点。</p>

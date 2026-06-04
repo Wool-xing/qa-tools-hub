@@ -1,8 +1,8 @@
 <template>
   <div class="lab-page">
     <div class="tabs-bar">
-      <button class="tab-btn" :class="{ active: tab === 'free' }" @click="tab = 'free'">🔍 自由检测</button>
-      <button class="tab-btn" :class="{ active: tab === 'challenge' }" @click="tab = 'challenge'">🏆 场景挑战</button>
+      <button class="tab-btn" :class="{ active: tab === 'free' }" @click="tab = 'free'">自由检测</button>
+      <button class="tab-btn" :class="{ active: tab === 'challenge' }" @click="tab = 'challenge'">场景挑战</button>
     </div>
 
     <div v-if="tab === 'free'" class="card" style="margin-bottom:var(--space-md);">
@@ -35,7 +35,7 @@
 
     <div v-if="results && results.length > 0" class="card" style="margin-bottom:var(--space-md);">
       <div class="results-header">
-        <h3>📋 检测结果</h3>
+        <h3>检测结果</h3>
         <span class="results-summary">
           <span class="sev-count sev-a">🔴 {{ counts.A }} A级</span>
           <span class="sev-count sev-aa">🟡 {{ counts.AA }} AA级</span>

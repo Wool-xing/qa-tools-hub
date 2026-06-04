@@ -5,7 +5,7 @@
       <!-- ===== LEFT: Mock Builder ===== -->
       <div class="mock-left">
         <div class="card" style="margin-bottom:var(--space-md);">
-          <h3 style="font-size:.9rem;margin-bottom:10px;">🔧 Mock 构建器</h3>
+          <h3 style="font-size:.9rem;margin-bottom:10px;">Mock 构建器</h3>
           <div class="form-row">
             <div class="form-group" style="flex:0 0 120px;">
               <label class="form-label">方法</label>
@@ -35,7 +35,7 @@
 
           <!-- Fault Injection Presets -->
           <div style="margin-bottom:10px;">
-            <label class="form-label" style="margin-bottom:6px;">⚡ 故障注入预设</label>
+            <label class="form-label" style="margin-bottom:6px;">故障注入预设</label>
             <div class="preset-chips">
               <button class="preset-chip" @click="applyPreset('503')">💥 注入503错误</button>
               <button class="preset-chip" @click="applyPreset('delay')">🐌 注入5s延迟</button>
@@ -44,11 +44,11 @@
             </div>
           </div>
 
-          <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-bottom:8px;" @click="createMock">✅ 创建 Mock</button>
+          <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-bottom:8px;" @click="createMock">创建 Mock</button>
 
           <!-- Sequence Builder -->
           <details style="font-size:.8rem;">
-            <summary style="cursor:pointer;font-weight:600;color:var(--primary);margin-bottom:8px;">📋 行为序列 (高级)</summary>
+            <summary style="cursor:pointer;font-weight:600;color:var(--primary);margin-bottom:8px;">行为序列 (高级)</summary>
             <p style="color:var(--text-secondary);font-size:.74rem;margin-bottom:8px;">按调用顺序返回不同的响应</p>
             <div v-for="(step, i) in mockForm.sequence" :key="i" class="seq-step">
               <span class="seq-order">#{{ i + 1 }}</span>
@@ -64,7 +64,7 @@
         <!-- Mock List -->
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <h3 style="font-size:.9rem;">📋 已注册 Mock</h3>
+            <h3 style="font-size:.9rem;">已注册 Mock</h3>
             <button class="btn-ghost" style="font-size:.72rem;color:var(--danger);" @click="resetMocks">清空全部</button>
           </div>
           <div v-if="mockList.length === 0" style="color:var(--text-muted);font-size:.78rem;text-align:center;padding:16px;">暂无 Mock</div>
@@ -81,7 +81,7 @@
       <!-- ===== RIGHT: Test Panel ===== -->
       <div class="mock-right">
         <div class="card" style="margin-bottom:var(--space-md);">
-          <h3 style="font-size:.9rem;margin-bottom:10px;">🧪 测试面板</h3>
+          <h3 style="font-size:.9rem;margin-bottom:10px;">测试面板</h3>
           <div class="form-row">
             <div class="form-group" style="flex:0 0 110px;">
               <select v-model="testForm.method" class="form-input">
@@ -119,7 +119,7 @@
 
         <!-- Challenge Scenarios -->
         <div class="card">
-          <h3 style="font-size:.9rem;margin-bottom:10px;">🏆 挑战关卡</h3>
+          <h3 style="font-size:.9rem;margin-bottom:10px;">挑战关卡</h3>
           <div class="challenge-bar">
             <button v-for="(c,i) in challenges" :key="i" class="challenge-btn" :class="{ active: chIdx === i, solved: chSolved[i] }"
               @click="selectChallenge(i)">{{ c.diff }} {{ c.label }}</button>

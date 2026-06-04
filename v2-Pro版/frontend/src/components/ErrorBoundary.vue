@@ -4,7 +4,7 @@
       <span class="err-icon">⚠️</span>
       <h2>页面出错</h2>
       <p class="err-msg">{{ error.message || '未知错误' }}</p>
-      <button class="btn-primary" @click="reset">🔄 重试</button>
+      <button class="btn-primary" @click="reset">重试</button>
     </div>
   </div>
   <slot v-else />

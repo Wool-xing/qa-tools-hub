@@ -116,7 +116,7 @@
           </select>
         </div>
       </div>
-      <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:10px;" @click="checkTriage" :disabled="triageRanks.includes(null)">✅ 提交分诊</button>
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:10px;" @click="checkTriage" :disabled="triageRanks.includes(null)">提交分诊</button>
       <div v-if="triageResult" class="triage-result" :class="triageResult.allCorrect ? 'pass' : 'fail'">
         <h4>{{ triageResult.allCorrect ? '🎉 全部分类正确！' : '📝 正确率 ' + triageResult.pct + '%' }}</h4>
         <div v-for="(b,i) in triageBugs" :key="i" class="triage-fb">
@@ -144,7 +144,7 @@
           <p><strong>实际：</strong>{{ compareReports[1].actual }}</p>
         </div>
       </div>
-      <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:10px;" @click="checkCompare" :disabled="compareChoice===null">✅ 确认选择</button>
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;margin-top:10px;" @click="checkCompare" :disabled="compareChoice===null">确认选择</button>
       <div v-if="compareResult" class="triage-result" :class="compareResult.correct ? 'pass' : 'fail'">
         <h4>{{ compareResult.correct ? '✅ 正确！' : '❌ 不对。' }}</h4>
         <p>{{ compareResult.correct ? 'B的标题包含关键信息（模块+症状+条件），步骤可复现，实际结果精确（报错信息+截图引用）。A太模糊——「不好使」不是Bug描述。' : 'B更好——标题清晰定位问题，步骤编号可复现，实际结果包含报错文本。A只说「不好使」——没有可操作的信息。' }}</p>

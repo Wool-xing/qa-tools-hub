@@ -7,7 +7,7 @@
           <select v-model="currentScenario" class="scenario-select">
             <option value="login">🔐 登录表单</option>
             <option value="cart">🛒 购物车</option>
-            <option value="table">📊 数据表格</option>
+            <option value="table">数据表格</option>
             <option value="modal">💬 模态对话框</option>
           </select>
           <button class="btn-rec" :class="{ active: isRecording }" @click="toggleRecording">
@@ -29,7 +29,7 @@
                 <div class="form-group"><label for="login-pass">密码</label><input id="login-pass" type="password" v-model="loginState.password" placeholder="请输入密码"></div>
                 <button type="submit" class="btn-login">登录</button>
                 <div class="error-msg" :style="{ display: loginState.showError ? 'block' : 'none' }">❌ 用户名或密码错误</div>
-                <div class="success-msg" :style="{ display: loginState.showSuccess ? 'block' : 'none' }">✅ 登录成功！欢迎回来</div>
+                <div class="success-msg" :style="{ display: loginState.showSuccess ? 'block' : 'none' }">登录成功！欢迎回来</div>
               </form>
             </div>
             <!-- Shopping Cart -->
@@ -46,7 +46,7 @@
             </div>
             <!-- Data Table -->
             <div v-if="currentScenario==='table'" class="mock-page">
-              <h2>📊 数据管理</h2>
+              <h2>数据管理</h2>
               <input id="search" v-model="tableState.search" placeholder="搜索 ID 或名称..." type="text">
               <table class="data-table">
                 <thead><tr><th>ID</th><th>名称</th><th>状态</th><th>操作</th></tr></thead>
@@ -91,7 +91,7 @@
 
         <div class="challenge-bar">
           <select v-model="currentChallenge" @change="loadChallenge" class="challenge-select">
-            <option value="beginner">⭐ 初级</option>
+            <option value="beginner">初级</option>
             <option value="intermediate">⭐⭐ 中级</option>
             <option value="advanced">⭐⭐⭐ 高级</option>
           </select>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="selector-panel" v-if="currentSelectors.length">
-          <h4>🔍 选择器验证</h4>
+          <h4>选择器验证</h4>
           <div v-for="s in currentSelectors" :key="s.selector" class="sel-row" :class="s.status">
             <span class="sel-icon">{{ s.icon }}</span>
             <code>{{ s.selector }}</code>
@@ -126,7 +126,7 @@
         </div>
 
         <div class="log-panel" ref="logRef">
-          <h4>📋 执行日志</h4>
+          <h4>执行日志</h4>
           <div v-if="!stepResults.length" class="log-empty">点击"单步"或"全部运行"开始</div>
           <div v-for="(r,i) in stepResults" :key="i" class="log-row" :class="r.pass?'pass':'fail'">
             <span class="log-icon">{{ r.pass?'✓':'✗' }}</span><span>{{ r.message }}</span>
@@ -134,7 +134,7 @@
         </div>
 
         <div class="assertion-panel" v-if="assertionResults.length">
-          <h4>✅ 断言结果</h4>
+          <h4>断言结果</h4>
           <div v-for="(a,i) in assertionResults" :key="i" class="assert-row" :class="a.pass?'pass':'fail'">
             <span>{{ a.pass?'✓':'✗' }}</span><code>{{ a.assertion }}</code>
             <span v-if="!a.pass" class="assert-detail"> — {{ a.detail }}</span>

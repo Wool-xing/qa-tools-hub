@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="page-header"><h1>📋 测试用例管理</h1><p>创建、组织和管理你的测试用例库</p></div>
+    <div class="page-header"><h1>测试用例管理</h1><p>创建、组织和管理你的测试用例库</p></div>
 
     <div class="tc-layout">
       <!-- Sidebar folders -->
       <aside class="tc-sidebar">
-        <h4>📁 文件夹</h4>
+        <h4>文件夹</h4>
         <ul>
           <li v-for="f in folders" :key="f.name" :class="{ active: filterFolder === f.name }" @click="filterFolder = filterFolder === f.name ? '' : f.name">
             {{ f.name }} <span class="fc">{{ f.count }}</span>
           </li>
-          <li :class="{ active: !filterFolder }" @click="filterFolder = ''">📋 全部 <span class="fc">{{ totalCount }}</span></li>
+          <li :class="{ active: !filterFolder }" @click="filterFolder = ''">全部 <span class="fc">{{ totalCount }}</span></li>
         </ul>
         <button class="btn-outline" style="width:100%;margin-top:12px;font-size:.78rem;" @click="showCreate=true">+ 新建用例</button>
       </aside>
@@ -26,7 +26,7 @@
 
         <div v-if="selectedIds.length" class="bulk-bar">
           <span>{{ selectedIds.length }} 项已选</span>
-          <button class="btn-outline" style="font-size:.72rem;" @click="bulkSetStatus('passed')">✅ 批量通过</button>
+          <button class="btn-outline" style="font-size:.72rem;" @click="bulkSetStatus('passed')">批量通过</button>
           <button class="btn-outline" style="font-size:.72rem;" @click="bulkSetStatus('failed')">❌ 批量失败</button>
         </div>
 
@@ -39,7 +39,7 @@
             <div class="tc-meta">
               <span class="badge" :class="'pri-'+tc.priority.toLowerCase()">{{ tc.priority }}</span>
               <span class="badge" :class="'st-'+tc.status">{{ statusLabel(tc.status) }}</span>
-              <span class="tc-folder">📁 {{ tc.folder }}</span>
+              <span class="tc-folder">{{ tc.folder }}</span>
             </div>
           </div>
           <div v-if="tc.steps" class="tc-steps" @click="editCase(tc)">{{ tc.steps.slice(0, 120) }}{{ tc.steps.length > 120 ? '...' : '' }}</div>

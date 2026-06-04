@@ -3,13 +3,13 @@
     <!-- Tabs -->
     <div class="tabs">
       <button :class="{ active: tab==='xss' }" @click="tab='xss'">💉 XSS 跨站脚本</button>
-      <button :class="{ active: tab==='sqli' }" @click="tab='sqli'">🗄️ SQL 注入</button>
+      <button :class="{ active: tab==='sqli' }" @click="tab='sqli'">SQL 注入</button>
     </div>
 
     <!-- ==================== XSS ==================== -->
     <div v-if="tab==='xss'">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>🎯 反射型 XSS 攻击模拟</h3>
+        <h3>反射型 XSS 攻击模拟</h3>
         <p class="desc">下面的搜索框存在反射型XSS漏洞——输入会被直接插入HTML而不做转义。尝试注入脚本。</p>
 
         <div class="xss-bar">
@@ -24,7 +24,7 @@
             <div class="panel-code"><code>{{ xssResult.unsafe_html }}</code></div>
           </div>
           <div class="result-panel safe">
-            <div class="panel-label">✅ 安全渲染（HTML实体编码后）</div>
+            <div class="panel-label">安全渲染（HTML实体编码后）</div>
             <div class="panel-html" v-html="xssResult.safe_html"></div>
             <div class="panel-code"><code>{{ xssResult.safe_html }}</code></div>
           </div>
@@ -44,7 +44,7 @@
       </div>
 
       <div class="card" style="margin-top:var(--space-md);">
-        <h3>🛡️ 防御方案</h3>
+        <h3>防御方案</h3>
         <ul class="defense-list">
           <li><strong>输出编码</strong> — 将 &lt; &gt; " ' &amp; 转义为 HTML 实体</li>
           <li><strong>CSP 头</strong> — Content-Security-Policy 限制脚本来源</li>
@@ -58,7 +58,7 @@
     <!-- ==================== SQL Injection ==================== -->
     <div v-if="tab==='sqli'">
       <div class="card" style="margin-bottom:var(--space-md);">
-        <h3>🎯 SQL 注入攻击模拟</h3>
+        <h3>SQL 注入攻击模拟</h3>
         <p class="desc">这个登录表单使用字符串拼接构造SQL查询。尝试用 SQL 注入绕过身份验证。</p>
 
         <div class="login-mock">
@@ -79,15 +79,15 @@
           </div>
 
           <div v-if="sqliResult.injection_detected" class="injection-detected">
-            <h4>🔍 检测到注入攻击：</h4>
+            <h4>检测到注入攻击：</h4>
             <div v-for="(inj, i) in sqliResult.injection_types" :key="i" class="inj-item">
               <code>{{ inj.pattern }}</code><span>{{ inj.description }}</span>
             </div>
           </div>
 
           <div class="sqli-verdict" :class="{ bypassed: sqliResult.auth_bypassed, blocked: !sqliResult.auth_bypassed && sqliResult.injection_detected, normal: !sqliResult.injection_detected }">
-            <template v-if="sqliResult.auth_bypassed">⚠️ 认证绕过成功！攻击者以任意身份登录。</template>
-            <template v-else-if="sqliResult.injection_detected">🔍 检测到注入尝试但未绕过认证。</template>
+            <template v-if="sqliResult.auth_bypassed">认证绕过成功！攻击者以任意身份登录。</template>
+            <template v-else-if="sqliResult.injection_detected">检测到注入尝试但未绕过认证。</template>
             <template v-else>{{ sqliResult.matched_user ? '✅ 正常登录成功' : '❌ 用户名或密码错误' }}</template>
           </div>
 
@@ -107,7 +107,7 @@
       </div>
 
       <div class="card" style="margin-top:var(--space-md);">
-        <h3>🛡️ 防御方案</h3>
+        <h3>防御方案</h3>
         <ul class="defense-list">
           <li><strong>参数化查询</strong> — 使用 ? 占位符，数据库驱动自动转义</li>
           <li><strong>ORM 框架</strong> — SQLAlchemy/Django ORM 自动处理转义</li>

@@ -6,7 +6,7 @@
     </div>
 
     <div class="card" style="margin-bottom:var(--space-md);">
-      <div class="schema-info">📋 <strong>{{ currentSchema }}</strong></div>
+      <div class="schema-info"><strong>{{ currentSchema }}</strong></div>
       <textarea v-model="sql" placeholder="SELECT * FROM bugs WHERE status = 'open'" rows="4" class="sql-input"></textarea>
       <div class="toolbar">
         <span class="hint-text">提示: SELECT · FROM · WHERE · GROUP BY · HAVING · ORDER BY · LIMIT</span>
@@ -45,7 +45,7 @@
 
     <!-- Challenge Mode -->
     <div class="card" style="margin-top:var(--space-md);">
-      <h3 style="margin-bottom:10px;font-size:.9rem;">🏆 进阶挑战</h3>
+      <h3 style="margin-bottom:10px;font-size:.9rem;">进阶挑战</h3>
       <div class="challenge-bar">
         <button v-for="(c,i) in challenges" :key="i" class="challenge-btn" :class="{ active: chIdx===i, solved: chSolved[i] }"
           @click="selectChallenge(i)">{{ c.diff }} {{ c.label }}</button>
@@ -55,7 +55,7 @@
         <p class="ch-hint" v-if="showHint">💡 {{ challenges[chIdx].hint }}</p>
         <div class="ch-actions">
           <button class="btn-ghost" style="font-size:.72rem;" @click="showHint=!showHint">{{ showHint ? '隐藏' : '显示' }}提示</button>
-          <button class="btn-primary" style="font-size:.78rem;padding:6px 16px;" @click="checkChallenge" :disabled="!sql.trim()">✅ 提交挑战</button>
+          <button class="btn-primary" style="font-size:.78rem;padding:6px 16px;" @click="checkChallenge" :disabled="!sql.trim()">提交挑战</button>
         </div>
         <div v-if="chFeedback" class="ch-feedback" :class="chFeedback.ok ? 'pass' : 'fail'">
           {{ chFeedback.ok ? '🎉 正确！' : '❌ 不对。' }} {{ chFeedback.msg }}

@@ -5,7 +5,7 @@
     <div class="profile-grid">
       <!-- Profile Card -->
       <div class="card">
-        <h3>📋 基本信息</h3>
+        <h3>基本信息</h3>
         <div class="info-rows">
           <div class="info-row"><span class="info-label">用户名</span><span class="info-val">{{ auth.user?.username }}</span></div>
           <div class="info-row"><span class="info-label">邮箱</span><span class="info-val">{{ auth.user?.email }}</span></div>
@@ -15,7 +15,7 @@
 
       <!-- Stats Card -->
       <div class="card">
-        <h3>📊 学习统计</h3>
+        <h3>学习统计</h3>
         <div class="stats-mini">
           <div class="stat-item"><span class="stat-num">{{ store.progress.completed || 0 }}</span><span class="stat-label">已完成</span></div>
           <div class="stat-item"><span class="stat-num">{{ store.progress.points || 0 }}</span><span class="stat-label">积分</span></div>

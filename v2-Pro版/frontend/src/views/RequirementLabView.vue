@@ -43,7 +43,7 @@
           </div>
           <input v-model="tempNote" placeholder="补充说明（可选）" class="anno-note" />
           <div class="anno-actions">
-            <button class="btn-primary btn-sm" @click="confirmAnnotation">✅ 确认标注</button>
+            <button class="btn-primary btn-sm" @click="confirmAnnotation">确认标注</button>
             <button v-if="getAnnotation(editingClause.si, editingClause.ci)" class="btn-ghost btn-sm" @click="removeAnnotation(editingClause.si, editingClause.ci)">🗑 删除</button>
             <button class="btn-ghost btn-sm" @click="editingClause = null">取消</button>
           </div>
@@ -56,13 +56,13 @@
       </div>
 
       <div v-if="reviewResults" class="card result-card" :class="reviewResults.score >= 60 ? 'result-pass' : 'result-fail'">
-        <h3>📊 评审结果 — {{ specs[specIndex].title }}</h3>
+        <h3>评审结果 — {{ specs[specIndex].title }}</h3>
         <div class="score-big">{{ reviewResults.score }}<span class="score-unit">分</span></div>
         <div class="result-detail">
-          <div class="rd-row"><span>✅ 正确发现</span><span>{{ reviewResults.correctHits }} / {{ reviewResults.total }}</span></div>
-          <div class="rd-row"><span>⚠️ 遗漏</span><span>{{ reviewResults.missed }}</span></div>
+          <div class="rd-row"><span>正确发现</span><span>{{ reviewResults.correctHits }} / {{ reviewResults.total }}</span></div>
+          <div class="rd-row"><span>遗漏</span><span>{{ reviewResults.missed }}</span></div>
           <div class="rd-row"><span>❌ 误报</span><span>{{ reviewResults.falsePositiveCount }}</span></div>
-          <div class="rd-row"><span>🔄 分类错误</span><span>{{ reviewResults.wrongCat }}</span></div>
+          <div class="rd-row"><span>分类错误</span><span>{{ reviewResults.wrongCat }}</span></div>
         </div>
         <div v-if="reviewResults.missedList.length" style="margin-top:12px;">
           <p class="missed-title">遗漏的问题：</p>
@@ -89,7 +89,7 @@
       </div>
 
       <div class="card">
-        <h3 class="card-title">🔍 枚举边界条件</h3>
+        <h3 class="card-title">枚举边界条件</h3>
         <p class="hint-text">为每个维度写出你想到的边界条件</p>
         <div v-for="(cat, ci) in edgeCaseScenarios[ecScenario].categories" :key="ci" class="ec-category">
           <label class="ec-cat-label">{{ cat.icon }} {{ cat.label }}</label>
@@ -102,10 +102,10 @@
       </div>
 
       <div v-if="ecResults" class="card result-card">
-        <h3>📊 边界枚举结果</h3>
+        <h3>边界枚举结果</h3>
         <div class="score-big">{{ ecResults.score }}<span class="score-unit">分</span></div>
         <div class="result-detail">
-          <div class="rd-row"><span>✅ 命中</span><span>{{ ecResults.hits }} / {{ ecResults.total }}</span></div>
+          <div class="rd-row"><span>命中</span><span>{{ ecResults.hits }} / {{ ecResults.total }}</span></div>
           <div class="rd-row"><span>💡 部分命中</span><span>{{ ecResults.partial }}</span></div>
           <div class="rd-row"><span>❌ 遗漏</span><span>{{ ecResults.missed }}</span></div>
         </div>
@@ -127,7 +127,7 @@
     <!-- TAB 3: 歧义检测 -->
     <div v-if="activeTab === 2" class="tab-content">
       <div v-if="!agStarted" class="card" style="text-align:center;">
-        <h3 style="margin-bottom:12px;">⚡ 歧义检测挑战</h3>
+        <h3 style="margin-bottom:12px;">歧义检测挑战</h3>
         <p style="color:var(--text-secondary);margin-bottom:12px;">15条需求语句 · 60秒 · 判断「模糊」还是「明确」</p>
         <p style="color:var(--text-muted);font-size:.78rem;margin-bottom:20px;">模糊词：快速、可靠、安全、用户友好、足够、合理、按需、等等、适当、高效</p>
         <button class="btn-primary btn-lg" @click="startAmbiguityGame">▶ 开始挑战</button>
@@ -146,8 +146,8 @@
           <p class="ag-question-text">"{{ ambiguityRounds[agRound].text }}"</p>
         </div>
         <div v-if="!agRoundResult" class="ag-buttons">
-          <button class="btn-ambiguous" @click="answerAmbiguity(true)">⚠️ 模糊</button>
-          <button class="btn-clear" @click="answerAmbiguity(false)">✅ 明确</button>
+          <button class="btn-ambiguous" @click="answerAmbiguity(true)">模糊</button>
+          <button class="btn-clear" @click="answerAmbiguity(false)">明确</button>
         </div>
         <div v-else class="ag-feedback" :class="agRoundResult.correct ? 'fb-correct' : 'fb-wrong'">
           <p><strong>{{ agRoundResult.correct ? '✅ 正确！' : '❌ 错误' }}</strong></p>
@@ -160,14 +160,14 @@
         <h3>🏁 挑战结束！</h3>
         <div class="score-big">{{ agScore }}<span class="score-unit">分</span></div>
         <p style="color:var(--text-secondary);margin-bottom:16px;">正确 {{ agHistory.filter(h => h.correct).length }} / {{ ambiguityRounds.length }} 轮</p>
-        <button class="btn-primary" @click="resetAmbiguityGame">🔄 再来一次</button>
+        <button class="btn-primary" @click="resetAmbiguityGame">再来一次</button>
       </div>
     </div>
 
     <!-- TAB 4: 用例生成 -->
     <div v-if="activeTab === 3" class="tab-content">
       <div class="card">
-        <h3 class="card-title">📋 需求规格</h3>
+        <h3 class="card-title">需求规格</h3>
         <div class="req-list">
           <div v-for="(req, i) in tcSpec.requirements" :key="i" class="req-item">
             <span class="req-tag">{{ req.id }}</span>
@@ -187,10 +187,10 @@
       </div>
 
       <div v-if="tcResults" class="card result-card" :class="tcResults.coverage >= 60 ? 'result-pass' : 'result-fail'">
-        <h3>📊 用例覆盖度</h3>
+        <h3>用例覆盖度</h3>
         <div class="score-big">{{ tcResults.coverage }}<span class="score-unit">%</span></div>
         <div class="result-detail">
-          <div class="rd-row"><span>✅ 覆盖的测试点</span><span>{{ tcResults.covered }} / {{ tcResults.total }}</span></div>
+          <div class="rd-row"><span>覆盖的测试点</span><span>{{ tcResults.covered }} / {{ tcResults.total }}</span></div>
           <div class="rd-row"><span>💡 部分覆盖</span><span>{{ tcResults.partial }}</span></div>
           <div class="rd-row"><span>❌ 遗漏</span><span>{{ tcResults.missed.length }}</span></div>
         </div>

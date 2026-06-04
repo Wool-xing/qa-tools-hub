@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="diff-panel current-panel">
-          <div class="diff-label">🔬 当前截图 (Current)</div>
+          <div class="diff-label">当前截图 (Current)</div>
           <div class="diff-canvas" ref="currentRef" @click="(e) => handleClick(e, 'current')">
             <component :is="renderScenario('current')" />
             <div v-for="(r, i) in currentScenario.regions" :key="'cr-'+i"
@@ -39,7 +39,7 @@
           <span class="score-label">个差异</span>
           <span v-if="foundRegions.size === currentScenario.regions.length" class="all-found">🎉 全部找到！</span>
         </div>
-        <button class="btn-outline" @click="resetScenario">🔄 重新开始</button>
+        <button class="btn-outline" @click="resetScenario">重新开始</button>
       </div>
 
       <div v-if="foundRegions.size === currentScenario.regions.length" class="quiz-section">
@@ -51,7 +51,7 @@
         }" :disabled="quizSubmitted" @click="quizChosen = i">
           <span class="opt-letter">{{ 'ABCD'[i] }}</span><span>{{ o }}</span>
         </button>
-        <button v-if="!quizSubmitted" class="btn-primary" style="margin-top:10px;" :disabled="quizChosen === -1" @click="quizSubmitted = true">✅ 提交</button>
+        <button v-if="!quizSubmitted" class="btn-primary" style="margin-top:10px;" :disabled="quizChosen === -1" @click="quizSubmitted = true">提交</button>
         <div v-if="quizSubmitted" class="explain" :class="quizChosen === currentScenario.quizAnswer ? 'correct' : 'wrong'">
           {{ quizChosen === currentScenario.quizAnswer ? '✅ 正确！' : '❌ 错误。' }} {{ currentScenario.quizExplain }}
         </div>

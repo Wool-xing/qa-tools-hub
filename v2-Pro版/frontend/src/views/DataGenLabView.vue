@@ -7,7 +7,7 @@
     <!-- ═══════════════════ TAB 1: Faker Playground ═══════════════════ -->
     <div v-if="activeTab === 0" class="tab-content">
       <div class="card">
-        <h3 class="card-title">🎲 Faker 数据工厂</h3>
+        <h3 class="card-title">Faker 数据工厂</h3>
         <p class="hint-text">配置字段模板，一键生成逼真测试数据。不需要写 Faker 代码。</p>
 
         <div class="form-row">
@@ -38,7 +38,7 @@
 
         <div class="toolbar">
           <span class="hint-text">{{ enabledFakerCount }} 个字段 · {{ fakerCount }} 条记录</span>
-          <button class="btn-primary" :disabled="enabledFakerCount === 0" @click="generateFaker">🎲 生成数据</button>
+          <button class="btn-primary" :disabled="enabledFakerCount === 0" @click="generateFaker">生成数据</button>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
             <button class="btn-ghost btn-xs" @click="fakerViewMode = fakerViewMode === 'table' ? 'json' : 'table'">
               {{ fakerViewMode === 'table' ? '📋 JSON' : '📊 表格' }}
             </button>
-            <button class="btn-ghost btn-xs" @click="copyFakerOutput">📋 复制</button>
+            <button class="btn-ghost btn-xs" @click="copyFakerOutput">复制</button>
           </div>
         </div>
         <div v-if="fakerViewMode === 'table'" style="overflow-x:auto;">
@@ -81,7 +81,7 @@
           </div>
         </div>
         <button class="btn-outline btn-sm" style="margin-top:8px;" @click="pairwiseParams.push({ name: '', valuesStr: '' })">+ 添加参数</button>
-        <button class="btn-ghost btn-sm" style="margin-left:8px;" @click="loadPairwisePreset">📋 加载示例 (浏览器/OS/分辨率/语言)</button>
+        <button class="btn-ghost btn-sm" style="margin-left:8px;" @click="loadPairwisePreset">加载示例 (浏览器/OS/分辨率/语言)</button>
 
         <div class="toolbar" style="margin-top:12px;">
           <span class="hint-text">{{ pairwiseParams.filter(p => p.name && p.valuesStr).length }} 个参数定义完成</span>
@@ -121,14 +121,14 @@
     <!-- ═══════════════════ TAB 3: Data Masking ═══════════════════ -->
     <div v-if="activeTab === 2" class="tab-content">
       <div class="card">
-        <h3 class="card-title">🎭 数据脱敏 (Data Masking)</h3>
+        <h3 class="card-title">数据脱敏 (Data Masking)</h3>
         <p class="hint-text">生产数据不能直接用于测试——粘贴 CSV/JSON 数据，选择脱敏规则，一键处理。</p>
 
         <div class="form-group">
           <label class="field-label">输入数据 (CSV 或 JSON 格式)</label>
           <textarea v-model="maskInput" rows="6" class="sql-input" placeholder="name,email,phone,id_card&#10;张三,zhangsan@abc.com,13812345678,310101199001011234&#10;李四,lisi@def.com,13987654321,110102198502022345"></textarea>
         </div>
-        <button class="btn-ghost btn-sm" style="margin-bottom:10px;" @click="loadMaskSample">📋 加载示例数据 (5行含PII)</button>
+        <button class="btn-ghost btn-sm" style="margin-bottom:10px;" @click="loadMaskSample">加载示例数据 (5行含PII)</button>
 
         <label class="field-label">脱敏规则</label>
         <div class="checkbox-grid">
@@ -140,7 +140,7 @@
 
         <div class="toolbar" style="margin-top:10px;">
           <span class="hint-text">{{ enabledMaskCount }} 条规则启用</span>
-          <button class="btn-primary" :disabled="!maskInput.trim() || enabledMaskCount === 0" @click="executeMask">🎭 执行脱敏</button>
+          <button class="btn-primary" :disabled="!maskInput.trim() || enabledMaskCount === 0" @click="executeMask">执行脱敏</button>
         </div>
       </div>
 
@@ -170,7 +170,7 @@
     <!-- ═══════════════════ TAB 4: Edge-Case Generator ═══════════════════ -->
     <div v-if="activeTab === 3" class="tab-content">
       <div class="card">
-        <h3 class="card-title">⚡ 边界值 & 边缘用例生成器</h3>
+        <h3 class="card-title">边界值 & 边缘用例生成器</h3>
         <p class="hint-text">选择数据类型，查看预计算的边界用例清单。勾选你认为需要测试的项，与答案比对。</p>
 
         <div class="form-row">
@@ -184,8 +184,8 @@
 
         <div v-if="currentEdgeType" class="edge-checklist">
           <div class="edge-info-row">
-            <span class="hint-text">📋 共 {{ currentEdgeType.cases.length }} 条边界用例 — 勾选你认为应该测试的</span>
-            <button class="btn-primary btn-sm" @click="checkEdgeAnswers">✅ 提交比对</button>
+            <span class="hint-text">共 {{ currentEdgeType.cases.length }} 条边界用例 — 勾选你认为应该测试的</span>
+            <button class="btn-primary btn-sm" @click="checkEdgeAnswers">提交比对</button>
           </div>
           <div v-for="(ec, i) in currentEdgeType.cases" :key="i" class="edge-item" :class="edgeReveal ? (ec.shouldTest ? 'edge-should' : 'edge-skip') : ''">
             <label class="edge-check-label">
@@ -201,15 +201,15 @@
         </div>
 
         <div v-if="edgeReveal" class="card result-card" :class="edgeScore >= 60 ? 'result-pass' : 'result-fail'">
-          <h3>📊 边界判断结果</h3>
+          <h3>边界判断结果</h3>
           <div class="score-big">{{ edgeScore }}<span class="score-unit">分</span></div>
           <div class="result-detail">
-            <div class="rd-row"><span>✅ 正确勾选 (应测且你勾了)</span><span>{{ edgeCorrectHits }}</span></div>
-            <div class="rd-row"><span>⚠️ 遗漏 (应测但你没勾)</span><span>{{ edgeMissed }}</span></div>
+            <div class="rd-row"><span>正确勾选 (应测且你勾了)</span><span>{{ edgeCorrectHits }}</span></div>
+            <div class="rd-row"><span>遗漏 (应测但你没勾)</span><span>{{ edgeMissed }}</span></div>
             <div class="rd-row"><span>❌ 过度测试 (不应测但你勾了)</span><span>{{ edgeOverTest }}</span></div>
             <div class="rd-row"><span>⏭ 正确跳过 (不应测且你没勾)</span><span>{{ edgeCorrectSkip }}</span></div>
           </div>
-          <button class="btn-ghost btn-sm" style="margin-top:10px;" @click="resetEdgeCheck">🔄 重新挑战</button>
+          <button class="btn-ghost btn-sm" style="margin-top:10px;" @click="resetEdgeCheck">重新挑战</button>
         </div>
       </div>
     </div>
@@ -217,7 +217,7 @@
     <!-- ═══════════════════ TAB 5: SQL Data Factory ═══════════════════ -->
     <div v-if="activeTab === 4" class="tab-content">
       <div class="card">
-        <h3 class="card-title">🗄️ SQL INSERT 语句工厂</h3>
+        <h3 class="card-title">SQL INSERT 语句工厂</h3>
         <p class="hint-text">选择表模板，配置列值生成策略，一键生成批量 INSERT 语句。</p>
 
         <div class="form-row">
@@ -253,14 +253,14 @@
 
         <div class="toolbar" style="margin-top:10px;">
           <span class="hint-text">{{ sqlColumns.length }} 列 · {{ sqlRowCount }} 行</span>
-          <button class="btn-primary" @click="generateSQL">🗄️ 生成 SQL</button>
+          <button class="btn-primary" @click="generateSQL">生成 SQL</button>
         </div>
       </div>
 
       <div v-if="sqlOutput" class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <h3 style="font-size:.84rem;">📋 生成的 INSERT 语句</h3>
-          <button class="btn-ghost btn-xs" @click="copySqlOutput">📋 复制</button>
+          <h3 style="font-size:.84rem;">生成的 INSERT 语句</h3>
+          <button class="btn-ghost btn-xs" @click="copySqlOutput">复制</button>
         </div>
         <pre class="sql-output">{{ sqlOutput }}</pre>
       </div>
