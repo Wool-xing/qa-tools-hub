@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -36,6 +36,12 @@ const route = useRoute()
 const token = ref(route.query.token || '')
 const password = ref(''), error = ref(''), success = ref('')
 let _redirectTimer = null
+
+onMounted(() => {
+  if (route.query.token) {
+    history.replaceState(null, '', window.location.pathname)
+  }
+})
 
 onBeforeUnmount(() => {
   if (_redirectTimer) clearTimeout(_redirectTimer)

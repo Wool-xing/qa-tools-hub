@@ -470,3 +470,13 @@ async def test_rate_limit_login(client):
         })
     # 6th should be rate limited
     assert r.status_code == 429
+
+
+@pytest.mark.asyncio
+async def test_rate_limit_reset_password(client):
+    for _ in range(6):
+        r = await client.post("/api/auth/reset-password", json={
+            "token": "bad-token", "new_password": "pass1234"
+        })
+    # 6th should be rate limited
+    assert r.status_code == 429
