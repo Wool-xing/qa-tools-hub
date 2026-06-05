@@ -255,8 +255,8 @@ async def submit_answer(data: SubmitAnswer, user: User = Depends(get_current_use
         # Include per-option analysis for learning depth
         if not correct:
             option_analysis = level.task_config.get("option_analysis", [])
-            if option_analysis:
-                explanation += "\n\n" + option_analysis[user_choice] if user_choice < len(option_analysis) else ""
+            if option_analysis and isinstance(user_choice, int) and 0 <= user_choice < len(option_analysis):
+                explanation += "\n\n" + option_analysis[user_choice]
 
     elif level.task_type == "explore":
         user_answer = data.answer.get("text", "")
