@@ -1,0 +1,15 @@
+{
+  "name": "QA Tools Hub - 全球测试工具栈",
+  "short_name": "QA Tools Hub",
+  "description": "测试理论 + 流程 + 维度 + 60+ 工具，一站式测试资源导航",
+  "start_url": "./羊毛工具导航.html",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "icons": [
+    { "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "categories": ["developer tools", "education", "productivity"],
+  "lang": "zh-CN"
+}
