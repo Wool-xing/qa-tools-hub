@@ -295,7 +295,7 @@ async def performance_simulate(data: PerformanceSimRequest, user: User = Depends
 
 @router.post("/mock/create")
 async def mock_create(data: MockCreateRequest, user: User = Depends(get_current_user)):
-    key = f"{data.method.upper()}:{data.path}"
+    key = f"{data.method.upper()}:{data.path.lstrip('/')}"
     mock_store[key] = {
         "status_code": data.status_code,
         "response_body": data.response_body,
