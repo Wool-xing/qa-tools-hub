@@ -12,7 +12,7 @@ logger = logging.getLogger("qa-tools")
 
 
 def is_configured() -> bool:
-    return bool(SMTP_HOST and SMTP_USER and SMTP_PASS)
+    return bool(SMTP_HOST and SMTP_USER and SMTP_PASS != "")
 
 
 def send(recipient: str, subject: str, body_html: str):

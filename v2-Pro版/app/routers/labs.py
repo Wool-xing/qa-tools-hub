@@ -1,3 +1,5 @@
+import html as html_mod
+import re as _re
 import sqlite3
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -196,9 +198,6 @@ async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user)):
 
 
 # ==================== Security Lab (intentionally vulnerable for training) ====================
-
-import html as html_mod
-import re as _re
 
 # Simulated user database for SQL injection exercises
 _SECURITY_USERS = [
