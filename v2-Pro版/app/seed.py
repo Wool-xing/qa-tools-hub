@@ -686,7 +686,8 @@ def seed():
         if r.fetchone():
             return
         import os as _os
-        if not _os.getenv("SEED_DB") and not _os.getenv("DATABASE_URL", "").startswith("sqlite"):
+        from app.config import DATABASE_URL as _db_url
+        if not _os.getenv("SEED_DB") and not _db_url.startswith("sqlite"):
             print("SEED: Refusing to seed non-SQLite database without SEED_DB=true")
             return
         print("SEED: Seeding database with default data...")
