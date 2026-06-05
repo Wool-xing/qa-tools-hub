@@ -270,18 +270,18 @@ await page.click('.btn-login');
 await expect(page.locator('.success-msg')).toBeVisible();`,
   intermediate: `// ⭐⭐ 中级挑战：添加商品到购物车，验证总价
 await page.goto('/cart');
-// TODO: 添加 2 个 Widget A
+// 添加 2 个 Widget A
 await page.fill('.quantity-input[data-product-id="widget-a"]', '2');
-// TODO: 添加 1 个 Widget B
+// 添加 1 个 Widget B
 await page.fill('.quantity-input[data-product-id="widget-b"]', '1');
-// TODO: 验证总价是否正确
+// 验证总价是否正确
 await expect(page.locator('.cart-total')).toHaveText('$69.97');`,
   advanced: `// ⭐⭐⭐ 高级挑战：模态框确认 + 数据表格搜索
 await page.goto('/modal');
-// TODO: 打开模态框并确认
+// 打开模态框并确认
 await page.click('#open-modal');
 await page.click('.btn-confirm');
-// TODO: 验证 toast 出现且模态框关闭
+// 验证 toast 出现且模态框关闭
 await expect(page.locator('.toast')).toBeVisible();
 await expect(page.locator('.modal-overlay')).toBeHidden();
 // 导航到数据表格并搜索

@@ -160,7 +160,7 @@ async def root():
 
 
 # Mock service virtualisation endpoint — must be before SPA fallback
-@app.api_route("/mock/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+@app.api_route("/mock/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"], include_in_schema=False)
 async def mock_handler(request: Request, path: str):
     from app.routers.labs import mock_store, mock_call_counts
     key = f"{request.method}:{path}"
