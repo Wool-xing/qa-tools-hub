@@ -13,9 +13,6 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-filterwarnings = [
-    "ignore::DeprecationWarning:jose",
-]
 
 [tool.coverage.run]
 source = ["app"]

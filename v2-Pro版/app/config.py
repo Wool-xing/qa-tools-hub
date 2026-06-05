@@ -9,8 +9,8 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./qa_tools.db")
 
 # ==================== Security ====================
 
-_WEAK_SECRETS = {"dev-secret-change-in-production", "change-me-in-production"}
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-in-production")
+_WEAK_SECRETS = {"dev-secret-change-me-in-production!!", "change-me-in-production"}
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me-in-production!!")
 if SECRET_KEY in _WEAK_SECRETS:
     logger.warning("SECURITY: Using default SECRET_KEY. Set SECRET_KEY env var for production.")
 
