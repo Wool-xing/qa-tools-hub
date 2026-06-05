@@ -42,7 +42,10 @@ async function api(method, path, body) {
     throw new ApiError(`服务器返回异常 (${res.status})`, res.status)
   }
   if (!res.ok) {
-    const msg = data.detail || `请求失败 (${res.status})`
+    let msg = data.detail || `请求失败 (${res.status})`
+    if (Array.isArray(msg)) {
+      msg = msg.map(e => e.msg || e.message || JSON.stringify(e)).join('; ')
+    }
     throw new ApiError(msg, res.status)
   }
   return data
