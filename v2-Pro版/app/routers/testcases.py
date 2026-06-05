@@ -20,10 +20,17 @@ _MAX_XLSX_BYTES = 5 * 1024 * 1024  # 5 MB limit
 
 
 def _escape_csv_cell(value: str) -> str:
-    """Prefix cells starting with formula-trigger chars to prevent CSV injection."""
-    if value and value[0] in "=+-@":
-        return "'" + value
-    return value
+    """Sanitize cell value: prevent CSV formula injection + strip HTML tags."""
+    import re as _re
+    if not value:
+        return value
+    # Strip HTML tags and decode entities
+    cleaned = _re.sub(r'<[^>]*>', '', value)
+    cleaned = cleaned.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&')
+    # Prefix formula-trigger chars
+    if cleaned and cleaned[0] in "=+-@":
+        return "'" + cleaned
+    return cleaned
 
 
 class TestCaseCreate(BaseModel):
@@ -36,6 +43,18 @@ class TestCaseCreate(BaseModel):
     folder: str = "默认"
     level_id: int | None = None
     team_id: int | None = None
+
+    @field_validator("title")
+    @classmethod
+    def check_title(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("Title must not be empty")
+        return v.strip()
+
+    @field_validator("folder")
+    @classmethod
+    def check_folder(cls, v: str) -> str:
+        return v.strip() if v.strip() else "默认"
 
     @field_validator("priority")
     @classmethod

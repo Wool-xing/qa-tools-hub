@@ -28,10 +28,11 @@ class TeamJoin(BaseModel):
 @router.post("")
 async def create_team(data: TeamCreate, user: User = Depends(get_current_user),
                       db: AsyncSession = Depends(get_db)):
-    if not (2 <= len(data.name) <= 50):
+    name = data.name.strip()
+    if not (2 <= len(name) <= 50):
         raise HTTPException(status_code=400, detail="Team name must be 2-50 characters")
     invite_code = uuid.uuid4().hex[:8].upper()
-    team = Team(name=data.name, invite_code=invite_code, created_by=user.id)
+    team = Team(name=name, invite_code=invite_code, created_by=user.id)
     db.add(team)
     await db.flush()
     member = TeamMember(team_id=team.id, user_id=user.id, role="owner")
