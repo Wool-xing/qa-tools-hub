@@ -287,7 +287,9 @@ async def forgot_password(data: ForgotPasswordRequest, request: Request, respons
 
 
 @router.post("/reset-password")
-async def reset_password(data: ResetPasswordRequest, db: AsyncSession = Depends(get_db)):
+async def reset_password(data: ResetPasswordRequest, request: Request, response: Response,
+                         db: AsyncSession = Depends(get_db)):
+    _check_rate_limit(f"reset:{_client_ip(request)}", response)
     token_hash = hashlib.sha256(data.token.encode()).hexdigest()
     r = await db.execute(select(User).where(User.reset_token == token_hash))
     u = r.scalar_one_or_none()
