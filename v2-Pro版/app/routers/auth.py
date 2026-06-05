@@ -2,6 +2,7 @@ import re
 import time
 import uuid
 import secrets
+import hashlib
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
@@ -274,7 +275,8 @@ async def forgot_password(data: ForgotPasswordRequest, request: Request, respons
         return {"message": "If the email is registered, a reset link has been sent."}
 
     token = secrets.token_urlsafe(32)
-    u.reset_token = token
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    u.reset_token = token_hash
     u.reset_token_expires = datetime.now(timezone.utc) + timedelta(minutes=30)
     await db.commit()
 
@@ -286,7 +288,8 @@ async def forgot_password(data: ForgotPasswordRequest, request: Request, respons
 
 @router.post("/reset-password")
 async def reset_password(data: ResetPasswordRequest, db: AsyncSession = Depends(get_db)):
-    r = await db.execute(select(User).where(User.reset_token == data.token))
+    token_hash = hashlib.sha256(data.token.encode()).hexdigest()
+    r = await db.execute(select(User).where(User.reset_token == token_hash))
     u = r.scalar_one_or_none()
     if not u:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")

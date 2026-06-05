@@ -409,14 +409,15 @@ async def test_reset_password_flow(client):
     from sqlalchemy import select
     import secrets
     from datetime import datetime, timedelta, timezone
+    import hashlib
     import bcrypt
 
     with SyncSession() as sess:
         u = sess.execute(select(User).where(User.username == "resetflow")).scalar_one()
-        u.reset_token = secrets.token_urlsafe(32)
+        reset_token = secrets.token_urlsafe(32)
+        u.reset_token = hashlib.sha256(reset_token.encode()).hexdigest()
         u.reset_token_expires = datetime.now(timezone.utc) + timedelta(minutes=30)
         sess.commit()
-        reset_token = u.reset_token
 
     # Reset password
     r = await client.post("/api/auth/reset-password", json={
