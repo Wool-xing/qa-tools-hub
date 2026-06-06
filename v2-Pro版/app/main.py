@@ -141,6 +141,14 @@ if os.path.isdir(assets_dir):
     app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
 
+@app.get("/manifest.json", include_in_schema=False)
+async def manifest():
+    manifest_path = os.path.join(static_dir, "manifest.json")
+    if os.path.isfile(manifest_path):
+        return FileResponse(manifest_path, media_type="application/json")
+    raise HTTPException(status_code=404)
+
+
 # ==================== Routes ====================
 
 @app.get("/health")
