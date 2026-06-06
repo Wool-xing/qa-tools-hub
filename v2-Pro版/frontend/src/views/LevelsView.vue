@@ -5,19 +5,18 @@
       <p>{{ store.progress.completed ? store.progress.completed + '/' + store.progress.total + ' 关已完成 · ' + store.progress.points + ' 积分' : '从入门基础开始，一步步成为测试专家 🎯' }}</p>
     </div>
 
-    <!-- Search + Filter -->
+    <!-- Filter -->
     <div class="controls">
-      <div class="search-box">
-        <span>🔍</span>
-        <input v-model="search" placeholder="搜索关卡名称或描述..." class="search-input" aria-label="搜索关卡名称或描述">
-        <button v-if="search" @click="search=''" class="search-clear">✕</button>
-      </div>
       <select v-model="filterType" class="filter-select">
         <option value="">全部题型</option>
         <option value="quiz">选择题</option>
         <option value="code">编程题</option>
         <option value="explore">探索题</option>
       </select>
+      <span v-if="search" class="search-active-tag">
+        搜索: {{ search }}
+        <button @click="search=''" class="search-clear">✕</button>
+      </span>
     </div>
 
     <!-- Overall progress -->
@@ -186,16 +185,9 @@ onMounted(() => store.fetchList())
 
 <style scoped>
 /* Controls */
-.controls { display: flex; gap: 10px; margin-bottom: var(--space-md); }
-.search-box {
-  flex: 1; display: flex; align-items: center; gap: 8px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 0 14px; transition: border-color var(--fast);
-}
-.search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
-.search-box span { font-size: .9rem; flex-shrink: 0; }
-.search-input { flex: 1; border: none; outline: none; padding: 10px 0; font-size: .86rem; background: transparent; color: var(--text); font-family: var(--font-sans); }
-.search-clear { padding: 4px 8px; border: none; background: var(--border); border-radius: var(--radius-full); cursor: pointer; font-size: .7rem; color: var(--text-secondary); }
+.controls { display: flex; gap: 10px; align-items: center; margin-bottom: var(--space-md); }
+.search-active-tag { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: var(--radius-full); }
+.search-clear { padding: 2px 6px; border: none; background: transparent; cursor: pointer; font-size: .7rem; color: var(--primary); }
 .filter-select {
   padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--surface); color: var(--text); font-size: .84rem; outline: none; cursor: pointer;
