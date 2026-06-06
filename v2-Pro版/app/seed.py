@@ -697,6 +697,15 @@ def seed():
         admin_pw = SEED_ADMIN_PASSWORD if SEED_ADMIN_PASSWORD else _secrets.token_urlsafe(12)
         if not SEED_ADMIN_PASSWORD:
             print(f"SEED: Generated admin password: {admin_pw} (set SEED_ADMIN_PASSWORD env var in production)")
+            try:
+                data_dir = _os.path.join(_os.path.dirname(_os.path.dirname(__file__)), "data")
+                _os.makedirs(data_dir, exist_ok=True)
+                pw_file = _os.path.join(data_dir, "admin-password.txt")
+                with open(pw_file, "w") as f:
+                    f.write(f"Username: {SEED_ADMIN_USERNAME}\nPassword: {admin_pw}\n")
+                print(f"SEED: Admin password saved to {pw_file}")
+            except Exception:
+                pass  # non-fatal — password is still in console output
         pw = bcrypt.hashpw(admin_pw.encode(), bcrypt.gensalt()).decode()
         conn.execute(User.__table__.insert().values(
             username=SEED_ADMIN_USERNAME, email=SEED_ADMIN_EMAIL,

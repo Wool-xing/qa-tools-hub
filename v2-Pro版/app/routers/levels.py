@@ -294,7 +294,10 @@ async def submit_answer(data: SubmitAnswer, user: User = Depends(get_current_use
     if progress.status == "completed":
         new_achievements = await _check_achievements(user.id, db)
         if new_achievements:
-            await db.commit()
+            try:
+                await db.commit()
+            except Exception:
+                await db.rollback()  # concurrent request may have already awarded
 
     return {"correct": correct, "score": score, "explanation": explanation,
             "attempts": progress.attempts, "completed": progress.status == "completed",
