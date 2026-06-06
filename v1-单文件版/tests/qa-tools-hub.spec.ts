@@ -18,7 +18,7 @@ test.describe('QA Tools Hub - 核心功能', () => {
   });
 
   test('导航链接存在且可点击', async ({ page }) => {
-    const links = ['学习路线', '测试理论', '测试维度', '测试流程', '术语', '工具集合'];
+    const links = ['学习路线', '测试理论', '测试维度', '测试流程', '术语', '工具集合', '每日一题', '正则练习', '配置生成'];
     const nav = page.locator('.nav-links a');
     await expect(nav).toHaveCount(links.length);
     for (const text of links) {
