@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from app.database import get_db
 from app.models.user import User
 from app.routers.auth import get_current_user
+from app.routers.levels import _check_achievements
 from app.lab_data import (
     SQL_SCENARIOS, is_safe_sql, VFS, resolve_path,
     sim_grep, sim_awk, sim_sort, sim_uniq,
@@ -62,8 +63,10 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
             cur = conn.execute(data.sql)
             rows = [dict(r) for r in cur.fetchmany(100)]
             columns = [d[0] for d in cur.description] if cur.description else []
+            new_ach = await _check_achievements(user.id, db)
+            if new_ach: await db.commit()
             return {"ok": True, "columns": columns, "rows": rows, "row_count": len(rows),
-                    "description": scenario["description"]}
+                    "description": scenario["description"], "new_achievements": new_ach}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -198,7 +201,9 @@ async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user),
         else:
             result = f"Command '{command}' not supported in sandbox.\nSupported: cat, tail, head, grep, sort, uniq, wc, awk, cut, ls, pwd"
 
-        return {"ok": True, "output": result, "file": file_path}
+        new_ach = await _check_achievements(user.id, db)
+        if new_ach: await db.commit()
+        return {"ok": True, "output": result, "file": file_path, "new_achievements": new_ach}
     except HTTPException:
         raise
     except Exception as e:
