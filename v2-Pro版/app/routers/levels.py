@@ -60,7 +60,8 @@ async def _check_achievements(user_id: int, db: AsyncSession) -> list[dict]:
             done, total = stage_counts.get(ach.condition_value, (0, 1))
             earn = done >= total
         elif ach.condition_type == "lab_count":
-            earn = False  # server-side lab tracking not yet implemented
+            lab_user = (await db.execute(select(User).where(User.id == user_id))).scalar_one()
+            earn = (lab_user.lab_visit_count or 0) >= int(ach.condition_value)
 
         if earn:
             db.add(UserAchievement(user_id=user_id, achievement_key=ach.key))

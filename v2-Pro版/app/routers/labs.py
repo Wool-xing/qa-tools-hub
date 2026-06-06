@@ -2,7 +2,9 @@ import html as html_mod
 import re as _re
 import sqlite3
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
+from app.database import get_db
 from app.models.user import User
 from app.routers.auth import get_current_user
 from app.lab_data import (
@@ -39,7 +41,10 @@ class CmdQuery(BaseModel):
 # ==================== SQL Sandbox ====================
 
 @router.post("/sql/execute")
-async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user)):
+async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
+                       db: AsyncSession = Depends(get_db)):
+    user.lab_visit_count = (user.lab_visit_count or 0) + 1
+    await db.commit()
     if not data.sql or not data.sql.strip():
         raise HTTPException(status_code=400, detail="SQL query is required")
     if not is_safe_sql(data.sql):
@@ -66,7 +71,10 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user)):
 # ==================== Command Simulator ====================
 
 @router.post("/cmd/execute")
-async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user)):
+async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user),
+                       db: AsyncSession = Depends(get_db)):
+    user.lab_visit_count = (user.lab_visit_count or 0) + 1
+    await db.commit()
     cmd = data.cmd.strip()
     if not cmd:
         raise HTTPException(status_code=400, detail="Command is required")

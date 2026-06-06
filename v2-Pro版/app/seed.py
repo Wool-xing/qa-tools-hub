@@ -709,13 +709,26 @@ def seed():
         from app.models.achievement import Achievement
         for a in [
             ("first", "🌟", "初出茅庐", "完成第 1 关", "completed_count", "1"),
+            ("three", "✨", "渐入佳境", "完成 3 关", "completed_count", "3"),
             ("five", "🔥", "小有所成", "完成 5 关", "completed_count", "5"),
             ("ten", "⚡", "中流砥柱", "完成 10 关", "completed_count", "10"),
+            ("fifteen", "🎯", "步步为营", "完成 15 关", "completed_count", "15"),
             ("half", "💎", "半壁江山", "完成 20 关", "completed_count", "20"),
+            ("thirty", "🏆", "势如破竹", "完成 30 关", "completed_count", "30"),
+            ("fifty", "👑", "横扫千军", "完成 50 关", "completed_count", "50"),
+            ("seventyfive", "💫", "独孤求败", "完成 75 关", "completed_count", "75"),
+            ("all", "🐉", "登峰造极", "完成全部 102 关", "completed_count", "102"),
             ("beginner", "🌱", "入门毕业", "完成全部入门关卡", "stage_done", "beginner"),
+            ("intermediate", "🚀", "进阶达人", "完成全部进阶关卡", "stage_done", "intermediate"),
             ("web", "🌐", "Web 专家", "完成全部 Web 测试关卡", "stage_done", "web"),
+            ("api", "📡", "API 专家", "完成全部 API 测试关卡", "stage_done", "api"),
+            ("mobile", "📱", "移动测试专家", "完成全部 APP 测试关卡", "stage_done", "mobile"),
+            ("performance", "⚡", "性能专家", "完成全部性能测试关卡", "stage_done", "performance"),
+            ("security", "🛡️", "安全专家", "完成全部安全测试关卡", "stage_done", "security"),
             ("lab1", "🧪", "实验室新人", "使用 1 个实验室", "lab_count", "1"),
             ("lab3", "🔬", "实验达人", "使用 3 个实验室", "lab_count", "3"),
+            ("lab5", "🧬", "实验室狂热者", "使用 5 个实验室", "lab_count", "5"),
+            ("lab10", "🔮", "实验室大师", "使用 10 个实验室", "lab_count", "10"),
         ]:
             conn.execute(Achievement.__table__.insert().values(
                 key=a[0], icon=a[1], name=a[2], desc=a[3],
