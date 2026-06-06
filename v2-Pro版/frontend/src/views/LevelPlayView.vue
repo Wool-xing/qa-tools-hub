@@ -52,7 +52,7 @@
             <span class="ce-fname">solution.py</span>
             <button class="ce-run-btn" @click="runCode" :disabled="!answer.code">▶ 运行</button>
           </div>
-          <div class="ce-body"><textarea v-model="answer.code" placeholder="# 在这里写你的 Python 代码..." class="ce-textarea numbered" spellcheck="false" @keydown="handleTab"></textarea></div>
+          <CodeEditor v-model="answer.code" placeholder="# 在这里写你的 Python 代码..." />
           <div v-if="runResult !== null" class="ce-output" :class="{ error: !runResult.ok }">
             <div v-if="runResult.ok" class="output-text">{{ runResult.stdout || '(无输出)' }}</div>
             <div v-if="runResult.stderr" class="output-err">{{ runResult.stderr }}</div>
@@ -72,7 +72,7 @@
             <span class="ce-fname">buggy.py</span>
             <button class="ce-run-btn" @click="runCode" :disabled="!answer.code">▶ 运行</button>
           </div>
-          <div class="ce-body"><textarea v-model="answer.code" class="ce-textarea numbered" spellcheck="false" @keydown="handleTab"></textarea></div>
+          <CodeEditor v-model="answer.code" placeholder="# 修复这段代码..." />
           <div v-if="runResult !== null" class="ce-output" :class="{ error: !runResult.ok }">
             <div v-if="runResult.ok" class="output-text">{{ runResult.stdout || '(无输出)' }}</div>
             <div v-if="runResult.stderr" class="output-err">{{ runResult.stderr }}</div>
@@ -135,6 +135,7 @@
       <p>得分: {{ store.result.score }} 分 | 第 {{ store.result.attempts }} 次尝试</p>
       <p v-if="store.result.explanation" class="explain">{{ store.result.explanation }}</p>
       <div class="result-actions">
+        <button v-if="store.current.order > 1" @click="goPrev" class="btn-ghost">← 上一关</button>
         <button v-if="store.result.completed" @click="goNext" class="btn-primary" style="justify-content:center;">继续下一关</button>
         <button v-else @click="resetTask" class="btn-outline">再试一次</button>
       </div>
@@ -147,6 +148,7 @@ import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLevelsStore } from '../stores/levels'
 import { levels as levelsApi } from '../api'
+import CodeEditor from '../components/CodeEditor.vue'
 
 const store = useLevelsStore()
 const route = useRoute()
@@ -232,6 +234,12 @@ function resetTask() {
   answer.text = ''
 }
 
+function goPrev() {
+  const curOrder = store.current?.order
+  const allLevels = [...store.levels].sort((a, b) => a.order - b.order)
+  const prev = allLevels.find(l => l.order === curOrder - 1)
+  if (prev) router.push('/level/' + prev.id)
+}
 async function goNext() {
   await store.fetchList() // refresh so next level unlocks
   const curOrder = store.current?.order

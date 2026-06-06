@@ -24,6 +24,7 @@ describe('Sidebar', () => {
     router.push('/dashboard')
     await router.isReady()
     const wrapper = mount(Sidebar, {
+      props: { open: true },
       global: { plugins: [router] },
     })
     const titles = wrapper.findAll('.nav-section-title')
@@ -42,6 +43,7 @@ describe('Sidebar', () => {
     // simulate desktop
     Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
     const wrapper = mount(Sidebar, {
+      props: { open: true },
       global: { plugins: [router] },
     })
     expect(wrapper.find('.sidebar.collapsed').exists()).toBe(false)
@@ -52,6 +54,7 @@ describe('Sidebar', () => {
     router.push('/dashboard')
     await router.isReady()
     const wrapper = mount(Sidebar, {
+      props: { open: true },
       global: { plugins: [router] },
     })
     // "实操实验室" and "练习工具" start collapsed
@@ -71,6 +74,7 @@ describe('Sidebar', () => {
     router.push('/dashboard')
     await router.isReady()
     const wrapper = mount(Sidebar, {
+      props: { open: true },
       global: { plugins: [router] },
     })
     await router.isReady()
@@ -86,6 +90,7 @@ describe('Sidebar', () => {
     router.push('/level/5')
     await router.isReady()
     const wrapper = mount(Sidebar, {
+      props: { open: true },
       global: { plugins: [router] },
     })
     await router.isReady()
@@ -100,6 +105,7 @@ describe('Sidebar', () => {
     await router.isReady()
     const pushSpy = vi.spyOn(router, 'push')
     const wrapper = mount(Sidebar, {
+      props: { open: true },
       global: { plugins: [router] },
     })
     const input = wrapper.find('.search-input')
@@ -109,15 +115,14 @@ describe('Sidebar', () => {
     pushSpy.mockRestore()
   })
 
-  it('toggle button collapses sidebar', async () => {
+  it('collapses when open prop is false', async () => {
     const router = createRouterAt('/dashboard')
     router.push('/dashboard')
     await router.isReady()
     const wrapper = mount(Sidebar, {
+      props: { open: false },
       global: { plugins: [router] },
     })
-    const toggle = wrapper.find('.sidebar-toggle')
-    await toggle.trigger('click')
     expect(wrapper.find('.sidebar.collapsed').exists()).toBe(true)
   })
 })
