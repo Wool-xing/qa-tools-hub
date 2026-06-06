@@ -14,8 +14,8 @@ class TestCase(Base):
     expected_result: Mapped[str] = mapped_column(Text)
     priority: Mapped[str] = mapped_column(String(10), default="P2")  # P0-P4
     status: Mapped[str] = mapped_column(String(20), default="draft")  # draft/ready/running/passed/failed
-    team_id: Mapped[int | None] = mapped_column(ForeignKey("teams.id"), nullable=True, index=True)
-    level_id: Mapped[int | None] = mapped_column(ForeignKey("levels.id"), nullable=True, index=True)
+    team_id: Mapped[int | None] = mapped_column(ForeignKey("teams.id", ondelete="SET NULL"), nullable=True, index=True)
+    level_id: Mapped[int | None] = mapped_column(ForeignKey("levels.id", ondelete="SET NULL"), nullable=True, index=True)
     tags: Mapped[str | None] = mapped_column(String(500), nullable=True)  # comma-separated
     folder: Mapped[str] = mapped_column(String(100), default="默认", index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

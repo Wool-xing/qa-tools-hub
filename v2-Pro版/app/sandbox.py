@@ -104,7 +104,8 @@ def run_code_sandbox(code: str, test_input: str = "", timeout_sec: int | None = 
         kwargs = {
             "input": test_input, "capture_output": True, "text": True,
             "timeout": timeout_sec,
-            "env": {"PYTHONPATH": "", "PATH": os.environ.get("PATH", ""),
+            "env": {"PYTHONPATH": "", "PYTHONSTARTUP": "", "PYTHONHOME": "",
+                    "PATH": os.environ.get("PATH", ""),
                     "HOME": os.environ.get("HOME", tempfile.gettempdir())},
         }
         if platform.system() == "Windows":
