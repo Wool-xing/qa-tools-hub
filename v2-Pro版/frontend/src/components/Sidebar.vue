@@ -83,7 +83,7 @@ const openSections = reactive({
   main: true,
   levels: true,
   domains: false,
-  labs: false,
+  labs: true,
   practice: false,
 })
 

@@ -17,11 +17,11 @@
         </div>
         <div class="field">
           <label>密码</label>
-          <input v-model="password" type="password" placeholder="输入密码" required autocomplete="current-password">
+          <input v-model="password" type="password" placeholder="输入密码" required :autocomplete="isRegister ? 'new-password' : 'current-password'">
         </div>
         <p v-if="error" class="err">{{ error }}</p>
-        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:12px;">
-          {{ isRegister ? '创建账号' : '登录' }}
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:12px;" :disabled="submitting">
+          {{ submitting ? '⏳ 处理中...' : (isRegister ? '创建账号' : '登录') }}
         </button>
       </form>
       <p class="switch">
@@ -44,14 +44,17 @@ const router = useRouter()
 const auth = useAuthStore()
 const isRegister = ref(false)
 const username = ref(''), email = ref(''), password = ref(''), error = ref('')
+const submitting = ref(false)
 
 async function submit() {
   error.value = ''
+  submitting.value = true
   try {
     if (isRegister.value) await auth.register(username.value, email.value, password.value)
     else await auth.login(username.value, password.value)
     router.push('/levels')
   } catch (e) { error.value = e.message }
+  finally { submitting.value = false }
 }
 </script>
 
