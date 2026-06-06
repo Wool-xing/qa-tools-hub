@@ -36,7 +36,7 @@
         <span class="stage-bar-mini"><span class="stage-bar-mini-fill" :style="{width: stagePct(key)+'%'}"></span></span>
       </button>
       <div :id="'stage-'+key" v-show="openStages[key]" class="level-grid" role="list">
-        <div v-for="lv in filteredLevels(key)" :key="lv.id"
+        <div v-for="(lv, idx) in filteredLevels(key)" :key="lv.id"
           class="level-card" :class="{ completed: lv.status==='completed', locked: lv.status==='locked', current: lv.status==='in_progress'||lv.status==='unlocked' }"
           role="button" tabindex="0"
           :aria-label="lv.title + ' — ' + lv.description"
@@ -44,7 +44,7 @@
           @keydown.enter="openLevel(lv)"
           @keydown.space.prevent="openLevel(lv)">
           <div class="lc-top">
-            <span class="lc-num">#{{ lv.order }}</span>
+            <span class="lc-num">#{{ idx + 1 }}</span>
             <span class="lc-status">{{ statusIcon(lv.status) }}</span>
           </div>
           <h3>{{ lv.title }}</h3>
@@ -68,12 +68,12 @@ const store = useLevelsStore()
 const router = useRouter()
 const route = useRoute()
 
-const search = ref('')
-const filterType = ref('')
+const search = ref(route.query.search || '')
+const filterType = ref(route.query.type || '')
 const openStages = reactive({
   beginner: false, intermediate: false, advanced: false, web: false, api: false, mobile: false,
   performance: false, security: false, network: false, ops: false, cicd: false, automotive: false,
-  accessibility: false, data: false, chaos: false, visual: false, risk: false, metrics: false, 'automation-arch': false, 'advanced-api': false, compliance: false,
+  accessibility: false, data: false, chaos: false, visual: false, risk: false, metrics: false, 'automation-arch': false, 'advanced-api': false, compliance: false, fintech: false,
 })
 
 // Read stage from query param, expand accordion, scroll to center
