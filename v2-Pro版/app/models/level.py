@@ -30,7 +30,7 @@ class UserLevelProgress(Base):
     level_id: Mapped[int] = mapped_column(ForeignKey("levels.id"), index=True)
     status: Mapped[str] = mapped_column(String(20), default="locked", index=True)
     answer: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    score: Mapped[int] = mapped_column(Integer, default=0)
+    score: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     attempts: Mapped[int] = mapped_column(Integer, default=0)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
