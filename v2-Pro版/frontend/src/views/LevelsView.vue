@@ -2,7 +2,7 @@
   <div>
     <div class="page-header">
       <h1>测试技能闯关</h1>
-      <p>{{ store.progress.completed || 0 }}/{{ store.progress.total || 0 }} 关已完成 · {{ store.progress.points || 0 }} 积分</p>
+      <p>{{ store.progress.completed ? store.progress.completed + '/' + store.progress.total + ' 关已完成 · ' + store.progress.points + ' 积分' : '从入门基础开始，一步步成为测试专家 🎯' }}</p>
     </div>
 
     <!-- Search + Filter -->
@@ -97,7 +97,7 @@ const route = useRoute()
 const search = ref(route.query.search || '')
 const filterType = ref(route.query.type || '')
 const openStages = reactive({
-  beginner: false, intermediate: false, advanced: false, web: false, api: false, mobile: false,
+  beginner: true, intermediate: false, advanced: false, web: false, api: false, mobile: false,
   performance: false, security: false, network: false, ops: false, cicd: false, automotive: false,
   accessibility: false, data: false, chaos: false, visual: false, risk: false, metrics: false, 'automation-arch': false, 'advanced-api': false, compliance: false, fintech: false,
 })

@@ -258,6 +258,8 @@ function doSearch() {
 
 .nav-section-items {
   padding: 2px 0 8px;
+  max-height: 360px;
+  overflow-y: auto;
 }
 
 .nav-section-item {
