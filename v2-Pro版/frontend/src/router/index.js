@@ -43,7 +43,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() { return { top: 0 } },
+  scrollBehavior(to, from) {
+    if (to.query.stage && to.path === from.path) return false  // same page, no scroll reset
+    return { top: 0 }
+  },
 })
 
 router.beforeEach((to) => {

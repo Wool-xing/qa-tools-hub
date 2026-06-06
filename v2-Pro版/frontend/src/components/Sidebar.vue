@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, nextTick } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -58,13 +58,7 @@ const search = ref('')
 const open = ref(window.innerWidth > 768)
 
 function navigateTo(to) {
-  if (to.includes('?stage=') && route.path === '/levels') {
-    // Same page: replace query without re-render, just trigger watch
-    const params = new URLSearchParams(to.split('?')[1])
-    router.replace({ query: Object.fromEntries(params) })
-  } else {
-    router.push(to)
-  }
+  router.push(to)
 }
 
 const openSections = reactive({

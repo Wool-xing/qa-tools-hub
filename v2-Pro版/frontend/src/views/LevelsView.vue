@@ -106,15 +106,25 @@ const openStages = reactive({
 async function applyStageFilter() {
   const stage = route.query.stage
   if (!stage) return
-  Object.keys(openStages).forEach(k => openStages[k] = false)
   if (!openStages.hasOwnProperty(stage)) return
+  // Open target first → height increases, then close others → no collapse below viewport
   openStages[stage] = true
-  // Wait for data + DOM
   await nextTick()
-  setTimeout(() => {
-    const el = document.getElementById('block-'+stage) || document.getElementById('stage-'+stage)
-    if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' })
-  }, 50)
+  Object.keys(openStages).forEach(k => { if (k !== stage) openStages[k] = false })
+  await nextTick()
+  // Triple RAF to ensure all Vue DOM updates + layout + paint are done
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.getElementById('block-'+stage) || document.getElementById('stage-'+stage)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          const top = rect.top + window.scrollY - window.innerHeight / 2 + rect.height / 2
+          window.scrollTo({ top: Math.max(0, top), behavior: 'instant' })
+        }
+      })
+    })
+  })
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
 watch(() => route.query.search, (val) => {
