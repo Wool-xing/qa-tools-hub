@@ -26,18 +26,17 @@
             <span>{{ section.label }}</span>
           </button>
           <div v-show="openSections[section.key]" class="nav-section-items">
-            <a
+            <router-link
               v-for="item in section.items"
               :key="item.to"
-              :href="item.to"
+              :to="item.to"
               class="nav-section-item"
               :class="{ active: isActive(item.to, item.match) }"
-              @click.prevent="navigateTo(item.to)"
             >
               <span v-if="item.icon" class="item-icon">{{ item.icon }}</span>
               <span>{{ item.label }}</span>
               <span v-if="item.badge" class="item-badge">{{ item.badge }}</span>
-            </a>
+            </router-link>
           </div>
         </div>
       </nav>
@@ -73,10 +72,6 @@ function onResize() { isMobile.value = window.innerWidth <= 768 }
 
 onMounted(() => window.addEventListener('resize', onResize))
 onBeforeUnmount(() => window.removeEventListener('resize', onResize))
-
-function navigateTo(to) {
-  router.push(to)
-}
 
 const openSections = reactive({
   main: true,
