@@ -3,7 +3,7 @@
 import io
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, UploadFile, File
-from fastapi.responses import PlainTextResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, field_validator
@@ -243,21 +243,28 @@ async def bulk_update(data: BulkUpdate, user: User = Depends(get_current_user), 
 
 # ==================== Export ====================
 
-@router.get("/export/csv", response_class=PlainTextResponse)
+@router.get("/export/csv")
 async def export_csv(user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     r = await db.execute(select(TestCase).where(TestCase.user_id == user.id).order_by(TestCase.folder, TestCase.id))
     cases = r.scalars().all()
-    lines = ["ID,Title,Priority,Status,Folder,Tags,Steps,Expected"]
-    for c in cases:
-        title = _escape_csv_cell(c.title.replace('"', '""'))
-        steps = _escape_csv_cell((c.steps or "").replace('"', '""').replace('\n', '; '))
-        exp = _escape_csv_cell((c.expected_result or "").replace('"', '""'))
-        tags = _escape_csv_cell((c.tags or "").replace('"', '""'))
-        folder = _escape_csv_cell(c.folder or "")
-        priority = _escape_csv_cell(c.priority or "")
-        status = _escape_csv_cell(c.status or "")
-        lines.append(f'{c.id},"{title}","{priority}","{status}","{folder}","{tags}","{steps}","{exp}"')
-    return PlainTextResponse("\n".join(lines), media_type="text/csv", headers={"Content-Disposition": "attachment; filename=testcases.csv"})
+
+    def generate():
+        yield "ID,Title,Priority,Status,Folder,Tags,Steps,Expected\n"
+        for c in cases:
+            title = _escape_csv_cell(c.title.replace('"', '""'))
+            steps = _escape_csv_cell((c.steps or "").replace('"', '""').replace('\n', '; '))
+            exp = _escape_csv_cell((c.expected_result or "").replace('"', '""'))
+            tags = _escape_csv_cell((c.tags or "").replace('"', '""'))
+            folder = _escape_csv_cell(c.folder or "")
+            priority = _escape_csv_cell(c.priority or "")
+            status = _escape_csv_cell(c.status or "")
+            yield f'{c.id},"{title}","{priority}","{status}","{folder}","{tags}","{steps}","{exp}"\n'
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=testcases.csv"}
+    )
 
 
 # xlsx export

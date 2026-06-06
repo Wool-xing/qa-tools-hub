@@ -30,13 +30,13 @@
     <div v-if="isSearching" class="level-grid" role="list">
       <div v-for="(lv, idx) in searchResults" :key="lv.id"
         class="level-card" :class="{ completed: lv.status==='completed', locked: lv.status==='locked', current: lv.status==='in_progress'||lv.status==='unlocked' }"
-        role="button" tabindex="0"
+        role="button" tabindex="0" :title="lockedTitle(lv)"
         :aria-label="lv.title + ' — ' + lv.description"
         @click="openLevel(lv)"
         @keydown.enter="openLevel(lv)"
         @keydown.space.prevent="openLevel(lv)">
         <div class="lc-top">
-          <span class="lc-num">#{{ idx + 1 }}</span>
+          <span class="lc-num">#{{ lv.order }}</span>
           <span class="lc-status">{{ statusIcon(lv.status) }}</span>
         </div>
         <h3>{{ lv.title }}</h3>
@@ -69,7 +69,7 @@
           @keydown.enter="openLevel(lv)"
           @keydown.space.prevent="openLevel(lv)">
           <div class="lc-top">
-            <span class="lc-num">#{{ idx + 1 }}</span>
+            <span class="lc-num">#{{ lv.order }}</span>
             <span class="lc-status">{{ statusIcon(lv.status) }}</span>
           </div>
           <h3>{{ lv.title }}</h3>
@@ -190,6 +190,7 @@ function levelTagClass(l) {
   return 'tag-success'
 }
 function openLevel(lv) { if (lv.status !== 'locked') router.push('/level/' + lv.id) }
+function lockedTitle(lv) { return lv.status === 'locked' ? '完成前置关卡后解锁' : '' }
 
 onMounted(() => store.fetchList())
 </script>
