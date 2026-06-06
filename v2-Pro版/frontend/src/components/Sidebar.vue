@@ -24,17 +24,18 @@
             <span>{{ section.label }}</span>
           </button>
           <div v-show="openSections[section.key]" class="nav-section-items">
-            <router-link
+            <a
               v-for="item in section.items"
               :key="item.to"
-              :to="item.to"
+              :href="item.to"
               class="nav-section-item"
               :class="{ active: isActive(item.to, item.match) }"
+              @click.prevent="navigateTo(item.to)"
             >
               <span v-if="item.icon" class="item-icon">{{ item.icon }}</span>
               <span>{{ item.label }}</span>
               <span v-if="item.badge" class="item-badge">{{ item.badge }}</span>
-            </router-link>
+            </a>
           </div>
         </div>
       </nav>
@@ -48,13 +49,29 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const search = ref('')
 const open = ref(window.innerWidth > 768)
+
+function navigateTo(to) {
+  if (to.includes('?stage=')) {
+    // Same-page stage filter: update URL without full navigation, scroll smoothly
+    const stage = new URLSearchParams(to.split('?')[1]).get('stage')
+    router.replace({ query: { stage } })
+    nextTick(() => {
+      setTimeout(() => {
+        const el = document.getElementById('block-' + stage)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
+    })
+  } else {
+    router.push(to)
+  }
+}
 
 const openSections = reactive({
   main: true,
