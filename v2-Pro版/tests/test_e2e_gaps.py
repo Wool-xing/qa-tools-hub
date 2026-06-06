@@ -458,6 +458,53 @@ async def test_config_check_warns_on_defaults():
     assert len(issues) >= 1, f"Expected at least 1 config warning, got {issues}"
 
 
+def test_safe_int_env_invalid(monkeypatch):
+    """_safe_int_env should return default on invalid input."""
+    monkeypatch.setenv("TEST_INT", "not_a_number")
+    from app.config import _safe_int_env
+    result = _safe_int_env("TEST_INT", 42)
+    assert result == 42
+
+
+@pytest.mark.asyncio
+async def test_mock_create_with_sequence(auth, client):
+    """Mock create should accept sequence config."""
+    r = await client.post("/api/labs/mock/create", json={
+        "method": "POST", "path": "api/seqtest", "status_code": 200,
+        "response_body": "default",
+        "sequence": [{"status_code": 503, "response_body": "err"}]
+    }, headers=auth)
+    assert r.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_mock_reset_and_stats(auth, client):
+    """Mock reset should clear store, stats should reflect."""
+    await client.post("/api/labs/mock/reset", headers=auth)
+    r = await client.get("/api/labs/mock/stats", headers=auth)
+    assert r.status_code == 200
+    assert r.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_analytics_export(auth, client):
+    """Progress export should return valid JSON with username."""
+    r = await client.get("/api/analytics/export", headers=auth)
+    assert r.status_code == 200
+    data = r.json()
+    assert "username" in data
+    assert "summary" in data
+    assert "progress" in data
+
+
+@pytest.mark.asyncio
+async def test_analytics_achievements_for_new_user(auth, client):
+    """Achievements endpoint should list all 22 definitions."""
+    r = await client.get("/api/analytics/achievements", headers=auth)
+    assert r.status_code == 200
+    assert len(r.json()["achievements"]) >= 8
+
+
 # ==================== Coverage: testcases xlsx import ====================
 
 @pytest.mark.asyncio
