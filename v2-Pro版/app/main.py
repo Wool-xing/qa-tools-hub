@@ -45,6 +45,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 async def security_headers_middleware(request: Request, call_next):
     response = await call_next(request)
+    # Cache static assets (hashed filenames = immutable)
+    if request.url.path.startswith("/assets/"):
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-XSS-Protection"] = "1; mode=block"
