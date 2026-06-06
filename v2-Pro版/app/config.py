@@ -82,7 +82,7 @@ SEED_ADMIN_PASSWORD = os.getenv("SEED_ADMIN_PASSWORD", "")
 # ==================== Security Headers ====================
 
 HSTS_MAX_AGE = _safe_int_env("HSTS_MAX_AGE", 31536000)
-CSP_POLICY = os.getenv("CSP_POLICY", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'")
+CSP_POLICY = os.getenv("CSP_POLICY", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'")
 
 
 def check_config():

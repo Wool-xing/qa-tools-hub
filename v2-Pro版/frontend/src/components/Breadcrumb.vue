@@ -1,6 +1,6 @@
 <template>
   <nav class="breadcrumb" aria-label="面包屑导航">
-    <router-link to="/" class="crumb home">🏠 首页</router-link>
+    <router-link :to="homeLink" class="crumb home">🏠 首页</router-link>
     <template v-for="item in items" :key="item.to || item.label">
       <span class="crumb-sep">/</span>
       <router-link v-if="item.to" :to="item.to" class="crumb">{{ item.label }}</router-link>
@@ -12,8 +12,11 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { LS_TOKEN } from '../constants'
 
 const route = useRoute()
+
+const homeLink = computed(() => localStorage.getItem(LS_TOKEN) ? '/dashboard' : '/')
 
 const routeLabels = {
   dashboard: '仪表板',

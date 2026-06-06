@@ -14,7 +14,7 @@ import jwt
 from jwt import InvalidTokenError
 from app.database import get_db
 from app.models.user import User
-from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX, PASSWORD_MIN_LEN
+from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX, PASSWORD_MIN_LEN, BASE_URL as CONFIG_BASE_URL
 from app.mail import send_password_reset
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -159,9 +159,10 @@ def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain.encode(), hashed.encode())
 
 
-def create_token(user_id: int, username: str) -> str:
+def create_token(user_id: int, username: str, is_admin: bool = False) -> str:
     payload = {
         "sub": str(user_id), "username": username,
+        "is_admin": is_admin,
         "jti": uuid.uuid4().hex,
         "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     }
@@ -183,6 +184,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account is deactivated")
     return user
 
 
@@ -199,7 +202,7 @@ async def register(data: UserCreate, request: Request, response: Response, db: A
         raise HTTPException(status_code=400, detail="Email already registered")
     u = User(username=data.username, email=data.email, hashed_password=hash_password(data.password))
     db.add(u); await db.commit(); await db.refresh(u)
-    return TokenResponse(access_token=create_token(u.id, u.username), username=u.username, user_id=u.id)
+    return TokenResponse(access_token=create_token(u.id, u.username, u.is_admin), username=u.username, user_id=u.id)
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -211,7 +214,7 @@ async def login(data: UserLogin, request: Request, response: Response, db: Async
         raise HTTPException(status_code=401, detail="Invalid credentials")
     if not u.is_active:
         raise HTTPException(status_code=403, detail="Account is deactivated")
-    return TokenResponse(access_token=create_token(u.id, u.username), username=u.username, user_id=u.id)
+    return TokenResponse(access_token=create_token(u.id, u.username, u.is_admin), username=u.username, user_id=u.id)
 
 
 @router.post("/logout")
@@ -279,7 +282,7 @@ async def forgot_password(data: ForgotPasswordRequest, request: Request, respons
     u.reset_token_expires = datetime.now(timezone.utc) + timedelta(minutes=30)
     await db.commit()
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = CONFIG_BASE_URL if CONFIG_BASE_URL else str(request.base_url).rstrip("/")
     send_password_reset(email=u.email, username=u.username, token=token, base_url=base_url)
 
     return {"message": "If the email is registered, a reset link has been sent."}

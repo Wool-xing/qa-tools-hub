@@ -27,8 +27,8 @@ class UserLevelProgress(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
-    level_id: Mapped[int] = mapped_column(ForeignKey("levels.id"))
-    status: Mapped[str] = mapped_column(String(20), default="locked")
+    level_id: Mapped[int] = mapped_column(ForeignKey("levels.id"), index=True)
+    status: Mapped[str] = mapped_column(String(20), default="locked", index=True)
     answer: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     score: Mapped[int] = mapped_column(Integer, default=0)
     attempts: Mapped[int] = mapped_column(Integer, default=0)

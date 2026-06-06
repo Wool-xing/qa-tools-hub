@@ -96,6 +96,21 @@ async def list_my_teams(user: User = Depends(get_current_user),
     }
 
 
+@router.delete("/{team_id}/leave")
+async def leave_team(team_id: int, user: User = Depends(get_current_user),
+                     db: AsyncSession = Depends(get_db)):
+    r = await db.execute(
+        select(TeamMember).where(TeamMember.team_id == team_id, TeamMember.user_id == user.id))
+    member = r.scalar_one_or_none()
+    if not member:
+        raise HTTPException(status_code=404, detail="Not a member of this team")
+    if member.role == "owner":
+        raise HTTPException(status_code=400, detail="Owner cannot leave team. Transfer ownership or delete team first.")
+    await db.delete(member)
+    await db.commit()
+    return {"ok": True, "message": "Left team"}
+
+
 @router.get("/{team_id}/members")
 async def list_members(team_id: int, user: User = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):

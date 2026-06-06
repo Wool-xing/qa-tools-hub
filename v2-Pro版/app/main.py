@@ -128,7 +128,7 @@ app = FastAPI(
 )
 
 # Middleware order: last added = outermost
-app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_credentials=True, allow_methods=["GET","POST","PUT","DELETE"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_credentials=True, allow_methods=["GET","POST","PUT","DELETE","PATCH"], allow_headers=["Authorization","Content-Type","X-Request-ID"])
 app.middleware("http")(security_headers_middleware)
 app.middleware("http")(request_id_middleware)
 
@@ -163,7 +163,8 @@ async def health():
     db_ok = False
     try:
         from sqlalchemy import text
-        await asyncio.get_event_loop().run_in_executor(None, lambda: sync_engine.connect().execute(text("SELECT 1")))
+        with sync_engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
         db_ok = True
     except Exception as e:
         logger.warning("Health check DB error: %s", e)

@@ -17,6 +17,6 @@ class TestCase(Base):
     team_id: Mapped[int | None] = mapped_column(ForeignKey("teams.id"), nullable=True, index=True)
     level_id: Mapped[int | None] = mapped_column(ForeignKey("levels.id"), nullable=True, index=True)
     tags: Mapped[str | None] = mapped_column(String(500), nullable=True)  # comma-separated
-    folder: Mapped[str] = mapped_column(String(100), default="默认")
+    folder: Mapped[str] = mapped_column(String(100), default="默认", index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), index=True)

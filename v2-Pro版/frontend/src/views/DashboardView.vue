@@ -9,8 +9,10 @@
     <div v-if="loading" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">⏳ 加载中...</div>
     <template v-else>
     <div v-if="store.progress.total === 0" class="card" style="text-align:center;padding:40px;margin-bottom:var(--space-lg);">
-      <p style="font-size:2rem;margin-bottom:8px;">🚀</p>
-      <p style="font-weight:600;margin-bottom:4px;">加载中...</p>
+      <p style="font-size:2rem;margin-bottom:8px;">⚠️</p>
+      <p style="font-weight:600;margin-bottom:4px;">数据加载异常</p>
+      <p style="font-size:.8rem;color:var(--text-secondary);margin-bottom:12px;">未能获取关卡数据</p>
+      <button class="btn-outline" @click="fetchAll">🔄 重新加载</button>
     </div>
     <div v-else-if="store.progress.completed === 0" class="card" style="text-align:center;padding:48px;margin-bottom:var(--space-lg);background:linear-gradient(135deg,var(--primary-light),var(--surface));">
       <p style="font-size:2.5rem;margin-bottom:12px;">🎯</p>

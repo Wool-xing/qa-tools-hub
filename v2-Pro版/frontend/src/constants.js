@@ -4,7 +4,6 @@
 
 // ==================== localStorage Keys ====================
 export const LS_TOKEN = 'qa-pro-token'
-export const LS_IS_ADMIN = 'qa-pro-is-admin'
 export const LS_LAB_VISITS = 'qa-lab-visits'
 export const LS_LAB_COUNT = 'qa-lab-count'
 export const LS_DARK_MODE = 'qa-dark-mode'
