@@ -1,4 +1,5 @@
 import re
+import asyncio
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, func
@@ -220,7 +221,7 @@ async def submit_answer(data: SubmitAnswer, user: User = Depends(get_current_use
         code = data.answer.get("code", "")
         test_input = level.task_config.get("test_input", "")
         expected = level.task_config.get("expected", "")
-        sandbox_result = run_code_sandbox(code, test_input)
+        sandbox_result = await asyncio.to_thread(run_code_sandbox, code, test_input)
         if sandbox_result["ok"]:
             actual = sandbox_result["stdout"]
             if expected and actual == expected:
@@ -238,7 +239,7 @@ async def submit_answer(data: SubmitAnswer, user: User = Depends(get_current_use
     elif level.task_type == "debug":
         code = data.answer.get("code", "")
         test_input = level.task_config.get("test_input", "")
-        sandbox_result = run_code_sandbox(code, test_input)
+        sandbox_result = await asyncio.to_thread(run_code_sandbox, code, test_input)
         if sandbox_result["ok"] and sandbox_result["returncode"] == 0:
             checks = level.task_config.get("checks", [])
             passed_checks = 0

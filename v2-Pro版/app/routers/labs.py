@@ -45,7 +45,8 @@ class CmdQuery(BaseModel):
 @router.post("/sql/execute")
 async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
-    user.lab_visit_count = (user.lab_visit_count or 0) + 1
+    from sqlalchemy import update as sa_update
+    await db.execute(sa_update(User).where(User.id == user.id).values(lab_visit_count=User.lab_visit_count + 1))
     await db.commit()
     if not data.sql or not data.sql.strip():
         raise HTTPException(status_code=400, detail="SQL query is required")
@@ -69,7 +70,9 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
             return {"ok": True, "columns": columns, "rows": rows, "row_count": len(rows),
                     "description": scenario["description"], "new_achievements": new_ach}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        import logging
+        logging.getLogger("qa-tools").warning("SQL sandbox error: %s", e)
+        raise HTTPException(status_code=400, detail="SQL execution failed — check your query syntax")
 
 
 # ==================== Command Simulator ====================
@@ -77,7 +80,8 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
 @router.post("/cmd/execute")
 async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
-    user.lab_visit_count = (user.lab_visit_count or 0) + 1
+    from sqlalchemy import update as sa_update
+    await db.execute(sa_update(User).where(User.id == user.id).values(lab_visit_count=User.lab_visit_count + 1))
     await db.commit()
     cmd = data.cmd.strip()
     if not cmd:

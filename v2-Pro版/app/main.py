@@ -6,7 +6,7 @@ import logging
 import re
 from logging.handlers import RotatingFileHandler
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -17,6 +17,7 @@ from app.database import init_db, sync_engine
 from app.seed import seed
 from app.config import CORS_ORIGINS, check_config, HSTS_MAX_AGE, CSP_POLICY, LOG_MAX_BYTES, LOG_BACKUP_COUNT
 from app.routers import auth, levels, labs, admin, testcases, analytics, teams
+from app.routers.auth import get_current_user
 
 # Logging: stdout + rotating file
 LOG_FORMAT = "%(asctime)s %(levelname)s [%(name)s] %(message)s"
@@ -186,7 +187,8 @@ async def root():
 
 # Mock service virtualisation endpoint — must be before SPA fallback
 @app.api_route("/mock/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"], include_in_schema=False)
-async def mock_handler(request: Request, path: str):
+async def mock_handler(request: Request, path: str,
+                       user = Depends(get_current_user)):
     from app.routers.labs import mock_store, mock_call_counts
     key = f"{request.method}:{path}"
     config = mock_store.get(key)

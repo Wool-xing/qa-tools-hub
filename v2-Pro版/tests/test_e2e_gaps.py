@@ -436,10 +436,10 @@ async def test_teams_invalid_invite(auth, client):
 # ==================== Coverage: main.py ====================
 
 @pytest.mark.asyncio
-async def test_mock_handler_not_found(client):
-    """Mock handler should return 404 for unregistered mocks."""
+async def test_mock_handler_requires_auth(client):
+    """Mock handler should return 401 without auth token."""
     r = await client.get("/mock/not-registered")
-    assert r.status_code == 404
+    assert r.status_code == 401
 
 
 @pytest.mark.asyncio
@@ -529,7 +529,7 @@ async def test_mock_handler_post_method(auth, client):
         "method": "POST", "path": "api/posttest",
         "status_code": 201, "response_body": "created"
     }, headers=auth)
-    r = await client.post("/mock/api/posttest")
+    r = await client.post("/mock/api/posttest", headers=auth)
     assert r.status_code == 201
 
 
@@ -540,7 +540,7 @@ async def test_mock_handler_patch_method(auth, client):
         "method": "PATCH", "path": "api/patchtest",
         "status_code": 200, "response_body": "patched"
     }, headers=auth)
-    r = await client.patch("/mock/api/patchtest")
+    r = await client.patch("/mock/api/patchtest", headers=auth)
     assert r.status_code == 200
 
 
@@ -551,7 +551,7 @@ async def test_mock_handler_delete_method(auth, client):
         "method": "DELETE", "path": "api/deltest",
         "status_code": 204, "response_body": ""
     }, headers=auth)
-    r = await client.delete("/mock/api/deltest")
+    r = await client.delete("/mock/api/deltest", headers=auth)
     assert r.status_code == 204
 
 
@@ -562,14 +562,14 @@ async def test_mock_handler_with_delay(auth, client):
         "method": "GET", "path": "api/delaytest",
         "status_code": 200, "response_body": "ok", "delay_ms": 50
     }, headers=auth)
-    r = await client.get("/mock/api/delaytest")
+    r = await client.get("/mock/api/delaytest", headers=auth)
     assert r.status_code == 200
 
 
 @pytest.mark.asyncio
 async def test_mock_handler_not_found(auth, client):
     """Unregistered mock should return 404."""
-    r = await client.get("/mock/api/nonexistent12345")
+    r = await client.get("/mock/api/nonexistent12345", headers=auth)
     assert r.status_code == 404
 
 

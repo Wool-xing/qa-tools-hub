@@ -37,7 +37,7 @@
           :disabled="showResult"
           role="radio" :aria-checked="answer.choice===i ? 'true' : 'false'"
           @click="answer.choice=i">
-          <span class="opt-letter">{{ 'ABCD'[i] }}</span>
+          <span class="opt-letter">{{ String.fromCharCode(65 + i) }}</span>
           <span>{{ opt }}</span>
         </button>
         <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">提交答案</button>
@@ -94,7 +94,7 @@
           }" :disabled="showResult"
           role="radio" :aria-checked="answer.choice===i ? 'true' : 'false'"
           @click="answer.choice=i">
-          <span class="opt-letter">{{ 'ABCD'[i] }}</span>
+          <span class="opt-letter">{{ String.fromCharCode(65 + i) }}</span>
           <span>{{ opt.slice(2).trim() }}</span>
         </button>
         <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">提交判断</button>
@@ -121,7 +121,7 @@
           :disabled="showResult"
           role="radio" :aria-checked="answer.choice===i ? 'true' : 'false'"
           @click="answer.choice=i">
-          <span class="opt-letter">{{ 'ABCD'[i] }}</span>
+          <span class="opt-letter">{{ String.fromCharCode(65 + i) }}</span>
           <span>{{ opt }}</span>
         </button>
         <button v-if="!showResult" class="btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:12px;" :disabled="answer.choice===undefined" @click="doSubmit">提交答案</button>
@@ -203,8 +203,8 @@ const demoHtml = computed(() => md(store.current?.demo))
 const analyzeDataHtml = computed(() => md(store.current?.task_config?.data_block || ''))
 
 async function doSubmit() {
-  const body = store.current.task_type === 'quiz' || store.current.task_type === 'analyze' ? { choice: answer.choice }
-    : store.current.task_type === 'code' ? { code: answer.code }
+  const body = store.current.task_type === 'quiz' || store.current.task_type === 'analyze' || store.current.task_type === 'scenario' ? { choice: answer.choice }
+    : store.current.task_type === 'code' || store.current.task_type === 'debug' ? { code: answer.code }
     : { text: answer.text }
   await store.submit(store.current.id, body)
   showResult.value = true
