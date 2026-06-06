@@ -13,10 +13,12 @@ from app.models.user import User
 from app.models.test_case import TestCase
 from app.models.test_run import TestRun
 from app.routers.auth import get_current_user
+from app.config import MAX_XLSX_BYTES, BULK_UPDATE_LIMIT
 
 router = APIRouter(prefix="/api/testcases", tags=["testcases"])
 
-_MAX_XLSX_BYTES = 5 * 1024 * 1024  # 5 MB limit
+# Limit moved to config — imported above
+_MAX_XLSX_BYTES = MAX_XLSX_BYTES
 
 
 def _escape_csv_cell(value: str) -> str:
@@ -215,8 +217,8 @@ class BulkUpdate(BaseModel):
     @field_validator("ids")
     @classmethod
     def check_ids(cls, v: list[int]) -> list[int]:
-        if len(v) > 200:
-            raise ValueError("Bulk update limited to 200 items per request")
+        if len(v) > BULK_UPDATE_LIMIT:
+            raise ValueError(f"Bulk update limited to {BULK_UPDATE_LIMIT} items per request")
         return v
 
 

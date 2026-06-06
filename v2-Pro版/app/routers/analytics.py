@@ -9,6 +9,7 @@ from app.models.user import User
 from app.models.level import Level, UserLevelProgress
 from app.models.achievement import Achievement, UserAchievement
 from app.routers.auth import get_current_user
+from app.config import SKILL_GAP_WEAK_THRESHOLD, SKILL_GAP_STRONG_THRESHOLD, LEADERBOARD_LIMIT
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 
@@ -103,8 +104,8 @@ async def skill_gaps(
     # Sort by avg_score ascending (weakest first)
     stage_stats.sort(key=lambda s: s["avg_score"])
 
-    weakest = [s["stage"] for s in stage_stats[:3] if s["avg_score"] < 80]
-    strongest = [s["stage"] for s in stage_stats[-3:] if s["avg_score"] >= 90]
+    weakest = [s["stage"] for s in stage_stats[:3] if s["avg_score"] < SKILL_GAP_WEAK_THRESHOLD]
+    strongest = [s["stage"] for s in stage_stats[-3:] if s["avg_score"] >= SKILL_GAP_STRONG_THRESHOLD]
 
     return {
         "stages": stage_stats,
@@ -153,7 +154,7 @@ async def leaderboard(period: str = "weekly", db: AsyncSession = Depends(get_db)
     result = await db.execute(
         q.group_by(User.id, User.username)
         .order_by(func.count(UserLevelProgress.id).desc())
-        .limit(10)
+        .limit(LEADERBOARD_LIMIT)
     )
     rows = result.all()
     return {

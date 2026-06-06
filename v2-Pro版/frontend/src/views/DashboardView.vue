@@ -123,6 +123,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useLevelsStore } from '../stores/levels'
 import AchievementToast from '../components/AchievementToast.vue'
+import { LS_LAB_COUNT, LS_ACHIEVEMENTS } from '../constants'
 const store = useLevelsStore()
 
 const pct = computed(() => store.progress.total ? Math.round(store.progress.completed / store.progress.total * 100) : 0)
@@ -213,7 +214,7 @@ const achievements = computed(() => {
   const stages = store.stages || {}
   const beginnerDone = (stages.beginner?.completed || 0) >= (stages.beginner?.total || 1)
   const webDone = (stages.web?.completed || 0) >= (stages.web?.total || 1)
-  const labCount = parseInt(localStorage.getItem('qa-lab-count') || '0')
+  const labCount = parseInt(localStorage.getItem(LS_LAB_COUNT) || '0')
   return [
     { key: 'first', icon: '🌟', name: '初出茅庐', desc: '完成第 1 关', earned: completed >= 1 },
     { key: 'five', icon: '🔥', name: '小有所成', desc: '完成 5 关', earned: completed >= 5 },
@@ -233,14 +234,14 @@ onMounted(async () => {
   loading.value = false
 
   // Detect newly unlocked achievements
-  const prevEarned = JSON.parse(localStorage.getItem('qa-achievements') || '[]')
+  const prevEarned = JSON.parse(localStorage.getItem(LS_ACHIEVEMENTS) || '[]')
   const currentEarned = achievements.value.filter(a => a.earned).map(a => a.key)
   const newlyEarned = currentEarned.find(k => !prevEarned.includes(k))
   if (newlyEarned) {
     const ach = achievements.value.find(a => a.key === newlyEarned)
     if (ach) newAchievement.value = ach
   }
-  localStorage.setItem('qa-achievements', JSON.stringify(currentEarned))
+  localStorage.setItem(LS_ACHIEVEMENTS, JSON.stringify(currentEarned))
 })
 </script>
 

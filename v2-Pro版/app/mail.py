@@ -5,7 +5,7 @@ import smtplib
 import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from app.config import SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM
+from app.config import SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, SMTP_TIMEOUT, BASE_URL
 from app import __version__
 
 logger = logging.getLogger("qa-tools")
@@ -29,7 +29,7 @@ def send(recipient: str, subject: str, body_html: str):
 
     try:
         ctx = ssl.create_default_context()
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as server:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=SMTP_TIMEOUT) as server:
             server.starttls(context=ctx)
             server.login(SMTP_USER, SMTP_PASS)
             server.sendmail(SMTP_FROM, [recipient], msg.as_string())
@@ -40,9 +40,11 @@ def send(recipient: str, subject: str, body_html: str):
         return False
 
 
-def send_password_reset(email: str, username: str, token: str, base_url: str = "http://localhost:8005"):
+def send_password_reset(email: str, username: str, token: str, base_url: str = ""):
     """Send password reset email with reset link."""
-    link = f"{base_url}/reset-password?token={token}"
+    if not base_url:
+        base_url = BASE_URL
+    link = f"{base_url.rstrip('/')}/reset-password?token={token}"
     subject = "QA通关 - 重置密码"
     body = f"""\
 <html><body style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">

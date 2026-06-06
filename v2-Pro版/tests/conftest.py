@@ -7,6 +7,7 @@ import pytest
 _test_db_fd, _test_db_path = tempfile.mkstemp(suffix=".db", prefix="qa_test_")
 os.close(_test_db_fd)
 os.environ["DATABASE_URL"] = f"sqlite+aiosqlite:///{_test_db_path}"
+os.environ["SEED_ADMIN_PASSWORD"] = "qa123456"  # Fixed password for test fixtures
 
 
 def _cleanup():

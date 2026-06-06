@@ -1,6 +1,6 @@
-const BASE = ''
+import { API_BASE, LS_TOKEN, FETCH_MAX_RETRIES } from './constants'
 
-function token() { return localStorage.getItem('qa-pro-token') || '' }
+function token() { return localStorage.getItem(LS_TOKEN) || '' }
 
 class ApiError extends Error {
   constructor(message, status) {
@@ -16,12 +16,12 @@ async function api(method, path, body) {
   if (token()) headers['Authorization'] = `Bearer ${token()}`
   const opts = { method, headers }
   if (body) opts.body = JSON.stringify(body)
-  const maxRetries = SAFE_METHODS.has(method) ? 3 : 1
+  const maxRetries = SAFE_METHODS.has(method) ? FETCH_MAX_RETRIES : 1
   let res
   let lastErr
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      res = await fetch(BASE + path, opts)
+      res = await fetch(API_BASE + path, opts)
       break
     } catch (e) {
       lastErr = e
@@ -30,7 +30,7 @@ async function api(method, path, body) {
   }
   if (!res) throw new ApiError('无法连接服务器，请检查网络或后端是否启动', 0)
   if (res.status === 401) {
-    localStorage.removeItem('qa-pro-token')
+    localStorage.removeItem(LS_TOKEN)
     const current = window.location.pathname
     if (current !== '/login') window.location.href = '/login?redirect=' + encodeURIComponent(current)
     throw new ApiError('登录已过期，请重新登录', 401)

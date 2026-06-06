@@ -15,7 +15,7 @@ from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTEN
 from app import __version__
 from app.database import init_db, sync_engine
 from app.seed import seed
-from app.config import CORS_ORIGINS, check_config, HSTS_MAX_AGE, CSP_POLICY
+from app.config import CORS_ORIGINS, check_config, HSTS_MAX_AGE, CSP_POLICY, LOG_MAX_BYTES, LOG_BACKUP_COUNT
 from app.routers import auth, levels, labs, admin, testcases, analytics, teams
 
 # Logging: stdout + rotating file
@@ -25,7 +25,7 @@ os.makedirs(LOG_DIR, exist_ok=True)
 
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, handlers=[
     logging.StreamHandler(),
-    RotatingFileHandler(os.path.join(LOG_DIR, "app.log"), maxBytes=10_485_760, backupCount=5, encoding="utf-8"),
+    RotatingFileHandler(os.path.join(LOG_DIR, "app.log"), maxBytes=LOG_MAX_BYTES, backupCount=LOG_BACKUP_COUNT, encoding="utf-8"),
 ])
 logger = logging.getLogger("qa-tools")
 

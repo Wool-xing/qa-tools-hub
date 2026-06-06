@@ -47,6 +47,7 @@ import Sidebar from './components/Sidebar.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import BackToTop from './components/BackToTop.vue'
 import { useAuthStore } from './stores/auth'
+import { LS_DARK_MODE, LS_TOKEN } from './constants'
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -59,13 +60,13 @@ const isDark = ref(false)
 function toggleDark() {
   isDark.value = !isDark.value
   document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : '')
-  localStorage.setItem('qa-dark-mode', isDark.value ? '1' : '0')
+  localStorage.setItem(LS_DARK_MODE, isDark.value ? '1' : '0')
 }
 
 async function handleLogout() {
   try {
     await fetch('/api/auth/logout', {
-      method: 'POST', headers: { 'Authorization': `Bearer ${auth.token}` }
+      method: 'POST', headers: { 'Authorization': `Bearer ${localStorage.getItem(LS_TOKEN)}` }
     })
   } catch (e) { /* ignore */ }
   auth.logout()
@@ -74,7 +75,7 @@ async function handleLogout() {
 
 const _mq = window.matchMedia('(prefers-color-scheme: dark)')
 const _mqHandler = (e) => {
-  if (!localStorage.getItem('qa-dark-mode')) {
+  if (!localStorage.getItem(LS_DARK_MODE)) {
     isDark.value = e.matches
     document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : '')
   }
@@ -82,7 +83,7 @@ const _mqHandler = (e) => {
 
 onMounted(() => {
   auth.restore()
-  const saved = localStorage.getItem('qa-dark-mode')
+  const saved = localStorage.getItem(LS_DARK_MODE)
   if (saved === '1' || (!saved && _mq.matches)) {
     isDark.value = true
     document.documentElement.setAttribute('data-theme', 'dark')

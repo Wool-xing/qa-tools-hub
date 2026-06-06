@@ -86,12 +86,13 @@
 
 <script setup>
 import { ref, reactive, watch, onMounted } from 'vue'
+import { LS_TOKEN } from '../constants'
 
 const cases = ref([]), folders = ref([]), totalCount = ref(0)
 const search = ref(''), filterFolder = ref(''), filterPriority = ref(''), filterStatus = ref('')
 const showCreate = ref(false), editing = ref(null), selectedIds = ref([])
 const form = reactive({ title: '', steps: '', expected: '', priority: 'P2', status: 'draft', tags: '', folder: '默认' })
-const token = () => localStorage.getItem('qa-pro-token') || ''
+const token = () => localStorage.getItem(LS_TOKEN) || ''
 
 function statusLabel(s) {
   return { draft: '草稿', ready: '就绪', running: '执行中', passed: '通过', failed: '失败', skipped: '跳过', blocked: '阻塞' }[s] || s

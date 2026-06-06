@@ -10,6 +10,7 @@ import subprocess
 import os
 import sys
 import platform
+import tempfile
 
 
 def _safe_type(obj):
@@ -74,7 +75,7 @@ def validate_code_safety(code: str):
     SandboxValidator().visit(tree)
 
 
-def run_code_sandbox(code: str, test_input: str = "", timeout_sec: int = 5) -> dict:
+def run_code_sandbox(code: str, test_input: str = "", timeout_sec: int | None = None) -> dict:
     """Execute Python code in subprocess sandbox with timeout.
 
     Security: AST validation blocks imports, class definitions, dunder access,
@@ -89,12 +90,15 @@ def run_code_sandbox(code: str, test_input: str = "", timeout_sec: int = 5) -> d
     safe_keys_set = repr(sorted(SAFE_BUILTINS.keys()))
     wrapped_code = SANDBOX_WRAPPER.replace("__SAFE_KEYS__", safe_keys_set) + "\n" + code
 
+    from app.config import SANDBOX_TIMEOUT
+    if timeout_sec is None:
+        timeout_sec = SANDBOX_TIMEOUT
     try:
         kwargs = {
             "input": test_input, "capture_output": True, "text": True,
             "timeout": timeout_sec,
             "env": {"PYTHONPATH": "", "PATH": os.environ.get("PATH", ""),
-                    "HOME": os.environ.get("HOME", "/tmp")},
+                    "HOME": os.environ.get("HOME", tempfile.gettempdir())},
         }
         if platform.system() == "Windows":
             kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
