@@ -155,12 +155,17 @@ function toggleSection(key) {
 }
 
 function isActive(to, matchName) {
-  if (matchName === false) return false
   if (matchName) {
     if (route.name === matchName) return true
     if (matchName === 'levels' && (route.name === 'level' || route.path.startsWith('/level/'))) return true
     if (route.path === to) return true
     if (route.path.startsWith(to + '/') || route.path.startsWith(to + '?')) return true
+  }
+  // Stage filter links: active when URL stage param matches
+  if (to.includes('?stage=')) {
+    const linkStage = new URLSearchParams(to.split('?')[1]).get('stage')
+    if (linkStage && route.query.stage === linkStage) return true
+    return false
   }
   return route.path === to
 }
