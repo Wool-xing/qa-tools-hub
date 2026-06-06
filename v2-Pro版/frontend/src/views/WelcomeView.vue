@@ -33,7 +33,7 @@
           <router-link
             v-for="item in cat.items"
             :key="item.to"
-            :to="auth.isLoggedIn ? item.to : '/login'"
+            :to="auth.isLoggedIn ? item.to : '/login?redirect=' + encodeURIComponent(item.to)"
             class="tool-card"
           >
             <span v-if="item.icon" class="tool-icon">{{ item.icon }}</span>

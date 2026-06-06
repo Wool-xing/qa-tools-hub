@@ -37,10 +37,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 const isRegister = ref(false)
 const username = ref(''), email = ref(''), password = ref(''), error = ref('')
@@ -52,7 +53,8 @@ async function submit() {
   try {
     if (isRegister.value) await auth.register(username.value, email.value, password.value)
     else await auth.login(username.value, password.value)
-    router.push('/levels')
+    const redirect = route.query.redirect
+    router.push(redirect || '/levels')
   } catch (e) { error.value = e.message }
   finally { submitting.value = false }
 }

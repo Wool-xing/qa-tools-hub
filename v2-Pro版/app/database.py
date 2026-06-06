@@ -1,21 +1,38 @@
+import os
 from sqlalchemy import create_engine
+from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from app.config import DATABASE_URL
 
+# Allow explicit async URL override for non-standard drivers
+_async_url = os.getenv("ASYNC_DATABASE_URL", "")
+if not _async_url:
+    _async_url = DATABASE_URL
+    parsed = make_url(_async_url)
+    if "aiosqlite" not in parsed.drivername and "asyncpg" not in parsed.drivername:
+        if parsed.drivername == "sqlite":
+            _async_url = _async_url.replace("sqlite://", "sqlite+aiosqlite://", 1)
+        elif parsed.drivername == "postgresql":
+            _async_url = _async_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
 # Sync: strip async driver prefix
-_sync_url = DATABASE_URL.replace("+aiosqlite", "").replace("+asyncpg", "")
+_sync_url = DATABASE_URL
+parsed_sync = make_url(_sync_url)
+_async_prefixes = ("aiosqlite", "asyncpg", "asyncmy")
+for prefix in _async_prefixes:
+    if prefix in parsed_sync.drivername:
+        _sync_url = _sync_url.replace(f"+{prefix}", "", 1)
+        break
+
+# Pool config from env
+_pool_size = int(os.getenv("DB_POOL_SIZE", "5"))
+_pool_overflow = int(os.getenv("DB_POOL_OVERFLOW", "5"))
+
 sync_engine = create_engine(_sync_url, echo=False)
 SyncSession = sessionmaker(sync_engine)
 
-# Async: ensure async driver prefix
-_async_url = DATABASE_URL
-if "+aiosqlite" not in _async_url and "+asyncpg" not in _async_url:
-    if "sqlite" in _async_url:
-        _async_url = _async_url.replace("sqlite://", "sqlite+aiosqlite://")
-    elif "postgresql" in _async_url:
-        _async_url = _async_url.replace("postgresql://", "postgresql+asyncpg://")
-engine = create_async_engine(_async_url, echo=False, pool_size=5, max_overflow=5)
+engine = create_async_engine(_async_url, echo=False, pool_size=_pool_size, max_overflow=_pool_overflow)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 

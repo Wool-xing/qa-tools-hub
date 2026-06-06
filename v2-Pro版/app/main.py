@@ -103,11 +103,17 @@ async def request_id_middleware(request: Request, call_next):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Run migrations before create_all to ensure schema is current
-    from alembic.config import Config
-    from alembic import command
-    alembic_ini = os.path.join(os.path.dirname(os.path.dirname(__file__)), "alembic.ini")
-    alembic_cfg = Config(alembic_ini)
-    command.upgrade(alembic_cfg, "head")
+    try:
+        from alembic.config import Config
+        from alembic import command
+        alembic_ini = os.path.join(os.path.dirname(os.path.dirname(__file__)), "alembic.ini")
+        if os.path.isfile(alembic_ini):
+            alembic_cfg = Config(alembic_ini)
+            command.upgrade(alembic_cfg, "head")
+        else:
+            logger.warning("alembic.ini not found — skipping migrations, using create_all fallback")
+    except Exception as e:
+        logger.warning("Migration failed: %s — falling back to create_all", e)
     init_db()
     seed()
     for issue in check_config():
