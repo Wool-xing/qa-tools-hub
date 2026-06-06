@@ -91,6 +91,11 @@ async function applyStageFilter() {
   }, 200)
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
+watch(() => route.query.search, (val) => {
+  search.value = val || ''
+  // Auto-expand all stages when searching
+  if (val) Object.keys(openStages).forEach(k => openStages[k] = true)
+}, { immediate: true })
 
 const visibleStages = computed(() => stageOrder.filter(k => totalIn(k) > 0))
 
