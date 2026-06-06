@@ -5,15 +5,14 @@
 [![GitHub](https://img.shields.io/badge/github-Wool--xing/qa--tools--hub-blue)](https://github.com/Wool-xing/qa-tools-hub)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-## 产品线
+## 技术栈
 
-| 产品 | 路径 | 技术 | 启动 |
-|------|------|------|------|
-| **Lite** | `v1-单文件版/羊毛工具导航.html` | 单HTML (~3000行) | 双击打开 |
-| **Pro API** | `v2-Pro版/app/` | FastAPI + SQLite + JWT | `python -m uvicorn app.main:app --port 8005` |
-| **Pro 前端** | `v2-Pro版/frontend/` | Vue3 + Vite + Pinia | `npm run build` (已构建到 app/static/) |
+| 层 | 路径 | 技术 |
+|------|------|------|
+| **后端** | `v2-Pro版/app/` | FastAPI + SQLite + JWT |
+| **前端** | `v2-Pro版/frontend/` | Vue3 + Vite + Pinia |
 
-## Pro 版功能
+## 功能
 
 ### 102关学习体系 (22个领域)
 🌱 入门基础(8) · 🚀 进阶提升(3) · 🧠 专家进阶(4) · 🌐 Web测试(4) · 📡 API测试(3) · 📱 APP测试(4) · ⚡ 性能测试(3) · 🛡️ 安全测试(4) · 🚗 车载测试(2) · 📶 网络&抓包(3) · 🖥️ 运维&数据库(3) · 🔄 CI/CD(2)
@@ -71,9 +70,10 @@ qatest / qa123456
 
 | 指标 | 值 |
 |------|-----|
-| 测试 | 140 passed |
-| 覆盖率 | 95% |
-| 前端构建 | ~300ms |
+| 测试 | 228 passed (183后端 + 19前端 + 26 E2E) |
+| 覆盖率 | 81% |
+| CI | 全绿 |
+| 前端构建 | ~500ms |
 
 ## 快速开始
 
