@@ -40,6 +40,7 @@ const routes = [
   { path: '/labs/mutation', name: 'mutation-lab', component: () => import('../views/MutationLabView.vue'), meta: { auth: true, title: '变异测试' } },
   { path: '/teams', name: 'teams', component: () => import('../views/TeamView.vue'), meta: { auth: true, title: '团队协作' } },
   { path: '/testcases', name: 'testcases', component: () => import('../views/TestCaseView.vue'), meta: { auth: true, title: '测试用例管理' } },
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue'), meta: { title: '页面未找到' } },
 ]
 
 const router = createRouter({
