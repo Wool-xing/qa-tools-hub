@@ -86,6 +86,7 @@ def _is_token_revoked(token: str) -> bool:
     if token not in _token_blacklist:
         return False
     # Auto-cleanup expired entries
+    _cleanup_stale_entries()
     if time.time() > _token_blacklist[token]:
         del _token_blacklist[token]
         return False
@@ -301,6 +302,9 @@ async def reset_password(data: ResetPasswordRequest, request: Request, response:
     if expires and expires.tzinfo is None:
         expires = expires.replace(tzinfo=timezone.utc)
     if expires and expires < datetime.now(timezone.utc):
+        u.reset_token = None
+        u.reset_token_expires = None
+        await db.commit()
         raise HTTPException(status_code=400, detail="Reset token has expired")
 
     u.hashed_password = hash_password(data.new_password)
