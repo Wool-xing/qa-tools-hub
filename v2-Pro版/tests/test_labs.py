@@ -128,10 +128,9 @@ async def test_sql_syntax_error(auth, client):
     r = await client.post("/api/labs/sql/execute", json={
         "sql": "SELECTT * FROM test_data", "level_id": 0
     }, headers=auth)
-    assert r.status_code == 200
+    assert r.status_code == 400
     data = r.json()
-    assert data["ok"] is False
-    assert "error" in data
+    assert "detail" in data
 
 
 # ==================== Command Simulator (unit) ====================

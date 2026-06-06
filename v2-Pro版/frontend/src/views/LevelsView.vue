@@ -14,7 +14,7 @@
       </div>
       <select v-model="filterType" class="filter-select">
         <option value="">全部题型</option>
-        <option value="quiz">📝 选择题</option>
+        <option value="quiz">选择题</option>
         <option value="code">编程题</option>
         <option value="explore">探索题</option>
       </select>

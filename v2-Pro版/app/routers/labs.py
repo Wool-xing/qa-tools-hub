@@ -60,7 +60,7 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user)):
             return {"ok": True, "columns": columns, "rows": rows, "row_count": len(rows),
                     "description": scenario["description"]}
     except Exception as e:
-        return {"ok": False, "error": str(e)}
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 # ==================== Command Simulator ====================
