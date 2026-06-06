@@ -15,7 +15,11 @@
 
       <!-- Stats Card -->
       <div class="card">
-        <h3>学习统计</h3>
+        <h3>学习统计
+          <button class="btn-ghost" style="float:right;font-size:.72rem;" @click="exportProgress" :disabled="exporting">
+            {{ exporting ? '导出中...' : '📥 导出数据' }}
+          </button>
+        </h3>
         <div class="stats-mini">
           <div class="stat-item"><span class="stat-num">{{ store.progress.completed || 0 }}</span><span class="stat-label">已完成</span></div>
           <div class="stat-item"><span class="stat-num">{{ store.progress.points || 0 }}</span><span class="stat-label">积分</span></div>
@@ -52,6 +56,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useLevelsStore } from '../stores/levels'
+import { analytics } from '../api'
 
 const auth = useAuthStore()
 const store = useLevelsStore()
@@ -76,6 +81,22 @@ function checkStrength() {
   else if (score < 65) { strengthClass.value = 'fair'; strengthHint.value = '一般' }
   else if (score < 85) { strengthClass.value = 'good'; strengthHint.value = '强' }
   else { strengthClass.value = 'strong'; strengthHint.value = '很强' }
+}
+
+const exporting = ref(false)
+async function exportProgress() {
+  exporting.value = true
+  try {
+    const data = await analytics.export()
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `qa-progress-${new Date().toISOString().slice(0,10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch(e) { /* ignore */ }
+  exporting.value = false
 }
 
 async function changePassword() {

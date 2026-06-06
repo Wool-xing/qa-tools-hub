@@ -80,6 +80,7 @@ export const analytics = {
   skillGaps: () => api('GET', '/api/analytics/skill-gaps'),
   achievements: () => api('GET', '/api/analytics/achievements'),
   leaderboard: (period = 'weekly') => api('GET', `/api/analytics/leaderboard?period=${period}`),
+  export: () => api('GET', '/api/analytics/export'),
 }
 
 export const teams = {

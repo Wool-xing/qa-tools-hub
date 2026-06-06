@@ -162,3 +162,51 @@ async def leaderboard(period: str = "weekly", db: AsyncSession = Depends(get_db)
             for i, row in enumerate(rows)
         ]
     }
+
+
+@router.get("/export")
+async def export_progress(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Export user's complete learning progress as JSON."""
+    result = await db.execute(
+        select(UserLevelProgress).where(UserLevelProgress.user_id == user.id)
+    )
+    all_progress = result.scalars().all()
+
+    level_ids = [p.level_id for p in all_progress]
+    levels_map = {}
+    if level_ids:
+        lvl_result = await db.execute(select(Level).where(Level.id.in_(level_ids)))
+        levels_map = {l.id: l for l in lvl_result.scalars().all()}
+
+    progress_list = []
+    for p in all_progress:
+        lv = levels_map.get(p.level_id)
+        progress_list.append({
+            "level_id": p.level_id,
+            "title": lv.title if lv else "Unknown",
+            "stage": lv.stage if lv else "unknown",
+            "task_type": lv.task_type if lv else "unknown",
+            "status": p.status,
+            "score": p.score,
+            "attempts": p.attempts,
+            "points": lv.points if lv else 0,
+            "started_at": p.started_at.isoformat() if p.started_at else None,
+            "completed_at": p.completed_at.isoformat() if p.completed_at else None,
+        })
+
+    total_points = sum(item["points"] for item in progress_list if item["status"] == "completed")
+    completed_count = sum(1 for item in progress_list if item["status"] == "completed")
+
+    return {
+        "username": user.username,
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "summary": {
+            "total_levels": len(progress_list),
+            "completed": completed_count,
+            "total_points": total_points,
+        },
+        "progress": progress_list,
+    }
