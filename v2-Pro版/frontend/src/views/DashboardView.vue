@@ -42,7 +42,7 @@
     <div class="card" style="margin-bottom:var(--space-lg);">
       <h3 style="margin-bottom:var(--space-md);font-size:.95rem;">模块进度</h3>
       <div class="stage-bars">
-        <div v-for="(s, k) in store.stages" :key="k" class="stage-bar-row">
+        <div v-for="(s, k) in activeStages" :key="k" class="stage-bar-row">
           <span class="stage-bar-label">{{ stageName(k) }}</span>
           <div class="stage-bar-track">
             <div class="stage-bar-fill" :class="barColor(s)" :style="{width: s.total?s.completed/s.total*100+'%':'0%'}" role="progressbar" :aria-valuenow="s.total ? Math.round(s.completed/s.total*100) : 0" aria-valuemin="0" aria-valuemax="100" :aria-label="stageName(k) + ' 完成度'"></div>
@@ -127,6 +127,14 @@ const store = useLevelsStore()
 
 const pct = computed(() => store.progress.total ? Math.round(store.progress.completed / store.progress.total * 100) : 0)
 const totalStages = computed(() => Object.keys(store.stages).length)
+const activeStages = computed(() => {
+  const stages = store.stages || {}
+  const hasProgress = Object.entries(stages).filter(([k, s]) => s.completed > 0)
+  if (hasProgress.length > 0) return Object.fromEntries(hasProgress)
+  // New user: show only beginner so it's not overwhelming
+  const beginner = Object.entries(stages).find(([k]) => k === 'beginner')
+  return beginner ? Object.fromEntries([beginner]) : {}
+})
 
 function stageName(k) {
   return {
