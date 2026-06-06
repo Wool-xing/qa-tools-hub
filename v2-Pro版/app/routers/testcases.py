@@ -289,13 +289,13 @@ async def export_testcases_xlsx(
 
     for row, c in enumerate(cases, 2):
         ws.cell(row=row, column=1, value=c.id)
-        ws.cell(row=row, column=2, value=c.title)
-        ws.cell(row=row, column=3, value=c.steps)
-        ws.cell(row=row, column=4, value=c.expected_result)
+        ws.cell(row=row, column=2, value=_escape_csv_cell(c.title))
+        ws.cell(row=row, column=3, value=_escape_csv_cell(c.steps))
+        ws.cell(row=row, column=4, value=_escape_csv_cell(c.expected_result))
         ws.cell(row=row, column=5, value=c.priority)
         ws.cell(row=row, column=6, value=c.status)
-        ws.cell(row=row, column=7, value=c.tags or "")
-        ws.cell(row=row, column=8, value=c.folder or "")
+        ws.cell(row=row, column=7, value=_escape_csv_cell(c.tags or ""))
+        ws.cell(row=row, column=8, value=_escape_csv_cell(c.folder or ""))
         ws.cell(row=row, column=9, value=c.created_at.isoformat() if c.created_at else "")
         ws.cell(row=row, column=10, value=c.updated_at.isoformat() if c.updated_at else "")
 

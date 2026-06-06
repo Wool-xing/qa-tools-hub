@@ -8,7 +8,7 @@ User=www-data
 Group=www-data
 WorkingDirectory=/opt/qa-tools/v2-Pro版
 EnvironmentFile=/opt/qa-tools/v2-Pro版/.env
-ExecStart=/opt/qa-tools/v2-Pro版/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8005 --workers 4 --log-level info
+ExecStart=/opt/qa-tools/v2-Pro版/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8005 --workers 1 --log-level info
 Restart=always
 RestartSec=5
 

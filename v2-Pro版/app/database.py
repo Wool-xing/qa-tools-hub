@@ -15,7 +15,7 @@ if "+aiosqlite" not in _async_url and "+asyncpg" not in _async_url:
         _async_url = _async_url.replace("sqlite://", "sqlite+aiosqlite://")
     elif "postgresql" in _async_url:
         _async_url = _async_url.replace("postgresql://", "postgresql+asyncpg://")
-engine = create_async_engine(_async_url, echo=False)
+engine = create_async_engine(_async_url, echo=False, pool_size=5, max_overflow=5)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 

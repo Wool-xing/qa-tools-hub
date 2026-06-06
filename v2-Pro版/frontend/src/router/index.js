@@ -3,7 +3,8 @@ import LoginView from '../views/LoginView.vue'
 import LevelsView from '../views/LevelsView.vue'
 import LevelPlayView from '../views/LevelPlayView.vue'
 import WelcomeView from '../views/WelcomeView.vue'
-import { LS_TOKEN, LS_IS_ADMIN, LS_LAB_VISITS, LS_LAB_COUNT, APP_TITLE } from '../constants'
+import { LS_TOKEN, LS_LAB_VISITS, LS_LAB_COUNT, APP_TITLE } from '../constants'
+import { useAuthStore } from '../stores/auth'
 
 const routes = [
   { path: '/', name: 'home', component: WelcomeView, meta: { title: '首页' } },
@@ -52,10 +53,13 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const token = localStorage.getItem(LS_TOKEN)
-  if (to.name === 'home' && token) return '/levels'
+  if (to.name === 'home' && token) return '/dashboard'
   if (to.meta.auth && !token) return '/login'
   if (to.meta.guest && token) return '/levels'
-  if (to.meta.admin && localStorage.getItem(LS_IS_ADMIN) !== '1') return '/levels'
+  if (to.meta.admin) {
+    const auth = useAuthStore()
+    if (!auth.isAdmin) return '/levels'
+  }
   // Track lab visits for achievements
   if (to.path.startsWith('/labs/') && to.path !== '/labs') {
     try {

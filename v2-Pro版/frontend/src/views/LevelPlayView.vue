@@ -1,5 +1,7 @@
 <template>
-  <div v-if="store.current" class="player">
+  <div v-if="levelLoading" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">⏳ 加载关卡中...</div>
+  <div v-else-if="!store.current" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">关卡未找到</div>
+  <div v-else class="player">
     <!-- Breadcrumb -->
 
 
@@ -141,7 +143,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLevelsStore } from '../stores/levels'
 import { levels as levelsApi } from '../api'
@@ -206,6 +208,7 @@ async function doSubmit() {
     : { text: answer.text }
   await store.submit(store.current.id, body)
   showResult.value = true
+  if (store.current.task_type === 'explore') { clearExploreDraft() }
 }
 
 async function runCode() {
@@ -239,8 +242,16 @@ async function goNext() {
 }
 
 const curId = computed(() => parseInt(route.params.id))
-onMounted(async () => { try { await store.fetchLevel(curId.value) } catch { /* router guard or error boundary */ } initDebugCode() })
-watch(curId, async (id) => { if (id) { try { await store.fetchLevel(id) } catch { /* ignore */ } resetTask(); tab.value = 'read'; initDebugCode() } })
+const levelLoading = ref(false)
+
+async function loadLevel(id) {
+  levelLoading.value = true
+  try { await store.fetchLevel(id) } catch { /* ignore */ }
+  levelLoading.value = false
+}
+
+onMounted(async () => { await loadLevel(curId.value); initDebugCode() })
+watch(curId, async (id) => { if (id) { await loadLevel(id); resetTask(); tab.value = 'read'; initDebugCode() } })
 
 function initDebugCode() {
   if (store.current?.task_type === 'debug' && store.current?.demo) {
@@ -249,6 +260,43 @@ function initDebugCode() {
     }
   }
 }
+
+// Explore task autosave
+const exploreDraftKey = computed(() => `qa-draft-${curId.value}`)
+const _draftSaveTimer = ref(null)
+
+function saveExploreDraft() {
+  if (store.current?.task_type === 'explore' && answer.text) {
+    try { localStorage.setItem(exploreDraftKey.value, answer.text) } catch { /* ignore */ }
+  }
+}
+function loadExploreDraft() {
+  if (store.current?.task_type === 'explore') {
+    try {
+      const draft = localStorage.getItem(exploreDraftKey.value)
+      if (draft) answer.text = draft
+    } catch { /* ignore */ }
+  }
+}
+function clearExploreDraft() {
+  try { localStorage.removeItem(exploreDraftKey.value) } catch { /* ignore */ }
+}
+
+watch(() => answer.text, () => {
+  clearTimeout(_draftSaveTimer.value)
+  _draftSaveTimer.value = setTimeout(saveExploreDraft, 1000)
+})
+
+watch(curId, () => { loadExploreDraft() })
+
+const _beforeUnload = (e) => {
+  if (store.current?.task_type === 'explore' && answer.text && !showResult.value) {
+    e.preventDefault(); e.returnValue = ''
+  }
+}
+
+onMounted(() => { window.addEventListener('beforeunload', _beforeUnload); loadExploreDraft() })
+onBeforeUnmount(() => { window.removeEventListener('beforeunload', _beforeUnload); clearTimeout(_draftSaveTimer.value) })
 </script>
 
 <style scoped>
