@@ -24,6 +24,13 @@ FORBIDDEN_BUILTINS = frozenset({
     'setattr', 'delattr', 'hasattr',
 })
 
+# Only block dangerous dunders — allow benign ones like __name__, __doc__
+DANGEROUS_DUNDERS = frozenset({
+    '__import__', '__subclasses__', '__globals__', '__code__', '__closure__',
+    '__reduce__', '__reduce_ex__', '__getstate__', '__setstate__',
+    '__class_getitem__', '__init_subclass__', '__build_class__',
+})
+
 SAFE_BUILTINS = {
     'print': print, 'len': len, 'range': range, 'int': int, 'str': str,
     'float': float, 'bool': bool, 'list': list, 'dict': dict, 'tuple': tuple,
@@ -64,8 +71,8 @@ class SandboxValidator(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Attribute(self, node):
-        if isinstance(node.attr, str) and node.attr.startswith('__') and node.attr.endswith('__'):
-            raise ValueError("dunder attributes are not allowed in sandbox")
+        if isinstance(node.attr, str) and node.attr in DANGEROUS_DUNDERS:
+            raise ValueError(f"{node.attr} is not allowed in sandbox")
         self.generic_visit(node)
 
 

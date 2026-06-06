@@ -26,13 +26,14 @@ def test_sandbox_rejects_forbidden_builtin():
 
 
 def test_sandbox_rejects_dunder_access():
-    with pytest.raises(ValueError, match="dunder"):
-        validate_code_safety("x = ''.__class__\nprint(x)")
+    with pytest.raises(ValueError, match="not allowed"):
+        validate_code_safety("x = ''.__class__.__subclasses__()\nprint(x)")
 
 
 def test_sandbox_allows_safe_code():
     validate_code_safety("x = [1,2,3]; print(sum(x))")
     validate_code_safety("for i in range(5):\n    print(i)")
+    validate_code_safety("print(__name__)")  # benign dunder should be allowed
 
 
 def test_run_code_sandbox_invalid_utf8():
