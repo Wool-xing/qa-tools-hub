@@ -7,21 +7,24 @@
     </div>
 
     <div v-if="loading" class="card" style="text-align:center;padding:48px;color:var(--text-muted);">⏳ 加载中...</div>
-    <template v-else>
-    <div v-if="store.progress.total === 0" class="card" style="text-align:center;padding:40px;margin-bottom:var(--space-lg);">
-      <p style="font-size:2rem;margin-bottom:8px;">⚠️</p>
-      <p style="font-weight:600;margin-bottom:4px;">数据加载异常</p>
-      <p style="font-size:.8rem;color:var(--text-secondary);margin-bottom:12px;">未能获取关卡数据</p>
-      <button class="btn-outline" @click="fetchAll">🔄 重新加载</button>
-    </div>
-    <div v-else-if="store.progress.completed === 0" class="card" style="text-align:center;padding:48px;margin-bottom:var(--space-lg);background:linear-gradient(135deg,var(--primary-light),var(--surface));">
-      <p style="font-size:2.5rem;margin-bottom:12px;">🎯</p>
-      <p style="font-weight:700;font-size:1.1rem;margin-bottom:6px;">开始你的 QA 学习之旅</p>
-      <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:20px;">完成第一个关卡，解锁成就和进度追踪</p>
-      <router-link to="/levels" class="btn-primary" style="padding:10px 28px;">🚀 开始闯关</router-link>
-    </div>
+    <template v-else-if="loadError">
+      <div class="card" style="text-align:center;padding:40px;margin-bottom:var(--space-lg);">
+        <p style="font-size:2rem;margin-bottom:8px;">⚠️</p>
+        <p style="font-weight:600;margin-bottom:4px;">数据加载异常</p>
+        <p style="font-size:.8rem;color:var(--text-secondary);margin-bottom:12px;">未能获取关卡数据</p>
+        <button class="btn-outline" @click="fetchAll">🔄 重新加载</button>
+      </div>
+    </template>
+    <template v-else-if="!store.progress.completed">
+      <div class="card" style="text-align:center;padding:48px;margin-bottom:var(--space-lg);background:linear-gradient(135deg,var(--primary-light),var(--surface));">
+        <p style="font-size:2.5rem;margin-bottom:12px;">🎯</p>
+        <p style="font-weight:700;font-size:1.1rem;margin-bottom:6px;">开始你的 QA 学习之旅</p>
+        <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:20px;">完成第一个关卡，解锁成就和进度追踪</p>
+        <router-link to="/levels" class="btn-primary" style="padding:10px 28px;">🚀 开始闯关</router-link>
+      </div>
+    </template>
     <!-- Stats -->
-    <div class="stats-row" v-else>
+    <template v-else><div class="stats-row">
       <div class="stat-card" :aria-label="'已完成关卡 ' + (store.progress.completed || 0)">
         <span class="stat-icon" aria-hidden="true">✅</span>
         <div><span class="stat-num">{{ store.progress.completed || 0 }}</span><span class="stat-label">已完成关卡</span></div>
@@ -230,10 +233,17 @@ const achievements = computed(() => {
 })
 
 const newAchievement = ref(null)
+const loadError = ref(false)
+
+async function fetchAll() {
+  loading.value = true
+  loadError.value = false
+  try { await store.fetchList() } catch { loadError.value = true }
+  loading.value = false
+}
 
 onMounted(async () => {
-  try { await store.fetchList() } catch { /* store handles error */ }
-  loading.value = false
+  await fetchAll()
 
   // Detect newly unlocked achievements
   const prevEarned = JSON.parse(localStorage.getItem(LS_ACHIEVEMENTS) || '[]')
