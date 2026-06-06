@@ -144,11 +144,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount, watch, defineAsyncComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLevelsStore } from '../stores/levels'
 import { levels as levelsApi } from '../api'
-import CodeEditor from '../components/CodeEditor.vue'
+
+const CodeEditor = defineAsyncComponent(() => import('../components/CodeEditor.vue'))
 
 const store = useLevelsStore()
 const route = useRoute()
