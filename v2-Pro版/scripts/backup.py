@@ -13,9 +13,9 @@ import shutil
 import glob
 from datetime import datetime, timezone
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "qa_tools.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "qa_tools.db")
 BACKUP_DIR = os.path.join(os.path.dirname(__file__), "..", "backups")
-KEEP_LAST = 14
+KEEP_LAST = int(os.getenv("BACKUP_KEEP_LAST", "14"))
 
 
 def _ensure_backup_dir():

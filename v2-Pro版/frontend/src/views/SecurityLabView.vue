@@ -123,6 +123,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { LS_TOKEN } from '../constants'
 
 const tab = ref('xss')
 
@@ -141,7 +142,7 @@ const xssPayloads = [
 async function submitXSS() {
   try {
     const r = await fetch('/api/labs/security/xss', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('qa-pro-token')}` },
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem(LS_TOKEN)}` },
       body: JSON.stringify({ payload: xssPayload.value }),
     })
     xssResult.value = await r.json()
@@ -164,7 +165,7 @@ const sqliPayloads = [
 async function submitSQLI() {
   try {
     const r = await fetch('/api/labs/security/sqli', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('qa-pro-token')}` },
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem(LS_TOKEN)}` },
       body: JSON.stringify({ username: sqliUser.value, password: sqliPass.value }),
     })
     sqliResult.value = await r.json()

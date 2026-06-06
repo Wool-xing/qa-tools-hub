@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import LevelsView from '../views/LevelsView.vue'
 import LevelPlayView from '../views/LevelPlayView.vue'
 import WelcomeView from '../views/WelcomeView.vue'
+import { LS_TOKEN, LS_IS_ADMIN, LS_LAB_VISITS, LS_LAB_COUNT, APP_TITLE } from '../constants'
 
 const routes = [
   { path: '/', name: 'home', component: WelcomeView, meta: { title: '首页' } },
@@ -50,25 +51,25 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const token = localStorage.getItem('qa-pro-token')
+  const token = localStorage.getItem(LS_TOKEN)
   if (to.name === 'home' && token) return '/levels'
   if (to.meta.auth && !token) return '/login'
   if (to.meta.guest && token) return '/levels'
-  if (to.meta.admin && localStorage.getItem('qa-pro-is-admin') !== '1') return '/levels'
+  if (to.meta.admin && localStorage.getItem(LS_IS_ADMIN) !== '1') return '/levels'
   // Track lab visits for achievements
   if (to.path.startsWith('/labs/') && to.path !== '/labs') {
     try {
-      const raw = localStorage.getItem('qa-lab-visits') || '[]'
+      const raw = localStorage.getItem(LS_LAB_VISITS) || '[]'
       const visits = new Set(JSON.parse(raw))
       visits.add(to.path)
-      localStorage.setItem('qa-lab-visits', JSON.stringify([...visits]))
-      localStorage.setItem('qa-lab-count', String(visits.size))
+      localStorage.setItem(LS_LAB_VISITS, JSON.stringify([...visits]))
+      localStorage.setItem(LS_LAB_COUNT, String(visits.size))
     } catch { /* corrupted localStorage — reset */ }
   }
 })
 
 router.afterEach((to) => {
-  document.title = to.meta.title ? `${to.meta.title} — QA通关` : 'QA通关 — 测试工程师学习平台'
+  document.title = to.meta.title ? `${to.meta.title} — QA通关` : APP_TITLE
 })
 
 export default router

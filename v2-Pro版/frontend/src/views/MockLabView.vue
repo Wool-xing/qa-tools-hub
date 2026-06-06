@@ -146,6 +146,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { labs } from '../api'
+import { LS_TOKEN } from '../constants'
 
 const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 
@@ -211,7 +212,7 @@ async function sendTest() {
   const start = performance.now()
   try {
     const headers = { 'Content-Type': 'application/json' }
-    const token = localStorage.getItem('qa-pro-token')
+    const token = localStorage.getItem(LS_TOKEN)
     if (token) headers['Authorization'] = `Bearer ${token}`
     const opts = { method: testForm.method, headers }
     if (testForm.method !== 'GET' && testForm.body) {

@@ -163,11 +163,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
+import { LS_TOKEN } from '../constants'
 
 const auth = useAuthStore()
 const adminTab = ref('overview')
 const stats = ref({}), users = ref([]), adminError = ref('')
-const token = () => localStorage.getItem('qa-pro-token') || ''
+const token = () => localStorage.getItem(LS_TOKEN) || ''
 
 async function adminApi(method, path, body) {
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` }

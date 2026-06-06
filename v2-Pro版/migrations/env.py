@@ -29,7 +29,11 @@ target_metadata = Base.metadata
 
 def get_url():
     """Resolve database URL for migrations (sync driver)."""
-    db_url = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./qa_tools.db")
+    try:
+        from app.config import DATABASE_URL as _db_url
+        db_url = _db_url
+    except Exception:
+        db_url = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./data/qa_tools.db")
     return db_url.replace("+aiosqlite", "").replace("+asyncpg", "")
 
 

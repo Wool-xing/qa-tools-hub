@@ -9,6 +9,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.level import Level, UserLevelProgress
 from app.routers.auth import get_current_user
+from app.config import ADMIN_PAGE_LIMIT
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -49,7 +50,7 @@ async def get_stats(admin: User = Depends(_require_admin), db: AsyncSession = De
 
 @router.get("/users")
 async def list_users(admin: User = Depends(_require_admin), db: AsyncSession = Depends(get_db),
-                     limit: int = Query(50, ge=1, le=200), offset: int = Query(0, ge=0)):
+                     limit: int = Query(ADMIN_PAGE_LIMIT, ge=1, le=200), offset: int = Query(0, ge=0)):
     total = (await db.execute(select(func.count(User.id)))).scalar()
     result = await db.execute(select(User).order_by(User.id).offset(offset).limit(limit))
     users = result.scalars().all()

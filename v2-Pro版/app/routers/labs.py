@@ -8,6 +8,7 @@ from app.database import get_db
 from app.models.user import User
 from app.routers.auth import get_current_user
 from app.routers.levels import _check_achievements
+from app.config import SQL_ROW_LIMIT, PERF_VUS_MAX, PERF_DURATION_MAX
 from app.lab_data import (
     SQL_SCENARIOS, is_safe_sql, VFS, resolve_path,
     sim_grep, sim_awk, sim_sort, sim_uniq,
@@ -61,7 +62,7 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
             conn.commit()
 
             cur = conn.execute(data.sql)
-            rows = [dict(r) for r in cur.fetchmany(100)]
+            rows = [dict(r) for r in cur.fetchmany(SQL_ROW_LIMIT)]
             columns = [d[0] for d in cur.description] if cur.description else []
             new_ach = await _check_achievements(user.id, db)
             if new_ach: await db.commit()
@@ -296,10 +297,10 @@ class PerformanceSimRequest(BaseModel):
 async def performance_simulate(data: PerformanceSimRequest, user: User = Depends(get_current_user)):
     if not data.script or not data.script.strip():
         raise HTTPException(status_code=400, detail="k6 script is required")
-    if data.vus < 1 or data.vus > 500:
-        raise HTTPException(status_code=400, detail="VUs must be between 1 and 500")
-    if data.duration < 10 or data.duration > 600:
-        raise HTTPException(status_code=400, detail="Duration must be between 10 and 600 seconds")
+    if data.vus < 1 or data.vus > PERF_VUS_MAX:
+        raise HTTPException(status_code=400, detail=f"VUs must be between 1 and {PERF_VUS_MAX}")
+    if data.duration < 10 or data.duration > PERF_DURATION_MAX:
+        raise HTTPException(status_code=400, detail=f"Duration must be between 10 and {PERF_DURATION_MAX} seconds")
 
     from app.lab_data import simulate_k6_run
     result = simulate_k6_run(data.script, data.vus, data.duration)

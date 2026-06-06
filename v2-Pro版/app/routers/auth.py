@@ -14,7 +14,7 @@ import jwt
 from jwt import InvalidTokenError
 from app.database import get_db
 from app.models.user import User
-from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX, PASSWORD_MIN_LEN
 from app.mail import send_password_reset
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -22,26 +22,23 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 # ==================== Rate Limiter ====================
 
-_RATE_LIMIT_WINDOW = 60
-_RATE_LIMIT_MAX = 5
-
 _rate_store: dict[str, list[float]] = {}
 
 
 def _check_rate_limit(key: str, response: "Response | None" = None) -> None:
     now = time.time()
     _cleanup_stale_entries()  # Amortized cleanup on each check
-    attempts = [t for t in _rate_store.get(key, []) if now - t < _RATE_LIMIT_WINDOW]
-    remaining = max(0, _RATE_LIMIT_MAX - len(attempts))
+    attempts = [t for t in _rate_store.get(key, []) if now - t < RATE_LIMIT_WINDOW]
+    remaining = max(0, RATE_LIMIT_MAX - len(attempts))
     if response:
-        response.headers["X-RateLimit-Limit"] = str(_RATE_LIMIT_MAX)
+        response.headers["X-RateLimit-Limit"] = str(RATE_LIMIT_MAX)
         response.headers["X-RateLimit-Remaining"] = str(remaining)
-        response.headers["X-RateLimit-Reset"] = str(int(now + _RATE_LIMIT_WINDOW))
-    if len(attempts) >= _RATE_LIMIT_MAX:
+        response.headers["X-RateLimit-Reset"] = str(int(now + RATE_LIMIT_WINDOW))
+    if len(attempts) >= RATE_LIMIT_MAX:
         raise HTTPException(
             status_code=429,
             detail="Too many requests. Please wait.",
-            headers={"Retry-After": str(_RATE_LIMIT_WINDOW)},
+            headers={"Retry-After": str(RATE_LIMIT_WINDOW)},
         )
     attempts.append(now)
     _rate_store[key] = attempts
@@ -80,7 +77,7 @@ def _cleanup_stale_entries():
         if now > expiry:
             del _token_blacklist[token]
     for key, timestamps in list(_rate_store.items()):
-        _rate_store[key] = [t for t in timestamps if now - t < _RATE_LIMIT_WINDOW]
+        _rate_store[key] = [t for t in timestamps if now - t < RATE_LIMIT_WINDOW]
         if not _rate_store[key]:
             del _rate_store[key]
 
@@ -101,7 +98,7 @@ def reset_token_blacklist():
 
 # ==================== Schemas ====================
 
-_PASSWORD_MIN_LEN = 8
+_PASSWORD_MIN_LEN = PASSWORD_MIN_LEN
 _PASSWORD_PATTERN = re.compile(r'^(?=.*[a-zA-Z])(?=.*\d)')
 
 

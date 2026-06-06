@@ -686,15 +686,20 @@ def seed():
         if r.fetchone():
             return
         import os as _os
+        import secrets as _secrets
         from app.config import DATABASE_URL as _db_url
+        from app.config import SEED_ADMIN_USERNAME, SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD
         if not _os.getenv("SEED_DB") and not _db_url.startswith("sqlite"):
             print("SEED: Refusing to seed non-SQLite database without SEED_DB=true")
             return
         print("SEED: Seeding database with default data...")
         # Default test account
-        pw = bcrypt.hashpw("qa123456".encode(), bcrypt.gensalt()).decode()
+        admin_pw = SEED_ADMIN_PASSWORD if SEED_ADMIN_PASSWORD else _secrets.token_urlsafe(12)
+        if not SEED_ADMIN_PASSWORD:
+            print(f"SEED: Generated admin password: {admin_pw} (set SEED_ADMIN_PASSWORD env var in production)")
+        pw = bcrypt.hashpw(admin_pw.encode(), bcrypt.gensalt()).decode()
         conn.execute(User.__table__.insert().values(
-            username="qatest", email="qatest@qa.local",
+            username=SEED_ADMIN_USERNAME, email=SEED_ADMIN_EMAIL,
             hashed_password=pw, is_admin=True))
         for t in TOOL_SEED:
             conn.execute(Tool.__table__.insert().values(
