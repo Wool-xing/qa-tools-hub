@@ -118,7 +118,14 @@ async def lifespan(app: FastAPI):
 
 # ==================== App ====================
 
-app = FastAPI(title="QA通关", version=__version__, lifespan=lifespan)
+app = FastAPI(
+    title="QA通关",
+    version=__version__,
+    lifespan=lifespan,
+    description="测试工程师一站式学习与工具平台 API — 102关学习系统 + 21实验室 + 成就系统",
+    docs_url="/docs",
+    redoc_url=None,
+)
 
 # Middleware order: last added = outermost
 app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_credentials=True, allow_methods=["GET","POST","PUT","DELETE"], allow_headers=["*"])
