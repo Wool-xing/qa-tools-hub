@@ -10,8 +10,13 @@
     <template v-else>
     <div v-if="store.progress.total === 0" class="card" style="text-align:center;padding:40px;margin-bottom:var(--space-lg);">
       <p style="font-size:2rem;margin-bottom:8px;">🚀</p>
-      <p style="font-weight:600;margin-bottom:4px;">尚未加载关卡数据</p>
-      <p style="font-size:.82rem;color:var(--text-secondary);">请确认后端服务已启动</p>
+      <p style="font-weight:600;margin-bottom:4px;">加载中...</p>
+    </div>
+    <div v-else-if="store.progress.completed === 0" class="card" style="text-align:center;padding:48px;margin-bottom:var(--space-lg);background:linear-gradient(135deg,var(--primary-light),var(--surface));">
+      <p style="font-size:2.5rem;margin-bottom:12px;">🎯</p>
+      <p style="font-weight:700;font-size:1.1rem;margin-bottom:6px;">开始你的 QA 学习之旅</p>
+      <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:20px;">完成第一个关卡，解锁成就和进度追踪</p>
+      <router-link to="/levels" class="btn-primary" style="padding:10px 28px;">🚀 开始闯关</router-link>
     </div>
     <!-- Stats -->
     <div class="stats-row" v-else>
