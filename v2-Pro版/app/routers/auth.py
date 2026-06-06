@@ -38,9 +38,11 @@ def _check_rate_limit(key: str, response: "Response | None" = None) -> None:
         response.headers["X-RateLimit-Remaining"] = str(remaining)
         response.headers["X-RateLimit-Reset"] = str(int(now + _RATE_LIMIT_WINDOW))
     if len(attempts) >= _RATE_LIMIT_MAX:
-        if response:
-            response.headers["Retry-After"] = str(_RATE_LIMIT_WINDOW)
-        raise HTTPException(status_code=429, detail="Too many requests. Please wait.")
+        raise HTTPException(
+            status_code=429,
+            detail="Too many requests. Please wait.",
+            headers={"Retry-After": str(_RATE_LIMIT_WINDOW)},
+        )
     attempts.append(now)
     _rate_store[key] = attempts
 
