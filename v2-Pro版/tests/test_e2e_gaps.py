@@ -283,12 +283,11 @@ async def test_admin_update_level(admin_headers, client):
 
 @pytest.mark.asyncio
 async def test_admin_reorder_levels(admin_headers, client):
-    """Admin should be able to reorder levels."""
+    """Admin should be able to reorder levels — swap first two."""
     r = await client.put("/api/admin/levels/reorder", json={
-        "items": [{"id": 1, "order": 10}, {"id": 2, "order": 20}]
+        "items": [{"id": 1, "order": 2}, {"id": 2, "order": 1}]
     }, headers=admin_headers)
-    # 422 if the reorder request schema doesn't auto-validate
-    assert r.status_code in (200, 422)
+    assert r.status_code == 200
 
 
 @pytest.mark.asyncio

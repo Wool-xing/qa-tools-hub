@@ -127,6 +127,28 @@ async def list_levels(admin: User = Depends(_require_admin),
     ]}
 
 
+
+@router.put("/levels/reorder")
+async def reorder_levels(data: ReorderRequest,
+                         admin: User = Depends(_require_admin),
+                         db: AsyncSession = Depends(get_db)):
+    ids = [item["id"] for item in data.items]
+    r = await db.execute(select(Level).where(Level.id.in_(ids)))
+    levels = {lv.id: lv for lv in r.scalars().all()}
+    # Use temp negative orders to avoid unique constraint conflicts during swap
+    for item in data.items:
+        lv = levels.get(item["id"])
+        if lv:
+            lv.order = -item["order"]
+    await db.flush()
+    for item in data.items:
+        lv = levels.get(item["id"])
+        if lv:
+            lv.order = item["order"]
+    await db.commit()
+    return {"ok": True}
+
+
 @router.put("/levels/{level_id}")
 async def update_level(level_id: int, data: LevelUpdate,
                        admin: User = Depends(_require_admin),
@@ -176,20 +198,5 @@ async def delete_level(level_id: int,
         raise HTTPException(status_code=404)
     await db.execute(sa_delete(UserLevelProgress).where(UserLevelProgress.level_id == level_id))
     await db.delete(level)
-    await db.commit()
-    return {"ok": True}
-
-
-@router.put("/levels/reorder")
-async def reorder_levels(data: ReorderRequest,
-                         admin: User = Depends(_require_admin),
-                         db: AsyncSession = Depends(get_db)):
-    ids = [item["id"] for item in data.items]
-    r = await db.execute(select(Level).where(Level.id.in_(ids)))
-    levels = {lv.id: lv for lv in r.scalars().all()}
-    for item in data.items:
-        lv = levels.get(item["id"])
-        if lv:
-            lv.order = item["order"]
     await db.commit()
     return {"ok": True}
