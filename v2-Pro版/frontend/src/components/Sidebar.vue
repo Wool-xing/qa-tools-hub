@@ -1,7 +1,7 @@
 <template>
   <!-- Mobile backdrop overlay -->
-  <div v-if="open && isMobile" class="sidebar-backdrop" @click="open = false" />
-  <aside class="sidebar" :class="{ collapsed: !open }">
+  <div v-if="props.open && isMobile" class="sidebar-backdrop" @click="emit('toggle')" />
+  <aside class="sidebar" :class="{ collapsed: !props.open }">
     <div class="sidebar-inner">
       <!-- Search -->
       <div class="sidebar-search">
@@ -55,23 +55,22 @@ import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { watch } from 'vue'
 
+const props = defineProps({ open: Boolean })
+const emit = defineEmits(['toggle'])
+
 const route = useRoute()
 const router = useRouter()
 const search = ref('')
-const open = ref(window.innerWidth > 768)
 const isMobile = ref(window.innerWidth <= 768)
 
 // Auto-close sidebar on mobile after navigation via route watcher
 watch(() => route.path, () => {
-  if (isMobile.value) open.value = false
+  if (isMobile.value && props.open) emit('toggle')
 })
 
 // Watch resize
-function onResize() {
-  const mobile = window.innerWidth <= 768
-  isMobile.value = mobile
-  open.value = !mobile
-}
+function onResize() { isMobile.value = window.innerWidth <= 768 }
+
 onMounted(() => window.addEventListener('resize', onResize))
 onBeforeUnmount(() => window.removeEventListener('resize', onResize))
 

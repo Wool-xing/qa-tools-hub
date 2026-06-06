@@ -2,6 +2,11 @@
   <div class="app">
     <nav class="topbar">
       <div class="topbar-inner">
+        <!-- Mobile hamburger -->
+        <button v-if="auth.isLoggedIn" class="hamburger" @click="sidebarOpen = !sidebarOpen" :aria-label="sidebarOpen ? '关闭菜单' : '打开菜单'">
+          <span :class="{ open: sidebarOpen }"></span>
+        </button>
+
         <!-- Logo left -->
         <router-link :to="auth.isLoggedIn ? '/dashboard' : '/'" class="logo">
           <span class="logo-mark">QA</span>
@@ -27,7 +32,7 @@
       </div>
     </nav>
     <div class="app-body">
-      <Sidebar v-if="showSidebar" />
+      <Sidebar v-if="showSidebar" :open="sidebarOpen" @toggle="sidebarOpen = !sidebarOpen" />
       <main :class="{ 'has-sidebar': showSidebar }">
         <Breadcrumb v-if="showSidebar" />
         <ErrorBoundary>
@@ -54,6 +59,7 @@ const route = useRoute()
 
 const guestRoutes = ['login', 'forgot', 'reset', 'home']
 const showSidebar = computed(() => auth.isLoggedIn && !guestRoutes.includes(route.name))
+const sidebarOpen = ref(window.innerWidth > 768)
 
 const isDark = ref(false)
 
@@ -305,4 +311,32 @@ main:not(.has-sidebar) { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto
 .skeleton-text { height: 14px; margin-bottom: 8px; }
 .skeleton-title { height: 20px; width: 60%; margin-bottom: 12px; }
 .skeleton-card { height: 120px; margin-bottom: var(--space-md); }
+
+/* ==================== Mobile Responsive ==================== */
+.hamburger {
+  display: none; width: 32px; height: 32px; border: none;
+  background: transparent; cursor: pointer; position: relative;
+  padding: 6px 4px; margin-right: 8px;
+}
+.hamburger span, .hamburger span::before, .hamburger span::after {
+  display: block; width: 100%; height: 2px; background: var(--text);
+  border-radius: 2px; transition: all .2s ease; position: absolute;
+}
+.hamburger span { top: 50%; transform: translateY(-50%); }
+.hamburger span::before { content: ''; top: -6px; }
+.hamburger span::after { content: ''; top: 6px; }
+.hamburger span.open { background: transparent; }
+.hamburger span.open::before { top: 0; transform: rotate(45deg); }
+.hamburger span.open::after { top: 0; transform: rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .hamburger { display: flex; align-items: center; }
+  .topbar-inner { padding: 0 12px; }
+  .logo-text { display: none; }
+  main.has-sidebar { padding: var(--space-md); }
+  main:not(.has-sidebar) { padding: var(--space-md); max-width: 100%; }
+  .page-header h1 { font-size: 1.3rem; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .btn-primary { font-size: .8rem; padding: 8px 16px; }
+}
 </style>
