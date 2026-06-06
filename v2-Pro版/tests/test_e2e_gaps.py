@@ -505,6 +505,163 @@ async def test_analytics_achievements_for_new_user(auth, client):
     assert len(r.json()["achievements"]) >= 8
 
 
+# ==================== Coverage: smtp mail ====================
+
+def test_mail_is_configured_false():
+    """is_configured should return False when SMTP not set."""
+    from app.mail import is_configured
+    assert is_configured() is False
+
+
+def test_mail_send_noop_when_unconfigured():
+    """send should return False when SMTP not configured."""
+    from app.mail import send
+    result = send("test@t.com", "Subject", "<p>Body</p>")
+    assert result is False
+
+
+# ==================== Coverage: mock handler methods ====================
+
+@pytest.mark.asyncio
+async def test_mock_handler_post_method(auth, client):
+    """Mock handler should respond to POST method."""
+    await client.post("/api/labs/mock/create", json={
+        "method": "POST", "path": "api/posttest",
+        "status_code": 201, "response_body": "created"
+    }, headers=auth)
+    r = await client.post("/mock/api/posttest")
+    assert r.status_code == 201
+
+
+@pytest.mark.asyncio
+async def test_mock_handler_patch_method(auth, client):
+    """Mock handler should respond to PATCH method."""
+    await client.post("/api/labs/mock/create", json={
+        "method": "PATCH", "path": "api/patchtest",
+        "status_code": 200, "response_body": "patched"
+    }, headers=auth)
+    r = await client.patch("/mock/api/patchtest")
+    assert r.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_mock_handler_delete_method(auth, client):
+    """Mock handler should respond to DELETE method."""
+    await client.post("/api/labs/mock/create", json={
+        "method": "DELETE", "path": "api/deltest",
+        "status_code": 204, "response_body": ""
+    }, headers=auth)
+    r = await client.delete("/mock/api/deltest")
+    assert r.status_code == 204
+
+
+@pytest.mark.asyncio
+async def test_mock_handler_with_delay(auth, client):
+    """Mock with delay should respond after the delay."""
+    await client.post("/api/labs/mock/create", json={
+        "method": "GET", "path": "api/delaytest",
+        "status_code": 200, "response_body": "ok", "delay_ms": 50
+    }, headers=auth)
+    r = await client.get("/mock/api/delaytest")
+    assert r.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_mock_handler_not_found(auth, client):
+    """Unregistered mock should return 404."""
+    r = await client.get("/mock/api/nonexistent12345")
+    assert r.status_code == 404
+
+
+# ==================== Coverage: teams edge cases ====================
+
+@pytest.mark.asyncio
+async def test_teams_join_already_member(auth, client):
+    """Joining a team you already belong to should return 400."""
+    r = await client.post("/api/teams", json={"name": "AlreadyTeam"}, headers=auth)
+    invite = r.json()["invite_code"]
+    r = await client.post("/api/teams/join", json={"invite_code": invite}, headers=auth)
+    assert r.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_teams_create_validation(auth, client):
+    """Team name validation should be enforced."""
+    r = await client.post("/api/teams", json={"name": ""}, headers=auth)
+    assert r.status_code in (400, 422)
+
+
+# ==================== Coverage: analytics leaderboard periods ====================
+
+@pytest.mark.asyncio
+async def test_analytics_leaderboard_all_periods(auth, client):
+    """Leaderboard should handle all period values."""
+    for period in ["weekly", "monthly", "alltime"]:
+        r = await client.get(f"/api/analytics/leaderboard?period={period}", headers=auth)
+        assert r.status_code == 200
+
+
+# ==================== Coverage: testcases xlsx import error paths ====================
+
+@pytest.mark.asyncio
+async def test_testcases_xlsx_import_bad_file(auth, client):
+    """XLSX import with corrupted file should return errors."""
+    r = await client.post("/api/testcases/import/xlsx",
+        files={"file": ("bad.xlsx", b"corrupted data", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")},
+        headers=auth)
+    assert r.status_code == 200
+    assert len(r.json()["errors"]) >= 1
+
+
+@pytest.mark.asyncio
+async def test_testcases_xlsx_import_empty_rows(auth, client):
+    """XLSX import with empty rows should skip them."""
+    import io, openpyxl
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Test Cases"
+    ws.append(["ID", "Title", "Steps", "Expected Result", "Priority", "Status", "Tags", "Folder", "Created At", "Updated At"])
+    ws.append(["", "", "", "", "", "", "", "", "", ""])  # all empty
+    output = io.BytesIO(); wb.save(output); output.seek(0)
+    r = await client.post("/api/testcases/import/xlsx",
+        files={"file": ("empty_rows.xlsx", output, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")},
+        headers=auth)
+    assert r.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_testcases_delete_nonexistent(auth, client):
+    """Deleting non-existent test case should return 404."""
+    r = await client.delete("/api/testcases/99999", headers=auth)
+    assert r.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_testcases_update_nonexistent(auth, client):
+    """Updating non-existent test case should return 404."""
+    r = await client.put("/api/testcases/99999", json={"title": "x"}, headers=auth)
+    assert r.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_testcases_list_with_filters(auth, client):
+    """List test cases with all filter combinations."""
+    await client.post("/api/testcases", json={
+        "title": "FilterTest", "steps": "s", "expected_result": "e",
+        "priority": "P0", "status": "draft", "folder": "TestFolder"
+    }, headers=auth)
+    for prio in ["", "P0", "P1"]:
+        r = await client.get(f"/api/testcases?priority={prio}", headers=auth)
+        assert r.status_code == 200
+    for status in ["", "draft", "passed"]:
+        r = await client.get(f"/api/testcases?status={status}", headers=auth)
+        assert r.status_code == 200
+    r = await client.get("/api/testcases?folder=TestFolder", headers=auth)
+    assert r.status_code == 200
+    r = await client.get("/api/testcases?search=Filter", headers=auth)
+    assert r.status_code == 200
+
+
 # ==================== Coverage: testcases xlsx import ====================
 
 @pytest.mark.asyncio
