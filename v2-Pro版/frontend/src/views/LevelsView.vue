@@ -26,7 +26,32 @@
       <span class="op-text">{{ pct }}%</span>
     </div>
 
-    <!-- Stages (accordion) -->
+    <!-- Search Results: flat list when searching -->
+    <div v-if="isSearching" class="level-grid" role="list">
+      <div v-for="(lv, idx) in searchResults" :key="lv.id"
+        class="level-card" :class="{ completed: lv.status==='completed', locked: lv.status==='locked', current: lv.status==='in_progress'||lv.status==='unlocked' }"
+        role="button" tabindex="0"
+        :aria-label="lv.title + ' — ' + lv.description"
+        @click="openLevel(lv)"
+        @keydown.enter="openLevel(lv)"
+        @keydown.space.prevent="openLevel(lv)">
+        <div class="lc-top">
+          <span class="lc-num">#{{ idx + 1 }}</span>
+          <span class="lc-status">{{ statusIcon(lv.status) }}</span>
+        </div>
+        <h3>{{ lv.title }}</h3>
+        <p>{{ lv.description }}</p>
+        <div class="lc-bottom">
+          <span class="tag tag-primary">{{ stageName(lv.stage) }}</span>
+          <span :class="['tag', levelTagClass(lv)]">{{ typeLabel(lv.task_type) }}</span>
+          <span class="lc-pts">{{ lv.points }} 分</span>
+        </div>
+      </div>
+      <div v-if="searchResults.length === 0" class="empty-stage">没有匹配的关卡，试试其他关键词</div>
+    </div>
+
+    <!-- Stages (accordion) — only when not searching -->
+    <template v-else>
     <div v-for="(key, idx) in visibleStages" :key="key" class="stage-block" :id="'block-'+key" role="list">
       <button class="stage-header" @click="openStages[key] = openStages[key] === undefined ? false : !openStages[key]" :class="{ open: openStages[key] }"
         :aria-expanded="openStages[key] ? 'true' : 'false'" :aria-controls="'stage-'+key">
@@ -57,6 +82,7 @@
         <div v-if="filteredLevels(key).length === 0" class="empty-stage">没有匹配的关卡</div>
       </div>
     </div>
+    </template>
   </div>
 </template>
 
@@ -93,9 +119,20 @@ async function applyStageFilter() {
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
 watch(() => route.query.search, (val) => {
   search.value = val || ''
-  // Auto-expand all stages when searching
-  if (val) Object.keys(openStages).forEach(k => openStages[k] = true)
 }, { immediate: true })
+
+const isSearching = computed(() => !!(search.value || filterType.value))
+const searchResults = computed(() => {
+  if (!isSearching.value) return []
+  return store.levels.filter(l => {
+    if (search.value) {
+      const q = search.value.toLowerCase()
+      if (!l.title.toLowerCase().includes(q) && !l.description.toLowerCase().includes(q)) return false
+    }
+    if (filterType.value && l.task_type !== filterType.value) return false
+    return true
+  })
+})
 
 const visibleStages = computed(() => stageOrder.filter(k => totalIn(k) > 0))
 

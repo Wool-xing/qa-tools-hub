@@ -16,7 +16,7 @@
       </aside>
 
       <!-- Main -->
-      <main class="tc-main">
+      <div class="tc-main">
         <div class="controls">
           <div class="search-box"><span>🔍</span><input v-model="search" placeholder="搜索标题/步骤/标签..." class="search-input"></div>
           <select v-model="filterPriority" class="filter-select"><option value="">全部优先级</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select>
@@ -57,7 +57,7 @@
             <span v-for="r in tc.runs.slice(0,3)" :key="r.id" class="run-badge" :class="'run-'+r.status">{{ runIcon(r.status) }} {{ fmtRel(r.created_at) }}</span>
           </div>
         </div>
-      </main>
+      </div>
     </div>
 
     <!-- Create/Edit Modal -->
