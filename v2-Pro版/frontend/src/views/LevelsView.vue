@@ -113,8 +113,8 @@ async function applyStageFilter() {
   await nextTick()
   setTimeout(() => {
     const el = document.getElementById('block-'+stage) || document.getElementById('stage-'+stage)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, 200)
+    if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' })
+  }, 50)
 }
 watch(() => route.query.stage, applyStageFilter, { immediate: true })
 watch(() => route.query.search, (val) => {

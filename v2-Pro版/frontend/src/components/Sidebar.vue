@@ -58,19 +58,7 @@ const search = ref('')
 const open = ref(window.innerWidth > 768)
 
 function navigateTo(to) {
-  if (to.includes('?stage=')) {
-    // Same-page stage filter: update URL without full navigation, scroll smoothly
-    const stage = new URLSearchParams(to.split('?')[1]).get('stage')
-    router.replace({ query: { stage } })
-    nextTick(() => {
-      setTimeout(() => {
-        const el = document.getElementById('block-' + stage)
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
-    })
-  } else {
-    router.push(to)
-  }
+  router.push(to)
 }
 
 const openSections = reactive({
