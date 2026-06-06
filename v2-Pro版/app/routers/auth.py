@@ -252,6 +252,71 @@ async def update_profile(data: ChangePasswordRequest,
     return {"message": "Password updated"}
 
 
+# ==================== Account Deletion & Data Export ====================
+
+class DeleteAccountRequest(BaseModel):
+    password: str
+
+
+@router.delete("/me")
+async def delete_account(data: DeleteAccountRequest,
+                         user: User = Depends(get_current_user),
+                         token: str = Depends(oauth2_scheme),
+                         db: AsyncSession = Depends(get_db)):
+    """Permanently delete account and all associated data."""
+    if not verify_password(data.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Password incorrect")
+    await db.delete(user)
+    _revoke_token(token)
+    await db.commit()
+    return {"message": "Account permanently deleted"}
+
+
+@router.get("/me/export")
+async def export_my_data(user: User = Depends(get_current_user),
+                         db: AsyncSession = Depends(get_db)):
+    """Export all personal data (GDPR data portability)."""
+    from app.models.level import UserLevelProgress, Level
+    from app.models.test_case import TestCase
+    from app.models.team import TeamMember, Team
+    from app.models.achievement import UserAchievement
+
+    progress = (await db.execute(
+        select(UserLevelProgress).where(UserLevelProgress.user_id == user.id)
+    )).scalars().all()
+
+    testcases = (await db.execute(
+        select(TestCase).where(TestCase.user_id == user.id)
+    )).scalars().all()
+
+    teams = (await db.execute(
+        select(TeamMember, Team.name).join(Team).where(TeamMember.user_id == user.id)
+    )).all()
+
+    achievements = (await db.execute(
+        select(UserAchievement).where(UserAchievement.user_id == user.id)
+    )).scalars().all()
+
+    return {
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "account": {
+            "username": user.username,
+            "email": user.email,
+            "created_at": user.created_at.isoformat() if user.created_at else None,
+        },
+        "progress": [{
+            "level_id": p.level_id,
+            "status": p.status,
+            "score": p.score,
+            "attempts": p.attempts,
+            "completed_at": p.completed_at.isoformat() if p.completed_at else None,
+        } for p in progress],
+        "testcases": len(testcases),
+        "teams": [{"team": name, "role": tm.role} for tm, name in teams],
+        "achievements": [a.achievement_key for a in achievements],
+    }
+
+
 # ==================== Password Reset ====================
 
 class ForgotPasswordRequest(BaseModel):
