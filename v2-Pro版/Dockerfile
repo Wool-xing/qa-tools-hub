@@ -17,6 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend
 COPY app/ ./app/
+COPY alembic.ini ./
+COPY migrations/ ./migrations/
 COPY pyproject.toml ./
 
 # Copy built frontend from stage 1 into app/static/
