@@ -58,7 +58,13 @@ const search = ref('')
 const open = ref(window.innerWidth > 768)
 
 function navigateTo(to) {
-  router.push(to)
+  if (to.includes('?stage=') && route.path === '/levels') {
+    // Same page: replace query without re-render, just trigger watch
+    const params = new URLSearchParams(to.split('?')[1])
+    router.replace({ query: Object.fromEntries(params) })
+  } else {
+    router.push(to)
+  }
 }
 
 const openSections = reactive({
