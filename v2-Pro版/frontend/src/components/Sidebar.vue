@@ -1,4 +1,6 @@
 <template>
+  <!-- Mobile backdrop overlay -->
+  <div v-if="open && isMobile" class="sidebar-backdrop" @click="open = false" />
   <aside class="sidebar" :class="{ collapsed: !open }">
     <div class="sidebar-inner">
       <!-- Search -->
@@ -49,13 +51,30 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const search = ref('')
 const open = ref(window.innerWidth > 768)
+const isMobile = ref(window.innerWidth <= 768)
+
+// Auto-close sidebar on mobile after navigation
+const _origPush = router.push
+router.push = function(...args) {
+  if (isMobile.value) open.value = false
+  return _origPush.apply(router, args)
+}
+
+// Watch resize
+function onResize() {
+  const mobile = window.innerWidth <= 768
+  isMobile.value = mobile
+  open.value = !mobile
+}
+onMounted(() => window.addEventListener('resize', onResize))
+onBeforeUnmount(() => window.removeEventListener('resize', onResize))
 
 function navigateTo(to) {
   router.push(to)
@@ -335,7 +354,13 @@ function doSearch() {
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
+.sidebar-backdrop {
+  display: none;
+  position: fixed; inset: 0; z-index: 89;
+  background: rgba(0,0,0,.4);
+}
 @media (max-width: 768px) {
+  .sidebar-backdrop { display: block; }
   .sidebar {
     position: fixed;
     top: 52px;
@@ -347,6 +372,7 @@ function doSearch() {
     width: 0;
     min-width: 0;
   }
+  .sidebar.collapsed + .sidebar-backdrop { display: none; }
   .sidebar-toggle { right: -30px; }
 }
 </style>

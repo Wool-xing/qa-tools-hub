@@ -290,4 +290,18 @@ main:not(.has-sidebar) { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto
 }
 [data-theme="dark"] .topbar { background: var(--surface); }
 [data-theme="dark"] body { background: var(--bg); }
+
+/* Skeleton loading animation */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+.skeleton {
+  background: var(--border-light);
+  border-radius: var(--radius);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+.skeleton-text { height: 14px; margin-bottom: 8px; }
+.skeleton-title { height: 20px; width: 60%; margin-bottom: 12px; }
+.skeleton-card { height: 120px; margin-bottom: var(--space-md); }
 </style>
