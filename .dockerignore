@@ -1,0 +1,36 @@
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.coverage
+*.db
+
+# Frontend dev
+frontend/node_modules/
+
+# Build artifacts & runtime data (regenerated at build/deploy time)
+backend/app/static/
+backend/data/
+backend/logs/
+backend/backups/
+
+# Docs, tests & secrets
+*.md
+backend/tests/
+backend/.env
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,16 @@
+[Unit]
+Description=QA通关 API Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/qa-tools/backend
+EnvironmentFile=/opt/qa-tools/backend/.env
+ExecStart=/opt/qa-tools/backend/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8005 --workers 1 --log-level info
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
