@@ -21,7 +21,11 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./data/qa_tools.db
 # ==================== Security ====================
 
 _WEAK_SECRETS = {"dev-secret-change-me-in-production!!", "change-me-in-production"}
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me-in-production!!")
+# Empty/whitespace env values (e.g. docker-compose ${SECRET_KEY} with no .env)
+# would previously yield an empty signing key with NO warning — fall back to
+# the weak default so the warning below always fires (QA-2026-08-18 HIGH #3).
+_SECRET_ENV = (os.getenv("SECRET_KEY") or "").strip()
+SECRET_KEY = _SECRET_ENV if _SECRET_ENV else "dev-secret-change-me-in-production!!"
 if SECRET_KEY in _WEAK_SECRETS:
     logger.warning("SECURITY: Using default SECRET_KEY. Set SECRET_KEY env var for production.")
 
