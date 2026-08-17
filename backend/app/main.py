@@ -225,11 +225,32 @@ async def mock_handler(request: Request, path: str,
     return Response(content=body, status_code=status, media_type="application/json")
 
 
+# Static file extensions — requests for these must 404 when missing, never
+# fall back to index.html (serving HTML as JS/CSS breaks the SPA with MIME errors).
+STATIC_EXTENSIONS = frozenset({
+    ".js", ".css", ".png", ".svg", ".ico", ".jpg", ".jpeg", ".gif",
+    ".woff", ".woff2", ".ttf", ".map", ".json", ".webmanifest", ".txt",
+})
+
+
 @app.get("/{path:path}")
 async def spa_fallback(path: str):
     if path.startswith("api/") or path == "docs" or path == "openapi.json":
         raise HTTPException(status_code=404)
-    index_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
+    static_dir = os.path.join(os.path.dirname(__file__), "static")
+    index_path = os.path.join(static_dir, "index.html")
+    # Serve the built frontend under its configured base path /QA_Test/
+    if path == "QA_Test" or path.startswith("QA_Test/"):
+        rel = path[len("QA_Test/"):] if path.startswith("QA_Test/") else ""
+        if rel:
+            file_path = os.path.realpath(os.path.join(static_dir, rel))
+            if file_path.startswith(os.path.realpath(static_dir) + os.sep) and os.path.isfile(file_path):
+                return FileResponse(file_path)
+            if os.path.splitext(rel)[1].lower() in STATIC_EXTENSIONS:
+                raise HTTPException(status_code=404)
+        if os.path.isfile(index_path):
+            return FileResponse(index_path)
+        raise HTTPException(status_code=404)
     if os.path.isfile(index_path):
         return FileResponse(index_path)
     raise HTTPException(status_code=404)
