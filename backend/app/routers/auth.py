@@ -14,7 +14,7 @@ import jwt
 from jwt import InvalidTokenError
 from app.database import get_db
 from app.models.user import User
-from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX, PASSWORD_MIN_LEN, BASE_URL as CONFIG_BASE_URL
+from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX, PASSWORD_MIN_LEN, BASE_URL as CONFIG_BASE_URL, TRUST_PROXY
 from app.mail import send_password_reset
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -49,9 +49,13 @@ def reset_rate_limits():
 
 
 def _client_ip(request: Request) -> str:
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
+    # Only trust XFF behind a proxy that appends the real peer LAST
+    # (nginx $proxy_add_x_forwarded_for). Taking the FIRST value lets any
+    # client forge the header and bypass rate limiting (QA-2026-08-18 HIGH #4).
+    if TRUST_PROXY:
+        forwarded = request.headers.get("X-Forwarded-For")
+        if forwarded:
+            return forwarded.split(",")[-1].strip()
     return request.client.host if request.client else "unknown"
 
 

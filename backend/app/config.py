@@ -37,6 +37,10 @@ PASSWORD_MIN_LEN = _safe_int_env("PASSWORD_MIN_LEN", 8)
 
 RATE_LIMIT_WINDOW = _safe_int_env("RATE_LIMIT_WINDOW", 60)
 RATE_LIMIT_MAX = _safe_int_env("RATE_LIMIT_MAX", 5)
+# Set TRUST_PROXY=true only when behind a reverse proxy that appends the real
+# peer to the END of X-Forwarded-For (nginx $proxy_add_x_forwarded_for).
+# Direct exposure (docker port mapping) must keep false: forged XFF is ignored.
+TRUST_PROXY = os.getenv("TRUST_PROXY", "false").lower() in ("1", "true", "yes")
 
 # ==================== CORS ====================
 
