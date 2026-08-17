@@ -25,10 +25,15 @@ FORBIDDEN_BUILTINS = frozenset({
 })
 
 # Only block dangerous dunders — allow benign ones like __name__, __doc__
+# 2026-08-18 RCE fix: introspection chain dunders added (QA-2026-08-18 CRITICAL #1).
 DANGEROUS_DUNDERS = frozenset({
     '__import__', '__subclasses__', '__globals__', '__code__', '__closure__',
     '__reduce__', '__reduce_ex__', '__getstate__', '__setstate__',
     '__class_getitem__', '__init_subclass__', '__build_class__',
+    # introspection escape chain
+    '__class__', '__base__', '__bases__', '__mro__', '__dict__',
+    '__getattribute__', '__getattr__', '__init__', '__new__',
+    '__func__', '__builtins__',
 })
 
 SAFE_BUILTINS = {
@@ -73,6 +78,15 @@ class SandboxValidator(ast.NodeVisitor):
     def visit_Attribute(self, node):
         if isinstance(node.attr, str) and node.attr in DANGEROUS_DUNDERS:
             raise ValueError(f"{node.attr} is not allowed in sandbox")
+        self.generic_visit(node)
+
+    def visit_Subscript(self, node):
+        # String-subscript bypass: obj.__dict__['__getattribute__'] — the
+        # attribute name never appears as an ast.Attribute node, so reject
+        # constant-string subscripts that name dangerous dunders outright.
+        if isinstance(node.slice, ast.Constant) and isinstance(node.slice.value, str):
+            if node.slice.value in DANGEROUS_DUNDERS:
+                raise ValueError(f"subscript access to {node.slice.value} is not allowed in sandbox")
         self.generic_visit(node)
 
 
