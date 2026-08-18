@@ -137,7 +137,8 @@ async def get_achievements(user: User = Depends(get_current_user),
 
 
 @router.get("/leaderboard")
-async def leaderboard(period: str = "weekly", db: AsyncSession = Depends(get_db)):
+async def leaderboard(period: str = "weekly", db: AsyncSession = Depends(get_db),
+                      user: User = Depends(get_current_user)):
     """Top users by points/completed levels. period: weekly, monthly, alltime."""
     q = (select(User.username, func.count(UserLevelProgress.id).label("completed"), func.sum(Level.points).label("points"))
          .join(UserLevelProgress, UserLevelProgress.user_id == User.id)

@@ -2,6 +2,7 @@ import html as html_mod
 import re as _re
 import sqlite3
 import asyncio
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
@@ -25,8 +26,11 @@ class MockCreateRequest(BaseModel):
     path: str = "/api/test"
     status_code: int = 200
     response_body: str = '{"ok": true}'
-    delay_ms: int = 0
+    delay_ms: int = 0  # capped at MOCK_MAX_DELAY_MS to prevent DoS via multi-hour sleeps
     sequence: list[dict] = []  # [{order: 1, status: 503, body: 'error', delay: 0}, ...]
+
+
+MOCK_MAX_DELAY_MS = 10_000
 
 router = APIRouter(prefix="/api/labs", tags=["labs"])
 
@@ -213,7 +217,10 @@ async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user),
     except HTTPException:
         raise
     except Exception as e:
-        return {"ok": False, "error": str(e)}
+        # Never leak internal exception text (paths/state) to the client;
+        # log server-side for diagnosis (QA-2026-08-18 MEDIUM).
+        logging.getLogger("qa-tools").exception("cmd execute internal error user_id=%s", user.id)
+        return {"ok": False, "error": "Internal error during command execution"}
 
 
 # ==================== Security Lab (intentionally vulnerable for training) ====================
@@ -316,7 +323,15 @@ async def performance_simulate(data: PerformanceSimRequest, user: User = Depends
 @router.post("/mock/create")
 async def mock_create(data: MockCreateRequest, user: User = Depends(get_current_user)):
     key = f"{data.method.upper()}:{data.path.lstrip('/')}"
+    if data.delay_ms < 0 or data.delay_ms > MOCK_MAX_DELAY_MS:
+        raise HTTPException(status_code=422, detail=f"delay_ms must be between 0 and {MOCK_MAX_DELAY_MS}")
+    # Ownership isolation: a mock belongs to its creator. Overwrite only by
+    # the owner or an admin (QA-2026-08-18 MEDIUM).
+    existing = mock_store.get(key)
+    if existing and not user.is_admin and existing.get("owner_id") != user.id:
+        raise HTTPException(status_code=409, detail="Mock already registered by another user")
     mock_store[key] = {
+        "owner_id": user.id,
         "status_code": data.status_code,
         "response_body": data.response_body,
         "delay_ms": data.delay_ms,

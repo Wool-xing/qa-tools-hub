@@ -201,8 +201,11 @@ async def mock_handler(request: Request, path: str,
     if not config:
         raise HTTPException(status_code=404, detail=f"No mock registered for {key}")
 
-    # Record call
-    mock_call_counts.setdefault(key, []).append({"timestamp": time.time(), "path": path, "method": request.method})
+    # Record call (bounded history: keep last 100 per key)
+    counts = mock_call_counts.setdefault(key, [])
+    counts.append({"timestamp": time.time(), "path": path, "method": request.method})
+    if len(counts) > 100:
+        mock_call_counts[key] = counts[-100:]
 
     call_count = len(mock_call_counts.get(key, []))
 

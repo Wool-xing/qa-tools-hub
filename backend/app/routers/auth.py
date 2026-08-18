@@ -4,10 +4,12 @@ import uuid
 import secrets
 import hashlib
 import asyncio
+import logging
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select, delete as sa_delete
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, field_validator
 import bcrypt
@@ -209,7 +211,15 @@ async def register(data: UserCreate, request: Request, response: Response, db: A
     # to_thread: bcrypt is CPU-bound (~100-300ms) (QA-2026-08-18 HIGH #6)
     u = User(username=data.username, email=data.email,
              hashed_password=await asyncio.to_thread(hash_password, data.password))
-    db.add(u); await db.commit(); await db.refresh(u)
+    db.add(u)
+    try:
+        await db.commit()
+    except IntegrityError:
+        # Concurrent registration with the same username/email races past the
+        # check above — return 400 instead of a bare 500 (QA-2026-08-18 MEDIUM).
+        await db.rollback()
+        raise HTTPException(status_code=400, detail="Username or email already registered")
+    await db.refresh(u)
     return TokenResponse(access_token=create_token(u.id, u.username, u.is_admin), username=u.username, user_id=u.id)
 
 
@@ -369,7 +379,11 @@ async def forgot_password(data: ForgotPasswordRequest, request: Request, respons
 
     base_url = CONFIG_BASE_URL if CONFIG_BASE_URL else str(request.base_url).rstrip("/")
     # to_thread: smtplib blocks up to SMTP_TIMEOUT (QA-2026-08-18 HIGH #6)
-    await asyncio.to_thread(send_password_reset, email=u.email, username=u.username, token=token, base_url=base_url)
+    sent = await asyncio.to_thread(send_password_reset, email=u.email, username=u.username, token=token, base_url=base_url)
+    if not sent:
+        # Response stays identical (anti user-enumeration), but failures must
+        # be observable server-side (QA-2026-08-18 MEDIUM).
+        logging.getLogger("qa-tools").warning("Password reset email failed for user_id=%s", u.id)
 
     return {"message": "If the email is registered, a reset link has been sent."}
 
