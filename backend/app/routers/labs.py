@@ -1,6 +1,7 @@
 import html as html_mod
 import re as _re
 import sqlite3
+import asyncio
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
@@ -307,7 +308,8 @@ async def performance_simulate(data: PerformanceSimRequest, user: User = Depends
         raise HTTPException(status_code=400, detail=f"Duration must be between 10 and {PERF_DURATION_MAX} seconds")
 
     from app.lab_data import simulate_k6_run
-    result = simulate_k6_run(data.script, data.vus, data.duration)
+    # to_thread: pure CPU loop up to PERF_DURATION_MAX (QA-2026-08-18 HIGH #6)
+    result = await asyncio.to_thread(simulate_k6_run, data.script, data.vus, data.duration)
     return result
 
 

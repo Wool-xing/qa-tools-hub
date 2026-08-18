@@ -3,6 +3,7 @@ import time
 import uuid
 import secrets
 import hashlib
+import asyncio
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
@@ -205,7 +206,9 @@ async def register(data: UserCreate, request: Request, response: Response, db: A
     r = await db.execute(select(User).where(User.email == data.email.strip()))
     if r.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already registered")
-    u = User(username=data.username, email=data.email, hashed_password=hash_password(data.password))
+    # to_thread: bcrypt is CPU-bound (~100-300ms) (QA-2026-08-18 HIGH #6)
+    u = User(username=data.username, email=data.email,
+             hashed_password=await asyncio.to_thread(hash_password, data.password))
     db.add(u); await db.commit(); await db.refresh(u)
     return TokenResponse(access_token=create_token(u.id, u.username, u.is_admin), username=u.username, user_id=u.id)
 
@@ -215,7 +218,7 @@ async def login(data: UserLogin, request: Request, response: Response, db: Async
     _check_rate_limit(f"login:{_client_ip(request)}", response)
     r = await db.execute(select(User).where(User.username == data.username))
     u = r.scalar_one_or_none()
-    if not u or not verify_password(data.password, u.hashed_password):
+    if not u or not await asyncio.to_thread(verify_password, data.password, u.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     if not u.is_active:
         raise HTTPException(status_code=403, detail="Account is deactivated")
@@ -365,7 +368,8 @@ async def forgot_password(data: ForgotPasswordRequest, request: Request, respons
     await db.commit()
 
     base_url = CONFIG_BASE_URL if CONFIG_BASE_URL else str(request.base_url).rstrip("/")
-    send_password_reset(email=u.email, username=u.username, token=token, base_url=base_url)
+    # to_thread: smtplib blocks up to SMTP_TIMEOUT (QA-2026-08-18 HIGH #6)
+    await asyncio.to_thread(send_password_reset, email=u.email, username=u.username, token=token, base_url=base_url)
 
     return {"message": "If the email is registered, a reset link has been sent."}
 

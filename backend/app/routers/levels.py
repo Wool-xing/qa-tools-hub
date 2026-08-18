@@ -190,7 +190,8 @@ async def run_level_code(level_id: int, data: SubmitAnswer,
         raise HTTPException(status_code=403, detail="Level not unlocked")
     code = data.answer.get("code", "")
     test_input = level.task_config.get("test_input", "")
-    return run_code_sandbox(code, test_input)
+    # to_thread: subprocess run blocks up to SANDBOX_TIMEOUT (QA-2026-08-18 HIGH #6)
+    return await asyncio.to_thread(run_code_sandbox, code, test_input)
 
 
 @router.post("/submit")
