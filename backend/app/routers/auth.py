@@ -6,7 +6,7 @@ import hashlib
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy import select
+from sqlalchemy import select, delete as sa_delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, field_validator
 import bcrypt
@@ -270,6 +270,18 @@ async def delete_account(data: DeleteAccountRequest,
     """Permanently delete account and all associated data."""
     if not verify_password(data.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Password incorrect")
+    # Delete child rows explicitly: test_case/test_run/achievement FKs lack
+    # ondelete, and legacy DB files predate the FK PRAGMA (QA-2026-08-18 HIGH #5).
+    from app.models.test_case import TestCase
+    from app.models.test_run import TestRun
+    from app.models.level import UserLevelProgress
+    from app.models.achievement import UserAchievement
+    from app.models.team import TeamMember
+    await db.execute(sa_delete(TestRun).where(TestRun.user_id == user.id))
+    await db.execute(sa_delete(TestCase).where(TestCase.user_id == user.id))
+    await db.execute(sa_delete(UserLevelProgress).where(UserLevelProgress.user_id == user.id))
+    await db.execute(sa_delete(UserAchievement).where(UserAchievement.user_id == user.id))
+    await db.execute(sa_delete(TeamMember).where(TeamMember.user_id == user.id))
     await db.delete(user)
     _revoke_token(token)
     await db.commit()

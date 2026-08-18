@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
@@ -34,6 +34,21 @@ SyncSession = sessionmaker(sync_engine)
 
 engine = create_async_engine(_async_url, echo=False, pool_size=_pool_size, max_overflow=_pool_overflow)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
+
+
+def _enable_sqlite_fk(dbapi_conn, _record):
+    # SQLite ignores FK constraints unless enabled per-connection.
+    # Without this, ondelete=CASCADE silently does nothing and deletes
+    # leave orphan rows (QA-2026-08-18 HIGH #5).
+    cursor = dbapi_conn.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
+
+if sync_engine.dialect.name == "sqlite":
+    event.listen(sync_engine, "connect", _enable_sqlite_fk)
+if engine.dialect.name == "sqlite":
+    event.listen(engine.sync_engine, "connect", _enable_sqlite_fk)
 
 
 class Base(DeclarativeBase):
