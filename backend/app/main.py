@@ -100,6 +100,11 @@ async def request_id_middleware(request: Request, call_next):
 
 # ==================== Lifespan ====================
 
+def _db_is_empty() -> bool:
+    from sqlalchemy import inspect
+    return not inspect(sync_engine).has_table("users")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Run migrations before create_all to ensure schema is current
@@ -113,7 +118,14 @@ async def lifespan(app: FastAPI):
         else:
             logger.warning("alembic.ini not found — skipping migrations, using create_all fallback")
     except Exception as e:
-        logger.warning("Migration failed: %s — falling back to create_all", e)
+        # create_all only creates MISSING tables — it cannot repair a partial
+        # migration. On an existing database a failed migration means a broken
+        # schema: refuse to start instead of limping in half-migrated
+        # (QA-2026-08-18 MEDIUM).
+        if not _db_is_empty():
+            logger.exception("Migration failed on existing database — refusing to start")
+            raise
+        logger.warning("Migration failed on empty database: %s — using create_all", e)
     init_db()
     seed()
     for issue in check_config():
@@ -166,7 +178,7 @@ async def manifest():
 # ==================== Routes ====================
 
 @app.get("/health")
-async def health():
+async def health(response: Response):
     db_ok = False
     try:
         from sqlalchemy import text
@@ -175,6 +187,9 @@ async def health():
         db_ok = True
     except Exception as e:
         logger.warning("Health check DB error: %s", e)
+    if not db_ok:
+        # Monitors keyed on status code must see the failure (QA-2026-08-18 MEDIUM).
+        response.status_code = 503
     return {"status": "ok" if db_ok else "degraded", "service": "qa-tools-pro", "version": __version__, "database": "connected" if db_ok else "disconnected"}
 
 

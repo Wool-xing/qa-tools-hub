@@ -45,18 +45,25 @@ class CmdQuery(BaseModel):
     level_id: int = 0
 
 
+# Commands that read from the virtual filesystem
+FILE_COMMANDS = {"cat", "tail", "head", "grep", "sort", "uniq", "wc", "awk", "cut"}
+
+
 # ==================== SQL Sandbox ====================
 
 @router.post("/sql/execute")
 async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
     from sqlalchemy import update as sa_update
-    await db.execute(sa_update(User).where(User.id == user.id).values(lab_visit_count=User.lab_visit_count + 1))
-    await db.commit()
+    # Count only VALID visits: increment after input validation, not before
+    # (empty/invalid submissions were inflating lab stats, QA-2026-08-18 MEDIUM).
     if not data.sql or not data.sql.strip():
         raise HTTPException(status_code=400, detail="SQL query is required")
     if not is_safe_sql(data.sql):
         raise HTTPException(status_code=400, detail="Only SELECT queries are allowed in sandbox")
+
+    await db.execute(sa_update(User).where(User.id == user.id).values(lab_visit_count=User.lab_visit_count + 1))
+    await db.commit()
 
     scenario = SQL_SCENARIOS.get(data.level_id, SQL_SCENARIOS["default"])
 
@@ -86,11 +93,12 @@ async def execute_sql(data: SQLQuery, user: User = Depends(get_current_user),
 async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
     from sqlalchemy import update as sa_update
-    await db.execute(sa_update(User).where(User.id == user.id).values(lab_visit_count=User.lab_visit_count + 1))
-    await db.commit()
     cmd = data.cmd.strip()
     if not cmd:
         raise HTTPException(status_code=400, detail="Command is required")
+    # Count only VALID visits (QA-2026-08-18 MEDIUM).
+    await db.execute(sa_update(User).where(User.id == user.id).values(lab_visit_count=User.lab_visit_count + 1))
+    await db.commit()
 
     parts = cmd.split()
     command = parts[0]
@@ -120,6 +128,12 @@ async def execute_cmd(data: CmdQuery, user: User = Depends(get_current_user),
             file_content = VFS.get(file_path, "")
 
     if not file_content:
+        # A missing requested file must be reported as such — silently
+        # substituting app.log masks the failure (QA-2026-08-18 MEDIUM).
+        # Only for commands that actually read the file; unknown commands
+        # keep their teaching response below.
+        if command in FILE_COMMANDS and file_path:
+            return {"ok": False, "error": f"File not found: {file_path}"}
         file_content = VFS.get("/var/log/app.log", "")
         file_path = "/var/log/app.log"
 

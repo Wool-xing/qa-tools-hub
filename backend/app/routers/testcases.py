@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, UploadFi
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.team import TeamMember
 from pydantic import BaseModel, field_validator
 import openpyxl
 from app.database import get_db
@@ -84,6 +85,33 @@ class TestCaseUpdate(BaseModel):
     level_id: int | None = None
     team_id: int | None = None
 
+    # Same validation as create — PUT/bulk could otherwise persist arbitrary
+    # values and pollute list filters/exports (QA-2026-08-18 MEDIUM).
+    @field_validator("title")
+    @classmethod
+    def check_title(cls, v):
+        if v is not None and not v.strip():
+            raise ValueError("Title must not be empty")
+        return v.strip() if v is not None else v
+
+    @field_validator("priority")
+    @classmethod
+    def check_priority(cls, v):
+        if v is None:
+            return v
+        if v.upper() not in {"P0", "P1", "P2", "P3", "P4"}:
+            raise ValueError("Priority must be P0-P4")
+        return v.upper()
+
+    @field_validator("status")
+    @classmethod
+    def check_status(cls, v):
+        if v is None:
+            return v
+        if v.lower() not in {"draft", "ready", "running", "passed", "failed"}:
+            raise ValueError("Status must be draft/ready/running/passed/failed")
+        return v.lower()
+
 
 @router.get("")
 async def list_testcases(
@@ -147,8 +175,19 @@ async def list_testcases(
     }
 
 
+async def _validate_team_access(user: User, team_id: int | None, db: AsyncSession):
+    """Cases can only be assigned to teams the user belongs to (QA-2026-08-18 MEDIUM)."""
+    if team_id is None or user.is_admin:
+        return
+    r = await db.execute(select(TeamMember).where(
+        TeamMember.team_id == team_id, TeamMember.user_id == user.id))
+    if not r.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="You must be a team member to assign cases to this team")
+
+
 @router.post("")
 async def create_testcase(data: TestCaseCreate, user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    await _validate_team_access(user, data.team_id, db)
     tc = TestCase(user_id=user.id, title=data.title, steps=data.steps, expected_result=data.expected_result,
                   priority=data.priority, status=data.status, tags=data.tags, folder=data.folder,
                   level_id=data.level_id, team_id=data.team_id)
@@ -162,7 +201,9 @@ async def update_testcase(tc_id: int, data: TestCaseUpdate, user: User = Depends
     tc = r.scalar_one_or_none()
     if not tc:
         raise HTTPException(status_code=404)
-    for k, v in data.model_dump(exclude_unset=True).items():
+    fields = data.model_dump(exclude_unset=True)
+    await _validate_team_access(user, fields.get("team_id"), db)
+    for k, v in fields.items():
         setattr(tc, k, v)
     tc.updated_at = datetime.now(timezone.utc)
     await db.commit()
@@ -220,6 +261,15 @@ class BulkUpdate(BaseModel):
         if len(v) > BULK_UPDATE_LIMIT:
             raise ValueError(f"Bulk update limited to {BULK_UPDATE_LIMIT} items per request")
         return v
+
+    @field_validator("status")
+    @classmethod
+    def check_status(cls, v):
+        if v is None:
+            return v
+        if v.lower() not in {"draft", "ready", "running", "passed", "failed"}:
+            raise ValueError("Status must be draft/ready/running/passed/failed")
+        return v.lower()
 
 
 @router.post("/bulk")

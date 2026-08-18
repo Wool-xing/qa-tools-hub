@@ -3,6 +3,7 @@ import asyncio
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
 from app.database import get_db
@@ -96,7 +97,16 @@ async def list_levels(user: User = Depends(get_current_user), db: AsyncSession =
     if all_levels and not any(l.id in progress_map for l in all_levels):
         first = all_levels[0]
         prog = UserLevelProgress(user_id=user.id, level_id=first.id, status="unlocked")
-        db.add(prog); await db.commit()
+        db.add(prog)
+        try:
+            await db.commit()
+        except IntegrityError:
+            # Concurrent first visit already created the row — reload it
+            # instead of 500-ing on the unique constraint (QA-2026-08-18 MEDIUM).
+            await db.rollback()
+            existing = await db.execute(select(UserLevelProgress).where(
+                UserLevelProgress.user_id == user.id, UserLevelProgress.level_id == first.id))
+            prog = existing.scalar_one_or_none() or prog
         progress_map[first.id] = prog
 
     # Batch unlock: determine locked levels whose prerequisite is completed
@@ -128,7 +138,17 @@ async def list_levels(user: User = Depends(get_current_user), db: AsyncSession =
                 p = UserLevelProgress(user_id=user.id, level_id=l.id, status="unlocked")
                 db.add(p)
                 progress_map[l.id] = p
-        await db.commit()
+        try:
+            await db.commit()
+        except IntegrityError:
+            # Concurrent unlock raced the same unique constraint — reload
+            # the rows the other request created (QA-2026-08-18 MEDIUM).
+            await db.rollback()
+            existing = (await db.execute(select(UserLevelProgress).where(
+                UserLevelProgress.user_id == user.id,
+                UserLevelProgress.level_id.in_(unlocked_ids)))).scalars().all()
+            for p in existing:
+                progress_map[p.level_id] = p
 
     levels_out = []
     for l in all_levels:
@@ -297,8 +317,13 @@ async def submit_answer(data: SubmitAnswer, user: User = Depends(get_current_use
         if new_achievements:
             try:
                 await db.commit()
-            except Exception:
+            except IntegrityError:
                 await db.rollback()  # concurrent request may have already awarded
+            except Exception:
+                # Real DB/serialization failures must not vanish silently
+                # (QA-2026-08-18 MEDIUM).
+                await db.rollback()
+                logging.getLogger("qa-tools").exception("achievement commit failed user_id=%s", user.id)
 
     return {"correct": correct, "score": score, "explanation": explanation,
             "attempts": progress.attempts, "completed": progress.status == "completed",
